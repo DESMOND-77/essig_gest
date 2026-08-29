@@ -29,8 +29,8 @@ INSERT INTO annee_scolaire (libelle, date_debut, date_fin, est_courante)
   VALUES ('2025-2026', '2025-10-01', '2026-08-31', 1);
 SET @an_2025 = LAST_INSERT_ID();
 
-INSERT INTO modalite_formation (code, libelle) VALUES ('FI', 'Formation Initiale')
-  ON DUPLICATE KEY UPDATE libelle = VALUES(libelle);
+INSERT INTO modalite_formation (code, libelle) VALUES ('FI', 'Formation Initiale') AS new
+  ON DUPLICATE KEY UPDATE libelle = new.libelle;
 SET @mod_fi = (SELECT id FROM modalite_formation WHERE code = 'FI');
 
 INSERT INTO niveau (ecole_id, code, libelle, ordre, credits_requis, a_soutenance) VALUES
