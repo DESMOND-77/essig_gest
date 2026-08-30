@@ -1,4 +1,5 @@
 import pytest
+from django.db import IntegrityError
 
 from comptes.models import Utilisateur
 
@@ -16,7 +17,7 @@ def test_creer_utilisateur_hache_le_mot_de_passe():
 
 def test_login_est_unique():
     Utilisateur.objects.creer_utilisateur("jdupont", "j@ex.ga", "motdepasse42")
-    with pytest.raises(Exception):
+    with pytest.raises(IntegrityError):
         Utilisateur.objects.creer_utilisateur("jdupont", "autre@ex.ga", "motdepasse42")
 
 
