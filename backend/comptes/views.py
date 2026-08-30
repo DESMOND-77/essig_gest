@@ -10,6 +10,12 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import LoginSerializer, MoiSerializer
 
 
+def _user_from_token(token):
+    from django.contrib.auth import get_user_model
+
+    return get_user_model().objects.get(pk=token["user_id"])
+
+
 def _pose_cookie_refresh(response, refresh_value):
     response.set_cookie(
         settings.REFRESH_COOKIE_NAME,
@@ -56,10 +62,11 @@ class RefreshView(APIView):
             token = RefreshToken(raw)
             access = str(token.access_token)
             if settings.SIMPLE_JWT["ROTATE_REFRESH_TOKENS"]:
+                # Construire le nouveau refresh AVANT de blacklister l'ancien :
+                # si la ligne utilisateur a disparu, on échoue sans avoir
+                # invalidé le token courant.
+                new_refresh = RefreshToken.for_user(_user_from_token(token))
                 token.blacklist()
-                new_refresh = RefreshToken.for_user(
-                    _user_from_token(token)
-                )
             else:
                 new_refresh = token
         except TokenError:
@@ -68,12 +75,6 @@ class RefreshView(APIView):
         resp = Response({"access": access})
         _pose_cookie_refresh(resp, new_refresh)
         return resp
-
-
-def _user_from_token(token):
-    from django.contrib.auth import get_user_model
-
-    return get_user_model().objects.get(pk=token["user_id"])
 
 
 class LogoutView(APIView):
