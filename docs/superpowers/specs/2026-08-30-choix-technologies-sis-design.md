@@ -98,7 +98,7 @@ lourde, `pgvector`).
 
 ## 5. Architecture cible
 
-```
+```text
                        ┌───────────────────────────────┐
    navigateur  ───────▶│  Caddy  (VPS, HTTPS auto)      │
    (personnel)         │  · sert le build React (dist/) │
@@ -202,7 +202,52 @@ mémoire et le renouvelle silencieusement via `/api/auth/refresh` (protégé CSR
 | Connexion Internet du secrétariat (accès au VPS) | Hors pile ; à confirmer avec l'établissement. Repli éventuel : réplique locale (décision d'infra ultérieure, non retenue en v1). |
 | Séquence globale `encaissement.recu_numero` (design §P5) en environnement concurrent faible | Compteur applicatif sous transaction / `SELECT … FOR UPDATE` sur une table de séquence. |
 
-## 11. Suite
+## 11. Évolutivité et montée en charge
+
+Condition d'acceptation posée par le porteur du projet : la pile doit rester **évolutive
+et scalable**. Elle l'est par construction, sans surcoût en v1.
+
+### 11.1 Évolutivité fonctionnelle
+
+- **Découpage en modules Django** (`referentiel`, `personnes`, `scolarite`, `tresorerie`,
+  `paie`, `resultats`, `comptes`) : chaque domaine évolue et se teste isolément ; ajouter
+  un domaine = ajouter une app, pas toucher aux autres.
+- **Frais annexes génériques** (design données §D12) : un nouveau type de frais = une ligne
+  de référentiel, zéro migration. Le modèle est déjà conçu pour l'extension par la donnée.
+- **API versionnable** : préfixe `/api/v1/`. Une v2 cohabite avec la v1 le temps d'une
+  transition de client.
+- **Contrat typé** (OpenAPI → types TS) : un changement d'API casse la compilation du front
+  au lieu de casser en production — l'évolution reste sûre.
+- **Client mobile** (C2) : l'API REST est le point d'intégration ; l'app mobile future se
+  branche sans rien changer au backend.
+- **i18n, stockage objet, 2FA** : prévus comme points d'extension (T9, T16, T20) —
+  activables par configuration, pas par réécriture.
+
+### 11.2 Montée en charge technique
+
+Ordre d'intervention si le volume croît (chaque étape est un ajout, pas une réécriture) :
+
+1. **Verticale d'abord** : augmenter les vCPU/RAM du VPS et le nombre de workers Gunicorn.
+   Suffisant très au-delà de la cible (un groupe scolaire).
+2. **Index et vues** : les rapports lourds (bilans, situations de scolarité) passent en
+   requêtes indexées, puis en vues matérialisées / tables d'agrégat rafraîchies si besoin.
+3. **Cache** : Redis en cache de sessions et de réponses de lecture (`django-redis`).
+4. **Tâches asynchrones** : Celery (ou Django-Q2) + Redis pour PDF de masse et imports —
+   déclenché par le besoin (T12), le code métier est déjà isolé dans des services appelables.
+5. **Séparation des services** : `caddy` / `web` / `db` sont déjà des conteneurs distincts ;
+   `db` peut migrer vers une instance managée (RDS, Scaleway DB) sans changement applicatif.
+6. **Horizontale** : plusieurs conteneurs `web` derrière Caddy (l'API est *stateless* —
+   JWT, pas de session serveur ; média sur stockage objet via `django-storages`).
+7. **Lecture/écriture séparées** : réplicas MySQL en lecture via le routeur de bases Django,
+   si la charge de reporting le justifie.
+8. **PostgreSQL / multi-tenant** : seulement en cas de bascule SaaS multi-établissements
+   (voir §4) — décision produit, pas contrainte technique.
+
+Aucune de ces étapes n'est faite en v1 : elles sont rendues **possibles sans dette** par
+les choix ci-dessus (API stateless, conteneurs séparés, logique métier en services,
+stockage abstrait, contrat d'API typé).
+
+## 12. Suite
 
 Après validation de ce document : plan d'implémentation phasé (compétence `writing-plans`),
 dans l'ordre de dépendance du design données §10 :
