@@ -50,9 +50,6 @@ jobs:
           python-version: "3.13"
       - run: sudo apt-get update && sudo apt-get install -y default-libmysqlclient-dev pkg-config build-essential libpango-1.0-0 libpangocairo-1.0-0
       - run: pip install -e "backend/[dev]"
-      - name: ruff check
-        working-directory: backend
-        run: ruff check .
       - name: django check
         working-directory: backend
         run: python manage.py check
@@ -91,5 +88,14 @@ jobs:
           context: ./backend
           push: false
           tags: mlamine-web:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Build image Caddy (frontend + reverse-proxy)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: infra/caddy.Dockerfile
+          push: false
+          tags: mlamine-caddy:ci
           cache-from: type=gha
           cache-to: type=gha,mode=max

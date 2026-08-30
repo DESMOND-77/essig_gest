@@ -31,3 +31,12 @@ def test_desactivation_via_actif():
     u.actif = False
     u.save()
     assert u.is_active is False
+
+
+def test_alias_django_create_superuser():
+    """`manage.py createsuperuser` appelle `create_superuser`, pas le nom francais."""
+    assert hasattr(Utilisateur.objects, "create_user")
+    assert hasattr(Utilisateur.objects, "create_superuser")
+    su = Utilisateur.objects.create_superuser("root", "r@ex.ga", "motdepasse42")
+    assert su.is_staff and su.is_superuser
+    assert su.check_password("motdepasse42")

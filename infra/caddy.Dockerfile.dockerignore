@@ -4,3 +4,5 @@ frontend/dist
 backend
 docs
 .superpowers
+.env
+**/.env

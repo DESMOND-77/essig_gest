@@ -17,3 +17,8 @@ class UtilisateurManager(BaseUserManager):
         return self.creer_utilisateur(
             login, email, password, is_staff=True, is_superuser=True
         )
+
+    # Alias anglais attendus par Django (`createsuperuser`, admin, tests) —
+    # les noms francais restent les noms primaires.
+    create_user = creer_utilisateur
+    create_superuser = creer_superutilisateur

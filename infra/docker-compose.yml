@@ -59,6 +59,7 @@ services:
         condition: service_healthy
     volumes:
       - static:/srv/static
+      - media:/srv/media
       - caddy_data:/data
       - caddy_config:/config
 
