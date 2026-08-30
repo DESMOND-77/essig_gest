@@ -10,6 +10,7 @@ inscription pdf.pdf
 backend/.env
 backend/.venv/
 backend/staticfiles/
+backend/logs/
 *.egg-info/
 __pycache__/
 *.pyc

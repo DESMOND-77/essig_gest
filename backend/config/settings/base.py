@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import dj_database_url
 import environ
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -8,6 +9,9 @@ env = environ.Env()
 environ.Env.read_env(BASE_DIR / ".env")
 
 SECRET_KEY = env("DJANGO_SECRET_KEY")
+# `env.bool(...)` est indispensable : `env("DJANGO_DEBUG")` renvoie la chaîne
+# "False", tronquée en booléen -> True, ce qui activerait silencieusement le
+# mode debug en production.
 DEBUG = env.bool("DJANGO_DEBUG", default=False)
 ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=[])
 
@@ -56,20 +60,30 @@ TEMPLATES = [
     },
 ]
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": env("DB_NAME"),
-        "USER": env("DB_USER"),
-        "PASSWORD": env("DB_PASSWORD"),
-        "HOST": env("DB_HOST", default="127.0.0.1"),
-        "PORT": env("DB_PORT", default="3306"),
-        "OPTIONS": {
-            "charset": "utf8mb4",
-            "sql_mode": "STRICT_TRANS_TABLES",
-        },
+# Base de données : `DATABASE_URL` (base managée, déploiement) prioritaire ;
+# sinon variables `DB_*` discrètes (MySQL 8.4 local / CI).
+DATABASE_URL = env("DATABASE_URL", default="")
+if DATABASE_URL:
+    DATABASES = {
+        "default": dj_database_url.parse(
+            DATABASE_URL, conn_max_age=600, ssl_require=not DEBUG
+        )
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": env("DB_NAME"),
+            "USER": env("DB_USER"),
+            "PASSWORD": env("DB_PASSWORD"),
+            "HOST": env("DB_HOST", default="127.0.0.1"),
+            "PORT": env("DB_PORT", default="3306"),
+            "OPTIONS": {
+                "charset": "utf8mb4",
+                "sql_mode": "STRICT_TRANS_TABLES",
+            },
+        }
+    }
 
 AUTH_USER_MODEL = "comptes.Utilisateur"
 
@@ -77,6 +91,12 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.Argon2PasswordHasher",
     "django.contrib.auth.hashers.PBKDF2PasswordHasher",
 ]
+
+# En-têtes de sécurité HTTP — toujours actifs (aucun impact en dev), servis par
+# SecurityMiddleware / XFrameOptionsMiddleware déjà présents.
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = "DENY"
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
@@ -126,3 +146,41 @@ SPECTACULAR_SETTINGS = {
 
 CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])
 CORS_ALLOW_CREDENTIALS = True
+
+# --- Journalisation -------------------------------------------------------
+LOG_DIR = BASE_DIR / "logs"
+LOG_DIR.mkdir(exist_ok=True)
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "[{asctime}] {levelname} {name} {funcName}:{lineno} — {message}",
+            "style": "{",
+        },
+        "simple": {"format": "[{levelname}] {name}: {message}", "style": "{"},
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+        "fichier": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": str(LOG_DIR / "mlamine.log"),
+            "maxBytes": 5 * 1024 * 1024,
+            "backupCount": 5,
+            "formatter": "verbose",
+        },
+    },
+    "root": {
+        "handlers": ["console"] if DEBUG else ["console", "fichier"],
+        "level": "INFO",
+    },
+    "loggers": {
+        "django.request": {"level": "WARNING"},
+        "comptes": {"level": "INFO"},
+        "core": {"level": "INFO"},
+    },
+}
