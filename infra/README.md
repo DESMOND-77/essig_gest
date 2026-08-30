@@ -13,8 +13,7 @@ Pile Docker Compose : `db` (MySQL 8.4), `web` (Gunicorn / `config.settings.prod`
 
     cp .env.example .env      # renseigner secrets + SITE_ADDRESS (domaine réel)
     docker compose --env-file .env -f infra/docker-compose.yml up -d --build
-    docker compose --env-file .env -f infra/docker-compose.yml exec web \
-        python manage.py createsuperuser
+    docker compose --env-file .env -f infra/docker-compose.yml exec web python manage.py seed_socle --admin-login <login> --admin-password <mdp>
 
 `SITE_ADDRESS` = domaine public → Caddy obtient un certificat Let's Encrypt
 automatiquement. En local, garder `localhost` (certificat interne, utiliser
