@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, expect, test, vi } from "vitest";
 import { AuthProvider, useAuth } from "./AuthContext";
@@ -26,5 +26,6 @@ test("connexion renseigne l'utilisateur", async () => {
   }));
   render(<AuthProvider><Sonde /></AuthProvider>);
   await userEvent.click(await screen.findByText("go"));
-  await waitFor(() => screen.getByText("utilisateur:compta"));
+  await screen.findByText("utilisateur:compta");
+  expect(screen.getByText("utilisateur:compta")).toBeInTheDocument();
 });
