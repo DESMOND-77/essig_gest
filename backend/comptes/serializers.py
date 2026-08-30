@@ -13,8 +13,7 @@ class MoiSerializer(serializers.Serializer):
     roles = serializers.SerializerMethodField()
 
     def get_roles(self, obj):
-        mgr = getattr(obj, "roles", None)
-        if mgr is None:
-            return []
-        return [{"code": ur.role.code, "ecole_id": ur.ecole_id}
-                for ur in mgr.select_related("role").all()]
+        return [
+            {"code": ur.role.code, "ecole_id": ur.ecole_id}
+            for ur in obj.roles.select_related("role").all()
+        ]
