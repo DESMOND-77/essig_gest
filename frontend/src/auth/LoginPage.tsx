@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
+import { Button } from "@/components/ui/button";
 import { useAuth } from "./AuthContext";
 
 const schema = z.object({
@@ -38,10 +39,7 @@ export function LoginPage() {
         {errors.password && <em className="text-sm text-red-600">{errors.password.message}</em>}
       </label>
       {erreur && <p role="alert" className="text-sm text-red-600">{erreur}</p>}
-      <button disabled={isSubmitting}
-              className="w-full rounded bg-black p-2 text-white disabled:opacity-50">
-        Se connecter
-      </button>
+      <Button type="submit" disabled={isSubmitting} className="w-full">Se connecter</Button>
     </form>
   );
 }

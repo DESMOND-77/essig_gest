@@ -6,6 +6,10 @@
     "module": "esnext",
     "types": ["vite/client", "vitest/globals"],
     "strict": true,
+
+    /* Alias @/* -> src/* (paths sans baseUrl : baseUrl est une erreur en TS 6, cf. TS5101) */
+    "paths": { "@/*": ["./src/*"] },
+
     "allowArbitraryExtensions": true,
     "skipLibCheck": true,
 
