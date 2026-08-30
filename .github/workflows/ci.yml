@@ -1,0 +1,95 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  backend-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: sudo apt-get update && sudo apt-get install -y default-libmysqlclient-dev pkg-config build-essential
+      - run: pip install -e "backend/[dev]"
+      - name: ruff check
+        working-directory: backend
+        run: ruff check .
+
+  backend-tests:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: mlamine
+        ports: ["3306:3306"]
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -proot"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    env:
+      DJANGO_SETTINGS_MODULE: config.settings.dev
+      DJANGO_DEBUG: "true"
+      DJANGO_SECRET_KEY: django-insecure-ci-9K3pf2wq8Z7mNx4rLbT9yaJ6vHcS1dQeUgW5oIuPzA0nMkRxYtB
+      DB_NAME: mlamine
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_HOST: 127.0.0.1
+      DB_PORT: "3306"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: sudo apt-get update && sudo apt-get install -y default-libmysqlclient-dev pkg-config build-essential libpango-1.0-0 libpangocairo-1.0-0
+      - run: pip install -e "backend/[dev]"
+      - name: ruff check
+        working-directory: backend
+        run: ruff check .
+      - name: django check
+        working-directory: backend
+        run: python manage.py check
+      - name: migrations à jour
+        working-directory: backend
+        run: python manage.py makemigrations --check --dry-run
+      - name: pytest
+        working-directory: backend
+        run: pytest
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: build image backend
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          push: false
+          tags: mlamine-web:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
