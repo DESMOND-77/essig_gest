@@ -24,8 +24,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "django_filters",
     "core",
-    # TODO(Task 3): réactiver comptes + AUTH_USER_MODEL
-    # "comptes",
+    "comptes",
 ]
 
 MIDDLEWARE = [
@@ -72,8 +71,7 @@ DATABASES = {
     }
 }
 
-# TODO(Task 3): réactiver comptes + AUTH_USER_MODEL
-# AUTH_USER_MODEL = "comptes.Utilisateur"
+AUTH_USER_MODEL = "comptes.Utilisateur"
 
 PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.Argon2PasswordHasher",
