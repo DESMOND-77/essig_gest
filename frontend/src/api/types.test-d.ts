@@ -7,7 +7,7 @@ const _exemple: MoiReponse = {
   id: 1,
   login: "x",
   email: "y",
-  roles: [{ code: "COMPTA", ecole_id: null }],
+  roles: [{ code: "COMPTABLE", ecole_id: null }],
 };
 void _exemple;
 

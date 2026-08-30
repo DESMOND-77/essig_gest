@@ -23,9 +23,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => { chargerMoi().finally(() => setChargement(false)); }, []);
 
   async function connexion(login: string, mdp: string) {
-    const r = await fetch("/api/v1/auth/login/", {
-      method: "POST", credentials: "include",
-      headers: { "Content-Type": "application/json" },
+    // Passe par `apiFetch` : URL de base et politique `credentials` en un seul
+    // endroit (le garde de `client.ts` saute le refresh sur /auth/login).
+    const r = await apiFetch("/auth/login/", {
+      method: "POST",
       body: JSON.stringify({ login, password: mdp }),
     });
     if (!r.ok) throw new Error("Identifiants invalides.");
@@ -34,7 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function deconnexion() {
-    await fetch("/api/v1/auth/logout/", { method: "POST", credentials: "include" });
+    await apiFetch("/auth/logout/", { method: "POST" });
     setAccessToken(null);
     setUtilisateur(null);
   }
