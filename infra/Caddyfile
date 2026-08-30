@@ -4,10 +4,21 @@
 	# API et admin Django : proxy vers Gunicorn en conservant le préfixe
 	# (`handle`, pas `handle_path`) — le backend sert bien `/api/v1/...` et `/admin/...`.
 	handle /api/* {
-		reverse_proxy web:8000
+		reverse_proxy web:8000 {
+			# Ecrase tout X-Forwarded-For entrant par l'IP reelle du pair vue
+			# par Caddy : sans cela un client falsifie l'en-tete et contourne
+			# la limitation de debit sur /api/v1/auth/login/ (cf. NUM_PROXIES=1).
+			header_up X-Forwarded-For {remote_host}
+		}
 	}
 	handle /admin/* {
 		reverse_proxy web:8000
+	}
+
+	# Fichiers televerses (volume `media` partage avec le conteneur `web`).
+	handle_path /media/* {
+		root * /srv/media
+		file_server
 	}
 
 	# Fichiers statiques Django (admin, DRF) collectés dans le volume partagé.

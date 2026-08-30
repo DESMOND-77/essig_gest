@@ -1,6 +1,7 @@
 from django.conf import settings
 from drf_spectacular.utils import OpenApiResponse, extend_schema
-from rest_framework import status
+from rest_framework import serializers, status
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
@@ -8,6 +9,9 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from core.exceptions import CompteDesactiveException
+
+from .models import Utilisateur
 from .serializers import (
     AccessTokenSerializer,
     LoginRequeteSerializer,
@@ -17,9 +21,7 @@ from .serializers import (
 
 
 def _user_from_token(token):
-    from django.contrib.auth import get_user_model
-
-    return get_user_model().objects.get(pk=token["user_id"])
+    return Utilisateur.objects.get(pk=token["user_id"])
 
 
 def _pose_cookie_refresh(response, refresh_value):
@@ -52,7 +54,9 @@ class LoginView(APIView):
         serializer = LoginSerializer(data=request.data)
         try:
             serializer.is_valid(raise_exception=True)
-        except Exception:
+        except (serializers.ValidationError, AuthenticationFailed):
+            # Volontairement etroit : une panne base ne doit pas etre maquillee
+            # en « identifiants invalides ».
             return Response({"detail": "Identifiants invalides."},
                             status=status.HTTP_401_UNAUTHORIZED)
         data = serializer.validated_data
@@ -83,11 +87,24 @@ class RefreshView(APIView):
         try:
             token = RefreshToken(raw)
             access = str(token.access_token)
+        except TokenError:
+            return Response({"detail": "Refresh invalide."},
+                            status=status.HTTP_401_UNAUTHORIZED)
+        # Le refresh doit suivre l'etat du compte : un compte supprime ou
+        # desactive ne peut plus renouveler sa session.
+        try:
+            u = _user_from_token(token)
+        except Utilisateur.DoesNotExist:
+            return Response({"detail": "Refresh invalide."},
+                            status=status.HTTP_401_UNAUTHORIZED)
+        if not u.is_active:
+            raise CompteDesactiveException()
+        try:
             if settings.SIMPLE_JWT["ROTATE_REFRESH_TOKENS"]:
                 # Construire le nouveau refresh AVANT de blacklister l'ancien :
                 # si la ligne utilisateur a disparu, on échoue sans avoir
                 # invalidé le token courant.
-                new_refresh = RefreshToken.for_user(_user_from_token(token))
+                new_refresh = RefreshToken.for_user(u)
                 token.blacklist()
             else:
                 new_refresh = token

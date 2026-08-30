@@ -1,3 +1,4 @@
+from datetime import timedelta
 from pathlib import Path
 
 import dj_database_url
@@ -64,11 +65,14 @@ TEMPLATES = [
 # sinon variables `DB_*` discrètes (MySQL 8.4 local / CI).
 DATABASE_URL = env("DATABASE_URL", default="")
 if DATABASE_URL:
-    DATABASES = {
-        "default": dj_database_url.parse(
-            DATABASE_URL, conn_max_age=600, ssl_require=not DEBUG
-        )
-    }
+    _cfg = dj_database_url.parse(DATABASE_URL, conn_max_age=600)
+    _cfg.setdefault("OPTIONS", {})
+    _cfg["OPTIONS"].pop("sslmode", None)  # option psycopg, invalide pour mysqlclient
+    if _cfg.get("ENGINE") == "django.db.backends.mysql":
+        _cfg["OPTIONS"].update({"charset": "utf8mb4", "sql_mode": "STRICT_TRANS_TABLES"})
+        if not DEBUG:
+            _cfg["OPTIONS"].setdefault("ssl", {"ca": env("DB_SSL_CA", default=None)})
+    DATABASES = {"default": _cfg}
 else:
     # Branche `DB_*` : `CONN_MAX_AGE` par défaut de Django (= 0, connexions
     # non persistantes), alors que la branche `DATABASE_URL` mutualise à 600 s —
@@ -124,17 +128,25 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
     "DEFAULT_THROTTLE_RATES": {"auth": "10/min"},
+    # Un seul proxy de confiance (Caddy) devant Gunicorn : DRF ne retient que
+    # la derniere entree de X-Forwarded-For, non falsifiable par le client.
+    "NUM_PROXIES": 1,
 }
-
-from datetime import timedelta  # noqa: E402
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=env.int("JWT_ACCESS_MINUTES", default=15)),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=env.int("JWT_REFRESH_DAYS", default=7)),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
+    "UPDATE_LAST_LOGIN": True,
+    # TODO: `derniere_connexion` est une colonne distincte que Django ne met pas
+    # a jour ; brancher un signal `user_logged_in` ou supprimer la colonne.
 }
 
+# ATTENTION CSRF : `SameSite=Strict` est le SEUL controle anti-CSRF sur
+# /api/v1/auth/refresh/ et /api/v1/auth/logout/ — ces vues sont csrf_exempt de
+# fait (DRF + `authentication_classes = []`). Ne pas relacher en `Lax` sans
+# ajouter un jeton CSRF ou une verification d'Origin.
 REFRESH_COOKIE_NAME = "refresh_token"
 REFRESH_COOKIE_SECURE = env.bool("JWT_REFRESH_COOKIE_SECURE", default=True)
 REFRESH_COOKIE_SAMESITE = "Strict"
@@ -152,7 +164,13 @@ CORS_ALLOW_CREDENTIALS = True
 
 # --- Journalisation -------------------------------------------------------
 LOG_DIR = BASE_DIR / "logs"
-LOG_DIR.mkdir(parents=True, exist_ok=True)
+try:
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
+    LOG_FICHIER_DISPONIBLE = True
+except OSError:
+    # Systeme de fichiers en lecture seule (conteneur durci) : on se rabat sur
+    # la console plutot que d'empecher le demarrage.
+    LOG_FICHIER_DISPONIBLE = False
 
 LOGGING = {
     "version": 1,
@@ -169,16 +187,26 @@ LOGGING = {
             "class": "logging.StreamHandler",
             "formatter": "simple",
         },
-        "fichier": {
-            "class": "logging.handlers.RotatingFileHandler",
-            "filename": str(LOG_DIR / "mlamine.log"),
-            "maxBytes": 5 * 1024 * 1024,
-            "backupCount": 5,
-            "formatter": "verbose",
-        },
+        **(
+            {
+                "fichier": {
+                    "class": "logging.handlers.RotatingFileHandler",
+                    "filename": str(LOG_DIR / "mlamine.log"),
+                    "maxBytes": 5 * 1024 * 1024,
+                    "backupCount": 5,
+                    "formatter": "verbose",
+                }
+            }
+            if LOG_FICHIER_DISPONIBLE
+            else {}
+        ),
     },
     "root": {
-        "handlers": ["console"] if DEBUG else ["console", "fichier"],
+        "handlers": (
+            ["console"]
+            if DEBUG or not LOG_FICHIER_DISPONIBLE
+            else ["console", "fichier"]
+        ),
         "level": "INFO",
     },
     "loggers": {

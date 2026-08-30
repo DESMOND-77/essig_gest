@@ -9,12 +9,23 @@ def test_base_expose_les_entetes_de_securite():
     assert base.SECURE_BROWSER_XSS_FILTER is True
 
 
-def test_prod_active_hsts_preload():
-    prod = importlib.import_module("config.settings.prod")
+def test_prod_active_hsts_preload(monkeypatch):
+    # `SECURE_SSL_REDIRECT` lit l'environnement : on le neutralise pour tester
+    # la valeur par defaut et non celle de la machine hote.
+    monkeypatch.delenv("DJANGO_SECURE_SSL_REDIRECT", raising=False)
+    prod = importlib.reload(importlib.import_module("config.settings.prod"))
 
     assert prod.SECURE_HSTS_PRELOAD is True
     assert prod.SECURE_HSTS_SECONDS >= 31536000
     assert prod.SECURE_SSL_REDIRECT is True
+
+
+def test_prod_restreint_le_schema_openapi():
+    prod = importlib.import_module("config.settings.prod")
+
+    assert prod.SPECTACULAR_SETTINGS["SERVE_PERMISSIONS"] == [
+        "rest_framework.permissions.IsAdminUser"
+    ]
 
 
 def test_database_url_est_pris_en_compte_si_defini(monkeypatch):
@@ -24,6 +35,8 @@ def test_database_url_est_pris_en_compte_si_defini(monkeypatch):
     try:
         importlib.reload(base)
         assert base.DATABASES["default"]["ENGINE"] == "django.db.backends.sqlite3"
+        # Pas d'options psycopg (`sslmode`) laissees dans la config.
+        assert "sslmode" not in base.DATABASES["default"].get("OPTIONS", {})
     finally:
         monkeypatch.delenv("DATABASE_URL", raising=False)
         importlib.reload(base)

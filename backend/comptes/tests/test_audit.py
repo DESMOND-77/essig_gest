@@ -3,7 +3,7 @@ from rest_framework import viewsets
 from rest_framework.routers import SimpleRouter
 from rest_framework.test import APIClient
 
-from comptes.audit import AuditLogMixin
+from comptes.audit import AuditLogMixin, _snapshot
 from comptes.models import JournalAudit, Role
 from comptes.serializers import serializers
 from comptes.tests.factories import UtilisateurFactory
@@ -66,3 +66,19 @@ def test_suppression_ecrit_avant(urlconf):
     ligne = JournalAudit.objects.get(action="SUPPRESSION")
     assert ligne.valeurs_avant["code"] == "DAF"
     assert ligne.valeurs_apres is None
+
+
+def test_snapshot_masque_les_champs_sensibles():
+    u = UtilisateurFactory()
+    instantane = _snapshot(u)
+    assert "password" not in instantane
+    assert "mot_de_passe_hash" not in instantane
+    assert instantane["login"] == u.login
+
+
+def test_audit_anonyme_ecrit_une_ligne_sans_utilisateur(urlconf):
+    c = APIClient()  # aucune authentification
+    r = c.post("/roles-test/", {"code": "DAF", "libelle": "DAF"}, format="json")
+    assert r.status_code == 201
+    ligne = JournalAudit.objects.get()
+    assert ligne.utilisateur is None

@@ -68,3 +68,14 @@ def test_logout_blackliste_le_refresh(utilisateur):
     c.cookies[REFRESH_COOKIE] = login.cookies[REFRESH_COOKIE].value
     again = c.post("/api/v1/auth/refresh/")
     assert again.status_code == 401
+
+
+def test_refresh_refuse_si_compte_desactive(utilisateur):
+    c = APIClient()
+    login = c.post("/api/v1/auth/login/", {"login": "compta", "password": "motdepasse42"},
+                   format="json")
+    c.cookies[REFRESH_COOKIE] = login.cookies[REFRESH_COOKIE].value
+    utilisateur.actif = False
+    utilisateur.save()
+    r = c.post("/api/v1/auth/refresh/")
+    assert r.status_code == 403
