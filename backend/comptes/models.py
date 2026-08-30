@@ -69,3 +69,31 @@ class UtilisateurRole(models.Model):
 
     def __str__(self):
         return f"{self.utilisateur} / {self.role} / {self.ecole_id}"
+
+
+class JournalAudit(models.Model):
+    class Action(models.TextChoices):
+        CREATION = "CREATION"
+        MODIFICATION = "MODIFICATION"
+        SUPPRESSION = "SUPPRESSION"
+
+    utilisateur = models.ForeignKey(
+        "comptes.Utilisateur", on_delete=models.SET_NULL, null=True
+    )
+    action = models.CharField(max_length=20, choices=Action.choices)
+    table_cible = models.CharField(max_length=60)
+    ligne_id = models.BigIntegerField()
+    valeurs_avant = models.JSONField(null=True)
+    valeurs_apres = models.JSONField(null=True)
+    date = models.DateTimeField(auto_now_add=True)
+    ip = models.CharField(max_length=45, null=True, blank=True)  # noqa: DJ001
+
+    class Meta:
+        db_table = "journal_audit"
+        indexes = [
+            models.Index(fields=["table_cible", "ligne_id"]),
+            models.Index(fields=["utilisateur", "date"]),
+        ]
+
+    def __str__(self):
+        return f"{self.action} {self.table_cible}#{self.ligne_id}"
