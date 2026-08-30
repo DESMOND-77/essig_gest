@@ -86,7 +86,7 @@ class JournalAudit(models.Model):
     valeurs_avant = models.JSONField(null=True)
     valeurs_apres = models.JSONField(null=True)
     date = models.DateTimeField(auto_now_add=True)
-    ip = models.CharField(max_length=45, null=True, blank=True)  # noqa: DJ001
+    ip = models.GenericIPAddressField(null=True, blank=True)
 
     class Meta:
         db_table = "journal_audit"

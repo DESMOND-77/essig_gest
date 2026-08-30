@@ -1,5 +1,4 @@
 import pytest
-from django.db import models  # noqa: F401
 from rest_framework import viewsets
 from rest_framework.routers import SimpleRouter
 from rest_framework.test import APIClient
@@ -45,6 +44,17 @@ def test_creation_ecrit_une_ligne_audit(urlconf):
     assert ligne.table_cible == "role"
     assert ligne.valeurs_apres["code"] == "DAF"
     assert ligne.valeurs_avant is None
+
+
+def test_modification_ecrit_avant_et_apres(urlconf):
+    role = Role.objects.create(code="DAF", libelle="DAF")
+    c = APIClient()
+    c.force_authenticate(UtilisateurFactory())
+    r = c.patch(f"/roles-test/{role.pk}/", {"libelle": "Directeur AF"}, format="json")
+    assert r.status_code == 200
+    ligne = JournalAudit.objects.get(action="MODIFICATION")
+    assert ligne.valeurs_avant["libelle"] == "DAF"
+    assert ligne.valeurs_apres["libelle"] == "Directeur AF"
 
 
 def test_suppression_ecrit_avant(urlconf):
