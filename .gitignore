@@ -9,6 +9,8 @@ inscription pdf.pdf
 # --- backend ---
 backend/.env
 backend/.venv/
+backend/staticfiles/
+*.egg-info/
 __pycache__/
 *.pyc
 .pytest_cache/
