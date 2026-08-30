@@ -1,4 +1,5 @@
 from django.conf import settings
+from drf_spectacular.utils import OpenApiResponse, extend_schema
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -7,7 +8,12 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .serializers import LoginSerializer, MoiSerializer
+from .serializers import (
+    AccessTokenSerializer,
+    LoginRequeteSerializer,
+    LoginSerializer,
+    MoiSerializer,
+)
 
 
 def _user_from_token(token):
@@ -34,6 +40,14 @@ class LoginView(APIView):
     throttle_classes = [ScopedRateThrottle]
     throttle_scope = "auth"
 
+    @extend_schema(
+        request=LoginRequeteSerializer,
+        responses={
+            200: AccessTokenSerializer,
+            401: OpenApiResponse(description="Identifiants invalides"),
+        },
+        tags=["auth"],
+    )
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         try:
@@ -53,6 +67,14 @@ class RefreshView(APIView):
     throttle_classes = [ScopedRateThrottle]
     throttle_scope = "auth"
 
+    @extend_schema(
+        request=None,
+        responses={
+            200: AccessTokenSerializer,
+            401: OpenApiResponse(description="Refresh absent ou invalide"),
+        },
+        tags=["auth"],
+    )
     def post(self, request):
         raw = request.COOKIES.get(settings.REFRESH_COOKIE_NAME)
         if not raw:
@@ -81,6 +103,11 @@ class LogoutView(APIView):
     permission_classes = [AllowAny]
     authentication_classes: list = []
 
+    @extend_schema(
+        request=None,
+        responses={205: OpenApiResponse(description="Déconnecté")},
+        tags=["auth"],
+    )
     def post(self, request):
         raw = request.COOKIES.get(settings.REFRESH_COOKIE_NAME)
         if raw:
@@ -96,5 +123,6 @@ class LogoutView(APIView):
 class MoiView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(responses=MoiSerializer, tags=["auth"])
     def get(self, request):
         return Response(MoiSerializer(request.user).data)

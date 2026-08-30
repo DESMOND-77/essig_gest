@@ -87,7 +87,25 @@ export interface paths {
 }
 export type webhooks = Record<string, never>;
 export interface components {
-    schemas: never;
+    schemas: {
+        AccessToken: {
+            readonly access: string;
+        };
+        LoginRequete: {
+            login: string;
+            password: string;
+        };
+        Moi: {
+            readonly id: number;
+            readonly login: string;
+            readonly email: string;
+            readonly roles: components["schemas"]["RoleAffecte"][];
+        };
+        RoleAffecte: {
+            code: string;
+            ecole_id: number | null;
+        };
+    };
     responses: never;
     parameters: never;
     requestBodies: never;
@@ -103,10 +121,24 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LoginRequete"];
+                "application/x-www-form-urlencoded": components["schemas"]["LoginRequete"];
+                "multipart/form-data": components["schemas"]["LoginRequete"];
+            };
+        };
         responses: {
-            /** @description No response body */
             200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccessToken"];
+                };
+            };
+            /** @description Identifiants invalides */
+            401: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -123,8 +155,8 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description No response body */
-            200: {
+            /** @description Déconnecté */
+            205: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -141,12 +173,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description No response body */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["Moi"];
+                };
             };
         };
     };
@@ -159,8 +192,16 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description No response body */
             200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccessToken"];
+                };
+            };
+            /** @description Refresh absent ou invalide */
+            401: {
                 headers: {
                     [name: string]: unknown;
                 };
