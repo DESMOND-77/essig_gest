@@ -5,10 +5,12 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends \
       build-essential default-libmysqlclient-dev pkg-config \
     && rm -rf /var/lib/apt/lists/*
-COPY pyproject.toml .
-# Arborescence minimale des paquets pour que `pip install .` (deps runtime
-# uniquement, PAS [dev]) résolve la disposition « flat-layout » de setuptools.
-RUN mkdir -p config comptes core && pip install --no-cache-dir --prefix=/install .
+# Sources réelles (vrais dossiers de paquets avec __init__.py) : `pip install .`
+# résout ainsi la disposition « flat-layout » de setuptools sans bidouille.
+# L'invalidation du cache de cet étage à chaque changement de source est sans
+# conséquence : l'étage builder est jeté.
+COPY . .
+RUN pip install --no-cache-dir --prefix=/install .
 
 # --- Étage 2 : image d'exécution -----------------------------------------
 FROM python:3.13-slim

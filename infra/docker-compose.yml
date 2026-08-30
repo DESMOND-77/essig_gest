@@ -3,9 +3,12 @@ name: mlamine
 services:
   db:
     image: mysql:8.4
+    restart: unless-stopped
     environment:
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_USER: ${DB_USER}
+      # Identité non secrète de la base : figée ici (évite tout doublon avec la
+      # section « harnais SQL » de .env.example, où DB_NAME=mlamine_test).
+      MYSQL_DATABASE: mlamine
+      MYSQL_USER: mlamine
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
@@ -20,14 +23,15 @@ services:
   web:
     build:
       context: ../backend
+    restart: unless-stopped
     environment:
       DJANGO_SETTINGS_MODULE: config.settings.prod
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
       DJANGO_DEBUG: "false"
       DJANGO_SECURE_SSL_REDIRECT: "false"
       DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
+      DB_NAME: mlamine
+      DB_USER: mlamine
       DB_PASSWORD: ${DB_PASSWORD}
       DB_HOST: db
       DB_PORT: "3306"
@@ -44,13 +48,15 @@ services:
     build:
       context: ..
       dockerfile: infra/caddy.Dockerfile
+    restart: unless-stopped
     environment:
       SITE_ADDRESS: ${SITE_ADDRESS}
     ports:
       - "80:80"
       - "443:443"
     depends_on:
-      - web
+      web:
+        condition: service_healthy
     volumes:
       - static:/srv/static
       - caddy_data:/data
