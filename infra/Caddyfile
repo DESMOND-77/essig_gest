@@ -1,0 +1,25 @@
+{$SITE_ADDRESS:localhost} {
+	encode gzip
+
+	# API et admin Django : proxy vers Gunicorn en conservant le préfixe
+	# (`handle`, pas `handle_path`) — le backend sert bien `/api/v1/...` et `/admin/...`.
+	handle /api/* {
+		reverse_proxy web:8000
+	}
+	handle /admin/* {
+		reverse_proxy web:8000
+	}
+
+	# Fichiers statiques Django (admin, DRF) collectés dans le volume partagé.
+	handle_path /static/* {
+		root * /srv/static
+		file_server
+	}
+
+	# SPA React : tout le reste retombe sur index.html.
+	handle {
+		root * /srv
+		try_files {path} /index.html
+		file_server
+	}
+}
