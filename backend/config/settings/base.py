@@ -70,6 +70,9 @@ if DATABASE_URL:
         )
     }
 else:
+    # Branche `DB_*` : `CONN_MAX_AGE` par défaut de Django (= 0, connexions
+    # non persistantes), alors que la branche `DATABASE_URL` mutualise à 600 s —
+    # volontaire pour le local / CI.
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
@@ -149,7 +152,7 @@ CORS_ALLOW_CREDENTIALS = True
 
 # --- Journalisation -------------------------------------------------------
 LOG_DIR = BASE_DIR / "logs"
-LOG_DIR.mkdir(exist_ok=True)
+LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 LOGGING = {
     "version": 1,

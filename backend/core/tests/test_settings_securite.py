@@ -21,7 +21,9 @@ def test_database_url_est_pris_en_compte_si_defini(monkeypatch):
     monkeypatch.setenv("DATABASE_URL", "sqlite:///tmp-e1.sqlite3")
     import config.settings.base as base
 
-    importlib.reload(base)
-    assert base.DATABASES["default"]["ENGINE"] == "django.db.backends.sqlite3"
-    monkeypatch.delenv("DATABASE_URL", raising=False)
-    importlib.reload(base)
+    try:
+        importlib.reload(base)
+        assert base.DATABASES["default"]["ENGINE"] == "django.db.backends.sqlite3"
+    finally:
+        monkeypatch.delenv("DATABASE_URL", raising=False)
+        importlib.reload(base)
