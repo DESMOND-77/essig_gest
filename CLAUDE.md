@@ -1,71 +1,116 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guide pour Claude Code (claude.ai/code) sur ce dépôt.
 
-## What this is
+## Ce que c'est
 
-Database schema design for **`mlamine`**, a multi-school administration system (students, fees,
-payroll, cash accounting). This directory is a data-modeling workspace, not an application — there
-is no build, no test suite, no application code. Everything is French-language (table/column names,
-enums, domain terms) and should stay that way.
+**ESSIG-GEST** (nom technique : `mlamine`) — plateforme web de gestion intégrée du groupe
+scolaire de Franceville (Gabon) : référentiel académique, personnes & inscriptions, scolarité &
+facturation, encaissements & trésorerie, RH & paie, évaluations & résultats. Remplace un système
+de classeurs Excel (un fichier par année). Outil **interne** (personnel administratif), **un seul
+groupe scolaire**, **multi-années**. Tout est en **français** (tables, colonnes, enums, domaine) —
+garder cette langue.
 
-Files:
-- `scheme.dbs` — **source of truth**. DbSchema GUI project (XML) holding the model plus diagram
-  layout. Edit the schema here, in the DbSchema app.
-- `scheme.dbs.bak` — DbSchema's automatic previous-version backup. Do not edit.
-- `mlamine.sql` — **generated artifact**: a phpMyAdmin dump of the DDL (structure only, no data).
-  Regenerate it from the database or DbSchema after model changes; don't treat hand-edits here as
-  authoritative.
-- `test 2026.xlsx` — the legacy spreadsheet system this schema replaces. One sheet per school
-  (`ESSIG`, `ESSS`/UPSS, `CFPA`) plus `BILAN *`, `DEPENSES`, `VERSEMENTS`, fee sheets. Use it to
-  understand real-world domain rules and expected reports.
-- `Enseignants.xlsx`, `test 2026.xlsx`, `inscription pdf.pdf` — sample/reference data and the
-  student registration form.
+Prompt de mission détaillé : `prompts/PROMPT MAÎTRE — AGENT PRINCIPAL DE DÉVELOPPEMENT ESSIG-GEST.md`.
 
-## Working with the schema
+## Architecture (monorepo)
+
+| Dossier | Contenu | État |
+|---|---|---|
+| `backend/` | Django 5.2 LTS + DRF, Python 3.13, MySQL 8.4. Modules : `comptes` (utilisateur/rôle/audit), `core` (health, exceptions, schéma). Les 6 modules métier (`referentiel`, `personnes`, `scolarite`, `tresorerie`, `paie`, `resultats`) **restent à créer**. | Socle terminé |
+| `frontend/` | React 19 + TypeScript strict + Vite + React Router 7 + Tailwind v4 + shadcn/ui (minimal) + TanStack Query. Auth JWT SPA. Aucun écran métier ni layout applicatif. | Amorce SPA |
+| `db/` | Migrations SQL MySQL 8.4 (49 tables + 13 vues) + harnais de tests SQL. **Référence de conception uniquement** — non appliquée par Django (voir « Sources de vérité »). | Complet |
+| `infra/` | Docker Compose (`caddy` / `web` / `db`), `Caddyfile`, Dockerfiles, `entrypoint.sh`, `backup.sh`. Validé statiquement, **jamais exécuté au runtime**. | Écrit |
+| `docs/superpowers/` | `specs/` (designs validés), `plans/` (plans d'implémentation). | — |
+| `.superpowers/sdd/` | Journaux de tâches (`progress.md`, `task-*`, `review-*.diff`) des chantiers déjà menés. | — |
+
+## Sources de vérité (hiérarchie)
+
+1. Décisions validées dans `docs/superpowers/specs/` — notamment
+   `2026-08-29-modele-donnees-gestion-groupe-scolaire-design.md` (modèle, 6 modules, règles D1–D21)
+   et `2026-08-30-choix-technologies-sis-design.md` (pile, décisions T1–T22).
+2. Arbitrages `.superpowers/sdd/*/progress.md` (rulings PF-*, décisions en cours de chantier).
+3. Plans `docs/superpowers/plans/`.
+4. **Django (ORM + migrations) = source de vérité de l'application qui tourne.**
+5. `db/migrations/*.sql` + `db/tests/*.sql` = référence de conception (colonnes, types, contraintes,
+   `ON DELETE`, colonnes générées, règles métier en SQL). À ne jamais ignorer.
+6. Hypothèses de l'agent — en dernier recours, documentées comme `Decision` dans une spec.
+
+Toute création/modification de modèle Django doit être comparée au `.sql` de référence
+correspondant via `python manage.py sqlmigrate`. Les assertions de `db/tests/*.sql` sont à porter
+en tests `pytest`.
+
+## Commandes
 
 ```sh
-# Load the DDL into a local MySQL 8.4 instance
-mysql -u root -p mlamine < mlamine.sql
+# Backend (depuis backend/, venv .venv, MySQL 8.4 requis)
+python manage.py check
+python manage.py makemigrations --check --dry-run
+python manage.py migrate
+python manage.py spectacular --file /tmp/schema.yml   # doit rester 0 Error
+pytest                                                # DB_USER=root (pytest crée test_<DB_NAME>)
+ruff check .                                          # select E,F,I,UP,B,DJ ; migrations exclues
+python manage.py seed_socle --admin-login <l> --admin-password <m>
 
-# Regenerate mlamine.sql from a live database (structure only)
-mysqldump -u root -p --no-data --skip-comments mlamine > mlamine.sql
+# Référence SQL (indépendante de Django)
+bash db/run.sh                                        # migrations + assertions sur MySQL 8.4 jetable
+
+# Frontend (depuis frontend/)
+npm run typecheck          # tsc -b --noEmit
+npm test                   # vitest
+npm run build
+npm run gen:api            # régénère src/api/schema.d.ts — exige le backend sur :8000
+
+# Infra
+docker compose --env-file .env -f infra/docker-compose.yml config
 ```
 
-DbSchema itself is a desktop GUI (`.dbs` files); there is no CLI for it here. When asked to change
-"the schema", change `mlamine.sql` and describe the equivalent DbSchema edit — the two must be kept
-in sync manually.
+Après changement d'API : serializers → `@extend_schema` → `spectacular` → `npm run gen:api` →
+adapter le front → tests.
 
-## Model architecture
+## Conventions
 
-**Tenant boundary is `ecole`.** Almost every domain table carries `id_ecole`. `ecole` also holds
-school-wide default fee amounts (`frais_photocopie`, `frais_mutelle`, `frais_matiere_oeuvre`,
-`frais_journee_integration`).
+- **Argent** : entiers FCFA, `DecimalField(max_digits=12, decimal_places=0)`. **Jamais de flottant.**
+- **Multi-années** : `etudiant` = identité persistante, `inscription` = annuelle. Ne jamais fusionner.
+- **Année financière** : SEPT…AOUT. `mois` enum par défaut `'SEPT'`.
+- **Nommage tables cible** : `snake_case` singulier, sans accent, français ; PK `id` ; FK `<table>_id`
+  (cf. design données §5). `db_table` explicite sur chaque modèle Django.
+- **Clé primaire ORM** : `BigAutoField` / `BIGINT` partout (défaut Django), même si `db/migrations`
+  utilise `INT UNSIGNED` — divergence assumée, voir
+  `docs/superpowers/specs/2026-09-03-conventions-portage-orm-design.md`.
+- **RBAC** : 5 rôles (`COMPTABLE`, `DAF`, `DIRECTION`, `SCOLARITE`, `LECTURE`), contrôle
+  **exclusivement côté serveur** (`comptes/permissions.py` : `ARole(...)`, `EcritureInterditeEnLecture`).
+  Le front masque des boutons, ce n'est pas une sécurité.
+- **Audit** : `AuditLogMixin` sur les ViewSets d'opérations sensibles (avant/après JSON, IP).
+  Jamais de secret/mot de passe/jeton dans `journal_audit`.
+- **Transactions** : opérations multi-étapes (inscription+échéancier+frais, encaissement+imputation,
+  virement, paie, délibération) atomiques (`transaction.atomic`).
+- **Agrégats** : calculés (vues SQL / annotations / services), jamais stockés — sauf figés après
+  délibération.
+- **Erreurs API** : exceptions typées `core/exceptions.py` (FR, codes stables), format DRF standard.
+- **Règles LMD / classique** : cf. design données D3–D8 et prompt maître §7 (validation matière
+  ≥ 10/20 sans compensation ; `note_retenue = max(normale, min(rattrapage, 10))` ; passage
+  60/48/<48 crédits ; CFPA = moyenne annuelle /20).
 
-**Academic hierarchy** (two partly parallel structures):
-- `ecole` → `formation`, `ecole` → `niveaux`
-- `niveaux` → `filieres` → `options` → `matiere`
-- `etudiants` link out to `id_ecole`, `id_formation`, `id_niveau`, `id_option`.
+## Pièges connus
 
-**Per-student fee ledgers** — `mutuelle_etudiant`, `photocopie_etudiant`, `uniforme_etudiant` all
-follow the same shape: `avance` / `reste` / `etat_payement enum('non','partiel','solde')` tied to
-`id_etudiant` (+ `id_ecole`, and `id_uniforme` for uniforms). `modalites_payement` defines the
-installment plan (`montant_echeance`, `nombre_echeance`, `total`) per `id_niveau`.
+- `.env` est à la **racine** du dépôt (pas dans `infra/`). Compose : toujours `--env-file .env`
+  depuis la racine. `.env`/`.env.example` mélangent la section « harnais SQL » (`DB_NAME=mlamine_test`)
+  et la section compose (`mlamine`) — last-wins.
+- Tests `pytest` : `DB_USER=root` obligatoire (l'utilisateur applicatif MySQL n'a pas le droit de
+  créer `test_<DB_NAME>`).
+- Namespace URL `v1:` requis (`SpectacularSwaggerView(url_name="v1:schema")`) — ne pas le retirer.
+- `SPECTACULAR` : `SERVE_PERMISSIONS = IsAdminUser` en prod (schéma non public).
+- `utilisateur_role.ecole_id` est encore un `PositiveIntegerField` sans FK → devient une vraie FK
+  vers `referentiel.Ecole` en Phase 1.
+- `Utilisateur.derniere_connexion` non branché (collision avec `last_login` d'`AbstractBaseUser`) —
+  TODO dans `settings/base.py`.
+- Infra Docker/Caddy jamais lancée bout-en-bout : à vérifier dans un environnement réseau normal
+  avant tout déploiement (checklist dans `.superpowers/sdd/2026-08-30-socle-applicatif-sis/progress.md`).
+- Aucun remote Git configuré. Branche de travail : `main`.
 
-**Money movement** — `versements` (student tuition installments, `mois` enum), `salaire_enseignant`
-(teacher pay per month / matiere / formation / niveau / school, `source enum('caisse','banque')`),
-`depenses` (free-text expenses per `compte`), `operation_banque_caisse` (raw cash-in/cash-out with
-`intitule_compte enum('banque','caisse')`). Financial months run **SEPT…AOUT** (school year), and
-the `mois` enum defaults to `'SEPT'`.
+## Portées technologiques écartées v1 (design §9)
 
-## Conventions and known quirks
-
-- **Naming is inconsistently pluralized** by design — `etudiants`, `filieres`, `options`, `niveaux`
-  are plural; `enseignant`, `matiere`, `formation`, `ecole` are singular. Match the existing table
-  when adding related objects; don't "fix" the others.
-- `ecole.annee_scolaire` is a FK to `annee_scolaire.annee` (a `varchar(9)` like `2025-2026`), **not**
-  to its `id`.
-- In `mlamine.sql`, only `versements.id` is `AUTO_INCREMENT`; other PKs are plain `int` (ids are
-  assigned by the app/DbSchema). Several tables (`depenses`, `operation_banque_caisse`, `versements`,
-  `annee_scolaire`) have no foreign keys.
-- `etudiants` uniqueness is the composite `(matricule, numero_odre, nom)`.
+PostgreSQL, Celery/Redis, WebSockets, GraphQL, microservices/K8s, SSO, multi-tenant SaaS, portail
+étudiant/parent, paiement en ligne, mobile. Ne pas réintroduire sans nouvelle exigence métier
+documentée.
