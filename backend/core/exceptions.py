@@ -30,3 +30,11 @@ class LimiteDebitDepasseeException(APIException):
     status_code = 429
     default_detail = _("Trop de requêtes. Réessayez plus tard.")
     default_code = "limite_debit_depassee"
+
+
+class ConflitSuppressionException(APIException):
+    status_code = 409
+    default_detail = _(
+        "Suppression impossible : cet élément est référencé ailleurs."
+    )
+    default_code = "conflit_suppression"
