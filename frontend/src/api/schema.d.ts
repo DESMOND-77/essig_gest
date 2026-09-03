@@ -84,6 +84,754 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/referentiel/annees-scolaires/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        get: operations["referentiel_annees_scolaires_list"];
+        put?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        post: operations["referentiel_annees_scolaires_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/referentiel/annees-scolaires/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        get: operations["referentiel_annees_scolaires_retrieve"];
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        put: operations["referentiel_annees_scolaires_update"];
+        post?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        delete: operations["referentiel_annees_scolaires_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        patch: operations["referentiel_annees_scolaires_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/referentiel/classes/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        get: operations["referentiel_classes_list"];
+        put?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        post: operations["referentiel_classes_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/referentiel/classes/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        get: operations["referentiel_classes_retrieve"];
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        put: operations["referentiel_classes_update"];
+        post?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        delete: operations["referentiel_classes_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        patch: operations["referentiel_classes_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/referentiel/ecoles/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        get: operations["referentiel_ecoles_list"];
+        put?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        post: operations["referentiel_ecoles_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/referentiel/ecoles/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        get: operations["referentiel_ecoles_retrieve"];
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        put: operations["referentiel_ecoles_update"];
+        post?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        delete: operations["referentiel_ecoles_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        patch: operations["referentiel_ecoles_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/referentiel/filieres/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        get: operations["referentiel_filieres_list"];
+        put?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        post: operations["referentiel_filieres_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/referentiel/filieres/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        get: operations["referentiel_filieres_retrieve"];
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        put: operations["referentiel_filieres_update"];
+        post?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        delete: operations["referentiel_filieres_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        patch: operations["referentiel_filieres_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/referentiel/groupes-scolaires/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        get: operations["referentiel_groupes_scolaires_list"];
+        put?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        post: operations["referentiel_groupes_scolaires_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/referentiel/groupes-scolaires/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        get: operations["referentiel_groupes_scolaires_retrieve"];
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        put: operations["referentiel_groupes_scolaires_update"];
+        post?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        delete: operations["referentiel_groupes_scolaires_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        patch: operations["referentiel_groupes_scolaires_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/referentiel/matieres/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        get: operations["referentiel_matieres_list"];
+        put?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        post: operations["referentiel_matieres_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/referentiel/matieres/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        get: operations["referentiel_matieres_retrieve"];
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        put: operations["referentiel_matieres_update"];
+        post?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        delete: operations["referentiel_matieres_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        patch: operations["referentiel_matieres_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/referentiel/modalites-formation/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        get: operations["referentiel_modalites_formation_list"];
+        put?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        post: operations["referentiel_modalites_formation_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/referentiel/modalites-formation/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        get: operations["referentiel_modalites_formation_retrieve"];
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        put: operations["referentiel_modalites_formation_update"];
+        post?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        delete: operations["referentiel_modalites_formation_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        patch: operations["referentiel_modalites_formation_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/referentiel/niveaux/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        get: operations["referentiel_niveaux_list"];
+        put?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        post: operations["referentiel_niveaux_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/referentiel/niveaux/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        get: operations["referentiel_niveaux_retrieve"];
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        put: operations["referentiel_niveaux_update"];
+        post?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        delete: operations["referentiel_niveaux_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        patch: operations["referentiel_niveaux_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/referentiel/options-filiere/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        get: operations["referentiel_options_filiere_list"];
+        put?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        post: operations["referentiel_options_filiere_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/referentiel/options-filiere/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        get: operations["referentiel_options_filiere_retrieve"];
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        put: operations["referentiel_options_filiere_update"];
+        post?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        delete: operations["referentiel_options_filiere_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        patch: operations["referentiel_options_filiere_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/referentiel/periodes/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        get: operations["referentiel_periodes_list"];
+        put?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        post: operations["referentiel_periodes_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/referentiel/periodes/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        get: operations["referentiel_periodes_retrieve"];
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        put: operations["referentiel_periodes_update"];
+        post?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        delete: operations["referentiel_periodes_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        patch: operations["referentiel_periodes_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/referentiel/sessions-examen/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        get: operations["referentiel_sessions_examen_list"];
+        put?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        post: operations["referentiel_sessions_examen_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/referentiel/sessions-examen/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        get: operations["referentiel_sessions_examen_retrieve"];
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        put: operations["referentiel_sessions_examen_update"];
+        post?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        delete: operations["referentiel_sessions_examen_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
+         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
+         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
+         *     `super().perform_destroy()`.
+         */
+        patch: operations["referentiel_sessions_examen_partial_update"];
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -91,9 +839,81 @@ export interface components {
         AccessToken: {
             readonly access: string;
         };
+        AnneeScolaire: {
+            readonly id: number;
+            est_courante?: boolean;
+            libelle: string;
+            /** Format: date */
+            date_debut: string;
+            /** Format: date */
+            date_fin: string;
+        };
+        Classe: {
+            readonly id: number;
+            readonly libelle_auto: string;
+            effectif_max?: number | null;
+            annee_scolaire: number;
+            niveau: number;
+            option_filiere: number;
+            modalite_formation: number;
+        };
+        /**
+         * @description * `FI` - Formation initiale
+         *     * `FC` - Formation continue
+         *     * `FL` - FL
+         *     * `FT` - FT
+         * @enum {string}
+         */
+        CodeEnum: "FI" | "FC" | "FL" | "FT";
+        Ecole: {
+            readonly id: number;
+            readonly groupe_scolaire_libelle: string;
+            nom: string;
+            sigle?: string | null;
+            pole: components["schemas"]["PoleEnum"];
+            regime: components["schemas"]["RegimeEnum"];
+            logo?: string | null;
+            contacts?: string | null;
+            email?: string | null;
+            groupe_scolaire: number;
+        };
+        Filiere: {
+            readonly id: number;
+            readonly ecole_libelle: string;
+            nom: string;
+            sigle: string;
+            ecole: number;
+        };
+        GroupeScolaire: {
+            readonly id: number;
+            nom: string;
+            sigle?: string | null;
+            logo?: string | null;
+            contacts?: string | null;
+            email?: string | null;
+            adresse?: string | null;
+        };
         LoginRequete: {
             login: string;
             password: string;
+        };
+        Matiere: {
+            readonly id: number;
+            readonly niveau_libelle: string;
+            readonly option_filiere_libelle: string;
+            semestre: components["schemas"]["SemestreEnum"];
+            nom: string;
+            code: string;
+            coefficient: number;
+            credits?: number | null;
+            volume_horaire: number;
+            niveau: number;
+            option_filiere: number;
+        };
+        ModaliteFormation: {
+            readonly id: number;
+            code: components["schemas"]["CodeEnum"];
+            libelle: string;
         };
         Moi: {
             readonly id: number;
@@ -101,10 +921,351 @@ export interface components {
             readonly email: string;
             readonly roles: components["schemas"]["RoleAffecte"][];
         };
+        Niveau: {
+            readonly id: number;
+            readonly ecole_libelle: string;
+            code: string;
+            libelle: string;
+            ordre: number;
+            credits_requis?: number | null;
+            a_soutenance?: boolean;
+            a_examen_national?: boolean;
+            ecole: number;
+        };
+        OptionFiliere: {
+            readonly id: number;
+            readonly filiere_libelle: string;
+            nom: string;
+            sigle: string;
+            filiere: number;
+        };
+        PaginatedAnneeScolaireList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["AnneeScolaire"][];
+        };
+        PaginatedClasseList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Classe"][];
+        };
+        PaginatedEcoleList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Ecole"][];
+        };
+        PaginatedFiliereList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Filiere"][];
+        };
+        PaginatedGroupeScolaireList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["GroupeScolaire"][];
+        };
+        PaginatedMatiereList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Matiere"][];
+        };
+        PaginatedModaliteFormationList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["ModaliteFormation"][];
+        };
+        PaginatedNiveauList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Niveau"][];
+        };
+        PaginatedOptionFiliereList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["OptionFiliere"][];
+        };
+        PaginatedPeriodeList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Periode"][];
+        };
+        PaginatedSessionExamenList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["SessionExamen"][];
+        };
+        PatchedAnneeScolaire: {
+            readonly id?: number;
+            est_courante?: boolean;
+            libelle?: string;
+            /** Format: date */
+            date_debut?: string;
+            /** Format: date */
+            date_fin?: string;
+        };
+        PatchedClasse: {
+            readonly id?: number;
+            readonly libelle_auto?: string;
+            effectif_max?: number | null;
+            annee_scolaire?: number;
+            niveau?: number;
+            option_filiere?: number;
+            modalite_formation?: number;
+        };
+        PatchedEcole: {
+            readonly id?: number;
+            readonly groupe_scolaire_libelle?: string;
+            nom?: string;
+            sigle?: string | null;
+            pole?: components["schemas"]["PoleEnum"];
+            regime?: components["schemas"]["RegimeEnum"];
+            logo?: string | null;
+            contacts?: string | null;
+            email?: string | null;
+            groupe_scolaire?: number;
+        };
+        PatchedFiliere: {
+            readonly id?: number;
+            readonly ecole_libelle?: string;
+            nom?: string;
+            sigle?: string;
+            ecole?: number;
+        };
+        PatchedGroupeScolaire: {
+            readonly id?: number;
+            nom?: string;
+            sigle?: string | null;
+            logo?: string | null;
+            contacts?: string | null;
+            email?: string | null;
+            adresse?: string | null;
+        };
+        PatchedMatiere: {
+            readonly id?: number;
+            readonly niveau_libelle?: string;
+            readonly option_filiere_libelle?: string;
+            semestre?: components["schemas"]["SemestreEnum"];
+            nom?: string;
+            code?: string;
+            coefficient?: number;
+            credits?: number | null;
+            volume_horaire?: number;
+            niveau?: number;
+            option_filiere?: number;
+        };
+        PatchedModaliteFormation: {
+            readonly id?: number;
+            code?: components["schemas"]["CodeEnum"];
+            libelle?: string;
+        };
+        PatchedNiveau: {
+            readonly id?: number;
+            readonly ecole_libelle?: string;
+            code?: string;
+            libelle?: string;
+            ordre?: number;
+            credits_requis?: number | null;
+            a_soutenance?: boolean;
+            a_examen_national?: boolean;
+            ecole?: number;
+        };
+        PatchedOptionFiliere: {
+            readonly id?: number;
+            readonly filiere_libelle?: string;
+            nom?: string;
+            sigle?: string;
+            filiere?: number;
+        };
+        PatchedPeriode: {
+            readonly id?: number;
+            readonly annee_scolaire_libelle?: string;
+            numero?: number;
+            libelle?: string;
+            /** Format: date */
+            date_debut?: string;
+            /** Format: date */
+            date_fin?: string;
+            annee_scolaire?: number;
+        };
+        PatchedSessionExamen: {
+            readonly id?: number;
+            readonly periode_libelle?: string;
+            type?: components["schemas"]["TypeEnum"];
+            /** Format: date */
+            date_debut?: string | null;
+            /** Format: date */
+            date_fin?: string | null;
+            periode?: number;
+        };
+        Periode: {
+            readonly id: number;
+            readonly annee_scolaire_libelle: string;
+            numero: number;
+            libelle: string;
+            /** Format: date */
+            date_debut: string;
+            /** Format: date */
+            date_fin: string;
+            annee_scolaire: number;
+        };
+        /**
+         * @description * `ESSIG` - ESSIG
+         *     * `UPSS` - UPSS
+         *     * `CFPA` - CFPA
+         *     * `CICI` - CICI
+         * @enum {string}
+         */
+        PoleEnum: "ESSIG" | "UPSS" | "CFPA" | "CICI";
+        /**
+         * @description * `LMD` - LMD
+         *     * `CLASSIQUE` - Classique
+         * @enum {string}
+         */
+        RegimeEnum: "LMD" | "CLASSIQUE";
         RoleAffecte: {
             code: string;
             ecole_id: number | null;
         };
+        SanteDegradee: {
+            status: string;
+            db: string;
+        };
+        SanteReponse: {
+            status: string;
+            db: string;
+        };
+        /**
+         * @description * `S1` - Semestre 1
+         *     * `S2` - Semestre 2
+         * @enum {string}
+         */
+        SemestreEnum: "S1" | "S2";
+        SessionExamen: {
+            readonly id: number;
+            readonly periode_libelle: string;
+            type: components["schemas"]["TypeEnum"];
+            /** Format: date */
+            date_debut?: string | null;
+            /** Format: date */
+            date_fin?: string | null;
+            periode: number;
+        };
+        /**
+         * @description * `NORMALE` - Normale
+         *     * `RATTRAPAGE` - Rattrapage
+         * @enum {string}
+         */
+        TypeEnum: "NORMALE" | "RATTRAPAGE";
     };
     responses: never;
     parameters: never;
@@ -218,12 +1379,1718 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description No response body */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
+                content: {
+                    "application/json": components["schemas"]["SanteReponse"];
+                };
+            };
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SanteDegradee"];
+                };
+            };
+        };
+    };
+    referentiel_annees_scolaires_list: {
+        parameters: {
+            query?: {
+                est_courante?: boolean;
+                libelle__icontains?: string;
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedAnneeScolaireList"];
+                };
+            };
+        };
+    };
+    referentiel_annees_scolaires_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AnneeScolaire"];
+                "application/x-www-form-urlencoded": components["schemas"]["AnneeScolaire"];
+                "multipart/form-data": components["schemas"]["AnneeScolaire"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AnneeScolaire"];
+                };
+            };
+        };
+    };
+    referentiel_annees_scolaires_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this annee scolaire. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AnneeScolaire"];
+                };
+            };
+        };
+    };
+    referentiel_annees_scolaires_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this annee scolaire. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AnneeScolaire"];
+                "application/x-www-form-urlencoded": components["schemas"]["AnneeScolaire"];
+                "multipart/form-data": components["schemas"]["AnneeScolaire"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AnneeScolaire"];
+                };
+            };
+        };
+    };
+    referentiel_annees_scolaires_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this annee scolaire. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
                 content?: never;
+            };
+        };
+    };
+    referentiel_annees_scolaires_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this annee scolaire. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedAnneeScolaire"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedAnneeScolaire"];
+                "multipart/form-data": components["schemas"]["PatchedAnneeScolaire"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AnneeScolaire"];
+                };
+            };
+        };
+    };
+    referentiel_classes_list: {
+        parameters: {
+            query?: {
+                annee_scolaire?: number;
+                modalite_formation?: number;
+                niveau?: number;
+                option_filiere?: number;
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedClasseList"];
+                };
+            };
+        };
+    };
+    referentiel_classes_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Classe"];
+                "application/x-www-form-urlencoded": components["schemas"]["Classe"];
+                "multipart/form-data": components["schemas"]["Classe"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Classe"];
+                };
+            };
+        };
+    };
+    referentiel_classes_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this classe. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Classe"];
+                };
+            };
+        };
+    };
+    referentiel_classes_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this classe. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Classe"];
+                "application/x-www-form-urlencoded": components["schemas"]["Classe"];
+                "multipart/form-data": components["schemas"]["Classe"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Classe"];
+                };
+            };
+        };
+    };
+    referentiel_classes_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this classe. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    referentiel_classes_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this classe. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedClasse"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedClasse"];
+                "multipart/form-data": components["schemas"]["PatchedClasse"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Classe"];
+                };
+            };
+        };
+    };
+    referentiel_ecoles_list: {
+        parameters: {
+            query?: {
+                groupe_scolaire?: number;
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /**
+                 * @description * `ESSIG` - ESSIG
+                 *     * `UPSS` - UPSS
+                 *     * `CFPA` - CFPA
+                 *     * `CICI` - CICI
+                 */
+                pole?: "CFPA" | "CICI" | "ESSIG" | "UPSS";
+                /**
+                 * @description * `LMD` - LMD
+                 *     * `CLASSIQUE` - Classique
+                 */
+                regime?: "CLASSIQUE" | "LMD";
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedEcoleList"];
+                };
+            };
+        };
+    };
+    referentiel_ecoles_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Ecole"];
+                "application/x-www-form-urlencoded": components["schemas"]["Ecole"];
+                "multipart/form-data": components["schemas"]["Ecole"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ecole"];
+                };
+            };
+        };
+    };
+    referentiel_ecoles_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this ecole. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ecole"];
+                };
+            };
+        };
+    };
+    referentiel_ecoles_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this ecole. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Ecole"];
+                "application/x-www-form-urlencoded": components["schemas"]["Ecole"];
+                "multipart/form-data": components["schemas"]["Ecole"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ecole"];
+                };
+            };
+        };
+    };
+    referentiel_ecoles_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this ecole. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    referentiel_ecoles_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this ecole. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedEcole"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedEcole"];
+                "multipart/form-data": components["schemas"]["PatchedEcole"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Ecole"];
+                };
+            };
+        };
+    };
+    referentiel_filieres_list: {
+        parameters: {
+            query?: {
+                ecole?: number;
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+                sigle__icontains?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedFiliereList"];
+                };
+            };
+        };
+    };
+    referentiel_filieres_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Filiere"];
+                "application/x-www-form-urlencoded": components["schemas"]["Filiere"];
+                "multipart/form-data": components["schemas"]["Filiere"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Filiere"];
+                };
+            };
+        };
+    };
+    referentiel_filieres_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this filiere. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Filiere"];
+                };
+            };
+        };
+    };
+    referentiel_filieres_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this filiere. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Filiere"];
+                "application/x-www-form-urlencoded": components["schemas"]["Filiere"];
+                "multipart/form-data": components["schemas"]["Filiere"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Filiere"];
+                };
+            };
+        };
+    };
+    referentiel_filieres_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this filiere. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    referentiel_filieres_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this filiere. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedFiliere"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedFiliere"];
+                "multipart/form-data": components["schemas"]["PatchedFiliere"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Filiere"];
+                };
+            };
+        };
+    };
+    referentiel_groupes_scolaires_list: {
+        parameters: {
+            query?: {
+                nom__icontains?: string;
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedGroupeScolaireList"];
+                };
+            };
+        };
+    };
+    referentiel_groupes_scolaires_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GroupeScolaire"];
+                "application/x-www-form-urlencoded": components["schemas"]["GroupeScolaire"];
+                "multipart/form-data": components["schemas"]["GroupeScolaire"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GroupeScolaire"];
+                };
+            };
+        };
+    };
+    referentiel_groupes_scolaires_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this groupe scolaire. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GroupeScolaire"];
+                };
+            };
+        };
+    };
+    referentiel_groupes_scolaires_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this groupe scolaire. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GroupeScolaire"];
+                "application/x-www-form-urlencoded": components["schemas"]["GroupeScolaire"];
+                "multipart/form-data": components["schemas"]["GroupeScolaire"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GroupeScolaire"];
+                };
+            };
+        };
+    };
+    referentiel_groupes_scolaires_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this groupe scolaire. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    referentiel_groupes_scolaires_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this groupe scolaire. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedGroupeScolaire"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedGroupeScolaire"];
+                "multipart/form-data": components["schemas"]["PatchedGroupeScolaire"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GroupeScolaire"];
+                };
+            };
+        };
+    };
+    referentiel_matieres_list: {
+        parameters: {
+            query?: {
+                niveau?: number;
+                option_filiere?: number;
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+                /**
+                 * @description * `S1` - Semestre 1
+                 *     * `S2` - Semestre 2
+                 */
+                semestre?: "S1" | "S2";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedMatiereList"];
+                };
+            };
+        };
+    };
+    referentiel_matieres_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Matiere"];
+                "application/x-www-form-urlencoded": components["schemas"]["Matiere"];
+                "multipart/form-data": components["schemas"]["Matiere"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Matiere"];
+                };
+            };
+        };
+    };
+    referentiel_matieres_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this matiere. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Matiere"];
+                };
+            };
+        };
+    };
+    referentiel_matieres_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this matiere. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Matiere"];
+                "application/x-www-form-urlencoded": components["schemas"]["Matiere"];
+                "multipart/form-data": components["schemas"]["Matiere"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Matiere"];
+                };
+            };
+        };
+    };
+    referentiel_matieres_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this matiere. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    referentiel_matieres_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this matiere. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedMatiere"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedMatiere"];
+                "multipart/form-data": components["schemas"]["PatchedMatiere"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Matiere"];
+                };
+            };
+        };
+    };
+    referentiel_modalites_formation_list: {
+        parameters: {
+            query?: {
+                /**
+                 * @description * `FI` - Formation initiale
+                 *     * `FC` - Formation continue
+                 *     * `FL` - FL
+                 *     * `FT` - FT
+                 */
+                code?: "FC" | "FI" | "FL" | "FT";
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedModaliteFormationList"];
+                };
+            };
+        };
+    };
+    referentiel_modalites_formation_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ModaliteFormation"];
+                "application/x-www-form-urlencoded": components["schemas"]["ModaliteFormation"];
+                "multipart/form-data": components["schemas"]["ModaliteFormation"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModaliteFormation"];
+                };
+            };
+        };
+    };
+    referentiel_modalites_formation_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this modalite formation. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModaliteFormation"];
+                };
+            };
+        };
+    };
+    referentiel_modalites_formation_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this modalite formation. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ModaliteFormation"];
+                "application/x-www-form-urlencoded": components["schemas"]["ModaliteFormation"];
+                "multipart/form-data": components["schemas"]["ModaliteFormation"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModaliteFormation"];
+                };
+            };
+        };
+    };
+    referentiel_modalites_formation_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this modalite formation. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    referentiel_modalites_formation_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this modalite formation. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedModaliteFormation"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedModaliteFormation"];
+                "multipart/form-data": components["schemas"]["PatchedModaliteFormation"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModaliteFormation"];
+                };
+            };
+        };
+    };
+    referentiel_niveaux_list: {
+        parameters: {
+            query?: {
+                code__icontains?: string;
+                ecole?: number;
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedNiveauList"];
+                };
+            };
+        };
+    };
+    referentiel_niveaux_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Niveau"];
+                "application/x-www-form-urlencoded": components["schemas"]["Niveau"];
+                "multipart/form-data": components["schemas"]["Niveau"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Niveau"];
+                };
+            };
+        };
+    };
+    referentiel_niveaux_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this niveau. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Niveau"];
+                };
+            };
+        };
+    };
+    referentiel_niveaux_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this niveau. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Niveau"];
+                "application/x-www-form-urlencoded": components["schemas"]["Niveau"];
+                "multipart/form-data": components["schemas"]["Niveau"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Niveau"];
+                };
+            };
+        };
+    };
+    referentiel_niveaux_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this niveau. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    referentiel_niveaux_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this niveau. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedNiveau"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedNiveau"];
+                "multipart/form-data": components["schemas"]["PatchedNiveau"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Niveau"];
+                };
+            };
+        };
+    };
+    referentiel_options_filiere_list: {
+        parameters: {
+            query?: {
+                filiere?: number;
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedOptionFiliereList"];
+                };
+            };
+        };
+    };
+    referentiel_options_filiere_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OptionFiliere"];
+                "application/x-www-form-urlencoded": components["schemas"]["OptionFiliere"];
+                "multipart/form-data": components["schemas"]["OptionFiliere"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OptionFiliere"];
+                };
+            };
+        };
+    };
+    referentiel_options_filiere_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this option filiere. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OptionFiliere"];
+                };
+            };
+        };
+    };
+    referentiel_options_filiere_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this option filiere. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OptionFiliere"];
+                "application/x-www-form-urlencoded": components["schemas"]["OptionFiliere"];
+                "multipart/form-data": components["schemas"]["OptionFiliere"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OptionFiliere"];
+                };
+            };
+        };
+    };
+    referentiel_options_filiere_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this option filiere. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    referentiel_options_filiere_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this option filiere. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedOptionFiliere"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedOptionFiliere"];
+                "multipart/form-data": components["schemas"]["PatchedOptionFiliere"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OptionFiliere"];
+                };
+            };
+        };
+    };
+    referentiel_periodes_list: {
+        parameters: {
+            query?: {
+                annee_scolaire?: number;
+                numero?: number;
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedPeriodeList"];
+                };
+            };
+        };
+    };
+    referentiel_periodes_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Periode"];
+                "application/x-www-form-urlencoded": components["schemas"]["Periode"];
+                "multipart/form-data": components["schemas"]["Periode"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Periode"];
+                };
+            };
+        };
+    };
+    referentiel_periodes_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this periode. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Periode"];
+                };
+            };
+        };
+    };
+    referentiel_periodes_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this periode. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Periode"];
+                "application/x-www-form-urlencoded": components["schemas"]["Periode"];
+                "multipart/form-data": components["schemas"]["Periode"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Periode"];
+                };
+            };
+        };
+    };
+    referentiel_periodes_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this periode. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    referentiel_periodes_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this periode. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedPeriode"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedPeriode"];
+                "multipart/form-data": components["schemas"]["PatchedPeriode"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Periode"];
+                };
+            };
+        };
+    };
+    referentiel_sessions_examen_list: {
+        parameters: {
+            query?: {
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                periode?: number;
+                /** @description A search term. */
+                search?: string;
+                /**
+                 * @description * `NORMALE` - Normale
+                 *     * `RATTRAPAGE` - Rattrapage
+                 */
+                type?: "NORMALE" | "RATTRAPAGE";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedSessionExamenList"];
+                };
+            };
+        };
+    };
+    referentiel_sessions_examen_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SessionExamen"];
+                "application/x-www-form-urlencoded": components["schemas"]["SessionExamen"];
+                "multipart/form-data": components["schemas"]["SessionExamen"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionExamen"];
+                };
+            };
+        };
+    };
+    referentiel_sessions_examen_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this session examen. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionExamen"];
+                };
+            };
+        };
+    };
+    referentiel_sessions_examen_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this session examen. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SessionExamen"];
+                "application/x-www-form-urlencoded": components["schemas"]["SessionExamen"];
+                "multipart/form-data": components["schemas"]["SessionExamen"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionExamen"];
+                };
+            };
+        };
+    };
+    referentiel_sessions_examen_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this session examen. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    referentiel_sessions_examen_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this session examen. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedSessionExamen"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedSessionExamen"];
+                "multipart/form-data": components["schemas"]["PatchedSessionExamen"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionExamen"];
+                };
             };
         };
     };
