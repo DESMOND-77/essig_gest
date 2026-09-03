@@ -56,13 +56,21 @@ class UtilisateurRole(models.Model):
         "comptes.Utilisateur", on_delete=models.CASCADE, related_name="roles"
     )
     role = models.ForeignKey(Role, on_delete=models.RESTRICT)
-    ecole_id = models.PositiveIntegerField(null=True, blank=True)
+    ecole = models.ForeignKey(
+        "referentiel.Ecole",
+        on_delete=models.RESTRICT,
+        null=True,
+        blank=True,
+        db_column="ecole_id",
+        db_index=True,
+        related_name="+",
+    )
 
     class Meta:
         db_table = "utilisateur_role"
         constraints = [
             models.UniqueConstraint(
-                fields=["utilisateur", "role", "ecole_id"],
+                fields=["utilisateur", "role", "ecole"],
                 name="uniq_utilisateur_role_ecole",
             )
         ]
