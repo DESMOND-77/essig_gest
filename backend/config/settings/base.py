@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "django_filters",
     "core",
     "comptes",
+    "referentiel",
 ]
 
 MIDDLEWARE = [
@@ -72,6 +73,10 @@ if DATABASE_URL:
         _cfg["OPTIONS"].update({"charset": "utf8mb4", "sql_mode": "STRICT_TRANS_TABLES"})
         if not DEBUG:
             _cfg["OPTIONS"].setdefault("ssl", {"ca": env("DB_SSL_CA", default=None)})
+    # Ruling T1-1 : la base de test doit être en utf8mb4_unicode_ci (le défaut
+    # serveur MySQL 8 est utf8mb4_0900_ai_ci, qui divergerait du SQL de référence
+    # et changerait le tri/comparaison des accents français).
+    _cfg.setdefault("TEST", {"CHARSET": "utf8mb4", "COLLATION": "utf8mb4_unicode_ci"})
     DATABASES = {"default": _cfg}
 else:
     # Branche `DB_*` : `CONN_MAX_AGE` par défaut de Django (= 0, connexions
@@ -89,6 +94,9 @@ else:
                 "charset": "utf8mb4",
                 "sql_mode": "STRICT_TRANS_TABLES",
             },
+            # Ruling T1-1 : base de test en utf8mb4_unicode_ci (cf. branche
+            # DATABASE_URL ci-dessus).
+            "TEST": {"CHARSET": "utf8mb4", "COLLATION": "utf8mb4_unicode_ci"},
         }
     }
 
