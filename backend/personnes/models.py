@@ -1,6 +1,7 @@
 from django.db import models
 
-from referentiel.models import Ecole
+from core.models import Auditable
+from referentiel.models import AnneeScolaire, Classe, Ecole
 
 
 class Etudiant(models.Model):
@@ -117,3 +118,105 @@ class CompteurMatricule(models.Model):
 
     def __str__(self):
         return f"{self.pole}={self.valeur}"
+
+
+class Inscription(Auditable):
+    class Type(models.TextChoices):
+        INSCRIPTION = "INSCRIPTION", "Inscription"
+        REINSCRIPTION = "REINSCRIPTION", "Réinscription"
+
+    class Statut(models.TextChoices):
+        NOUVEAU = "NOUVEAU", "Nouveau"
+        ANCIEN = "ANCIEN", "Ancien"
+
+    class Etat(models.TextChoices):
+        ACTIVE = "ACTIVE", "Active"
+        ABANDON = "ABANDON", "Abandon"
+        EXCLU = "EXCLU", "Exclu"
+        DIPLOME = "DIPLOME", "Diplômé"
+
+    etudiant = models.ForeignKey(
+        Etudiant, on_delete=models.RESTRICT, related_name="inscriptions"
+    )
+    classe = models.ForeignKey(
+        Classe, on_delete=models.RESTRICT, related_name="inscriptions"
+    )
+    ecole = models.ForeignKey(Ecole, on_delete=models.RESTRICT, related_name="+")
+    annee_scolaire = models.ForeignKey(
+        AnneeScolaire, on_delete=models.RESTRICT, related_name="+"
+    )
+    numero_ordre = models.PositiveIntegerField()
+    type = models.CharField(max_length=13, choices=Type.choices)
+    statut = models.CharField(max_length=7, choices=Statut.choices)
+    etablissement_provenance = models.CharField(  # noqa: DJ001
+        max_length=150, null=True, blank=True
+    )
+    est_boursier = models.BooleanField(default=False)
+    cout_scolarite_negocie = models.DecimalField(
+        max_digits=12, decimal_places=0, null=True, blank=True
+    )
+    date_inscription = models.DateField()
+    etat = models.CharField(
+        max_length=8, choices=Etat.choices, default=Etat.ACTIVE
+    )
+
+    class Meta:
+        db_table = "inscription"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["etudiant", "annee_scolaire"],
+                name="unq_inscription_etudiant_annee",
+            ),
+            models.UniqueConstraint(
+                fields=["ecole", "annee_scolaire", "numero_ordre"],
+                name="unq_inscription_numero_ordre",
+            ),
+        ]
+        indexes = [
+            models.Index(fields=["classe"], name="idx_inscription_classe")
+        ]
+
+    def __str__(self):
+        return f"{self.numero_ordre} — {self.etudiant} ({self.annee_scolaire})"
+
+
+class CompteurInscription(models.Model):
+    ecole = models.ForeignKey(Ecole, on_delete=models.CASCADE, related_name="+")
+    annee_scolaire = models.ForeignKey(
+        AnneeScolaire, on_delete=models.CASCADE, related_name="+"
+    )
+    valeur = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        db_table = "compteur_inscription"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["ecole", "annee_scolaire"],
+                name="unq_compteur_inscription",
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.ecole_id}/{self.annee_scolaire_id}={self.valeur}"
+
+
+class PieceDossier(models.Model):
+    inscription = models.ForeignKey(
+        Inscription, on_delete=models.CASCADE, related_name="pieces_dossier"
+    )
+    type_piece = models.ForeignKey(
+        TypePiece, on_delete=models.RESTRICT, related_name="+"
+    )
+    fournie = models.BooleanField(default=False)
+    date_reception = models.DateField(null=True, blank=True)
+
+    class Meta:
+        db_table = "piece_dossier"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["inscription", "type_piece"], name="unq_piece_dossier"
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.type_piece} / insc {self.inscription_id}"

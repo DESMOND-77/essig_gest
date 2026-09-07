@@ -1,6 +1,7 @@
 import factory
 
 from personnes import models
+from referentiel.tests.factories import ClasseFactory
 
 
 class EtudiantFactory(factory.django.DjangoModelFactory):
@@ -40,3 +41,26 @@ class TypePieceFactory(factory.django.DjangoModelFactory):
 
     code = factory.Sequence(lambda n: f"PIECE_{n}")
     libelle = factory.LazyAttribute(lambda o: f"Pièce {o.code}")
+
+
+class InscriptionFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = models.Inscription
+
+    etudiant = factory.SubFactory(EtudiantFactory)
+    classe = factory.SubFactory(ClasseFactory)
+    ecole = factory.LazyAttribute(lambda o: o.classe.niveau.ecole)
+    annee_scolaire = factory.LazyAttribute(lambda o: o.classe.annee_scolaire)
+    numero_ordre = factory.Sequence(lambda n: n + 1)
+    type = models.Inscription.Type.INSCRIPTION
+    statut = models.Inscription.Statut.NOUVEAU
+    date_inscription = "2025-10-01"
+
+
+class PieceDossierFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = models.PieceDossier
+
+    inscription = factory.SubFactory(InscriptionFactory)
+    type_piece = factory.SubFactory(TypePieceFactory)
+    fournie = False

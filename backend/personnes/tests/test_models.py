@@ -63,3 +63,52 @@ def test_type_piece_code_unique():
 def test_index_nom_present():
     noms = {i.name for i in models.Etudiant._meta.indexes}
     assert "idx_etudiant_nom" in noms
+
+
+def test_inscription_db_table_et_index():
+    assert models.Inscription._meta.db_table == "inscription"
+    assert models.PieceDossier._meta.db_table == "piece_dossier"
+    assert models.CompteurInscription._meta.db_table == "compteur_inscription"
+    noms = {i.name for i in models.Inscription._meta.indexes}
+    assert "idx_inscription_classe" in noms
+
+
+def test_inscription_unicite_etudiant_annee():
+    e = f.EtudiantFactory()
+    i1 = f.InscriptionFactory(etudiant=e)
+    with pytest.raises(IntegrityError):
+        f.InscriptionFactory(etudiant=e, annee_scolaire=i1.annee_scolaire)
+
+
+def test_inscription_unicite_numero_ordre_par_ecole_annee():
+    i1 = f.InscriptionFactory(numero_ordre=1)
+    with pytest.raises(IntegrityError):
+        f.InscriptionFactory(
+            ecole=i1.ecole, annee_scolaire=i1.annee_scolaire, numero_ordre=1
+        )
+
+
+def test_piece_dossier_unicite():
+    from django.db import transaction
+
+    i = f.InscriptionFactory()
+    tp = f.TypePieceFactory()
+    f.PieceDossierFactory(inscription=i, type_piece=tp)
+    with pytest.raises(IntegrityError), transaction.atomic():
+        f.PieceDossierFactory(inscription=i, type_piece=tp)
+
+
+def test_piece_dossier_cascade_a_la_suppression_inscription():
+    i = f.InscriptionFactory()
+    f.PieceDossierFactory(inscription=i)
+    i.delete()
+    assert not models.PieceDossier.objects.filter(inscription_id=i.pk).exists()
+
+
+def test_compteur_inscription_unicite():
+    from referentiel.tests import factories as rf
+
+    e, a = rf.EcoleFactory(), rf.AnneeScolaireFactory()
+    models.CompteurInscription.objects.create(ecole=e, annee_scolaire=a, valeur=3)
+    with pytest.raises(IntegrityError):
+        models.CompteurInscription.objects.create(ecole=e, annee_scolaire=a)

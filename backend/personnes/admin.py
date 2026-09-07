@@ -4,3 +4,4 @@ from . import models
 
 admin.site.register(models.Etudiant)
 admin.site.register(models.TypePiece)
+admin.site.register(models.Inscription)
