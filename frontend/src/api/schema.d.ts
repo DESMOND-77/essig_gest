@@ -84,6 +84,326 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/personnes/affiliations/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["personnes_affiliations_list"];
+        put?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        post: operations["personnes_affiliations_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/personnes/affiliations/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["personnes_affiliations_retrieve"];
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        put: operations["personnes_affiliations_update"];
+        post?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        delete: operations["personnes_affiliations_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        patch: operations["personnes_affiliations_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/personnes/etudiants/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["personnes_etudiants_list"];
+        put?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        post: operations["personnes_etudiants_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/personnes/etudiants/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["personnes_etudiants_retrieve"];
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        put: operations["personnes_etudiants_update"];
+        post?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        delete: operations["personnes_etudiants_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        patch: operations["personnes_etudiants_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/personnes/situation-bac/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["personnes_situation_bac_list"];
+        put?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        post: operations["personnes_situation_bac_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/personnes/situation-bac/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["personnes_situation_bac_retrieve"];
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        put: operations["personnes_situation_bac_update"];
+        post?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        delete: operations["personnes_situation_bac_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        patch: operations["personnes_situation_bac_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/personnes/types-piece/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["personnes_types_piece_list"];
+        put?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        post: operations["personnes_types_piece_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/personnes/types-piece/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["personnes_types_piece_retrieve"];
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        put: operations["personnes_types_piece_update"];
+        post?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        delete: operations["personnes_types_piece_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        patch: operations["personnes_types_piece_partial_update"];
+        trace?: never;
+    };
     "/api/v1/referentiel/annees-scolaires/": {
         parameters: {
             query?: never;
@@ -92,18 +412,22 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         get: operations["referentiel_annees_scolaires_list"];
         put?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         post: operations["referentiel_annees_scolaires_create"];
         delete?: never;
@@ -120,34 +444,42 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         get: operations["referentiel_annees_scolaires_retrieve"];
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         put: operations["referentiel_annees_scolaires_update"];
         post?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         delete: operations["referentiel_annees_scolaires_destroy"];
         options?: never;
         head?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         patch: operations["referentiel_annees_scolaires_partial_update"];
         trace?: never;
@@ -160,18 +492,22 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         get: operations["referentiel_classes_list"];
         put?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         post: operations["referentiel_classes_create"];
         delete?: never;
@@ -188,34 +524,42 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         get: operations["referentiel_classes_retrieve"];
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         put: operations["referentiel_classes_update"];
         post?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         delete: operations["referentiel_classes_destroy"];
         options?: never;
         head?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         patch: operations["referentiel_classes_partial_update"];
         trace?: never;
@@ -228,18 +572,22 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         get: operations["referentiel_ecoles_list"];
         put?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         post: operations["referentiel_ecoles_create"];
         delete?: never;
@@ -256,34 +604,42 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         get: operations["referentiel_ecoles_retrieve"];
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         put: operations["referentiel_ecoles_update"];
         post?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         delete: operations["referentiel_ecoles_destroy"];
         options?: never;
         head?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         patch: operations["referentiel_ecoles_partial_update"];
         trace?: never;
@@ -296,18 +652,22 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         get: operations["referentiel_filieres_list"];
         put?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         post: operations["referentiel_filieres_create"];
         delete?: never;
@@ -324,34 +684,42 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         get: operations["referentiel_filieres_retrieve"];
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         put: operations["referentiel_filieres_update"];
         post?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         delete: operations["referentiel_filieres_destroy"];
         options?: never;
         head?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         patch: operations["referentiel_filieres_partial_update"];
         trace?: never;
@@ -364,18 +732,22 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         get: operations["referentiel_groupes_scolaires_list"];
         put?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         post: operations["referentiel_groupes_scolaires_create"];
         delete?: never;
@@ -392,34 +764,42 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         get: operations["referentiel_groupes_scolaires_retrieve"];
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         put: operations["referentiel_groupes_scolaires_update"];
         post?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         delete: operations["referentiel_groupes_scolaires_destroy"];
         options?: never;
         head?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         patch: operations["referentiel_groupes_scolaires_partial_update"];
         trace?: never;
@@ -432,18 +812,22 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         get: operations["referentiel_matieres_list"];
         put?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         post: operations["referentiel_matieres_create"];
         delete?: never;
@@ -460,34 +844,42 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         get: operations["referentiel_matieres_retrieve"];
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         put: operations["referentiel_matieres_update"];
         post?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         delete: operations["referentiel_matieres_destroy"];
         options?: never;
         head?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         patch: operations["referentiel_matieres_partial_update"];
         trace?: never;
@@ -500,18 +892,22 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         get: operations["referentiel_modalites_formation_list"];
         put?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         post: operations["referentiel_modalites_formation_create"];
         delete?: never;
@@ -528,34 +924,42 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         get: operations["referentiel_modalites_formation_retrieve"];
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         put: operations["referentiel_modalites_formation_update"];
         post?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         delete: operations["referentiel_modalites_formation_destroy"];
         options?: never;
         head?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         patch: operations["referentiel_modalites_formation_partial_update"];
         trace?: never;
@@ -568,18 +972,22 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         get: operations["referentiel_niveaux_list"];
         put?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         post: operations["referentiel_niveaux_create"];
         delete?: never;
@@ -596,34 +1004,42 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         get: operations["referentiel_niveaux_retrieve"];
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         put: operations["referentiel_niveaux_update"];
         post?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         delete: operations["referentiel_niveaux_destroy"];
         options?: never;
         head?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         patch: operations["referentiel_niveaux_partial_update"];
         trace?: never;
@@ -636,18 +1052,22 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         get: operations["referentiel_options_filiere_list"];
         put?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         post: operations["referentiel_options_filiere_create"];
         delete?: never;
@@ -664,34 +1084,42 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         get: operations["referentiel_options_filiere_retrieve"];
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         put: operations["referentiel_options_filiere_update"];
         post?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         delete: operations["referentiel_options_filiere_destroy"];
         options?: never;
         head?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         patch: operations["referentiel_options_filiere_partial_update"];
         trace?: never;
@@ -704,18 +1132,22 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         get: operations["referentiel_periodes_list"];
         put?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         post: operations["referentiel_periodes_create"];
         delete?: never;
@@ -732,34 +1164,42 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         get: operations["referentiel_periodes_retrieve"];
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         put: operations["referentiel_periodes_update"];
         post?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         delete: operations["referentiel_periodes_destroy"];
         options?: never;
         head?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         patch: operations["referentiel_periodes_partial_update"];
         trace?: never;
@@ -772,18 +1212,22 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         get: operations["referentiel_sessions_examen_list"];
         put?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         post: operations["referentiel_sessions_examen_create"];
         delete?: never;
@@ -800,34 +1244,42 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         get: operations["referentiel_sessions_examen_retrieve"];
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         put: operations["referentiel_sessions_examen_update"];
         post?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         delete: operations["referentiel_sessions_examen_destroy"];
         options?: never;
         head?: never;
         /**
-         * @description Traduit un refus d'intégrité référentielle (`on_delete=RESTRICT`/`PROTECT`)
-         *     en réponse HTTP 409 au lieu d'une 500. À placer AVANT les autres mixins de
-         *     suppression dans la MRO : il délègue la suppression réelle (et l'audit) à
-         *     `super().perform_destroy()`.
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         patch: operations["referentiel_sessions_examen_partial_update"];
         trace?: never;
@@ -839,6 +1291,22 @@ export interface components {
         AccessToken: {
             readonly access: string;
         };
+        Affiliation: {
+            readonly id: number;
+            type: components["schemas"]["AffiliationTypeEnum"];
+            nom: string;
+            prenom: string;
+            contact: string;
+            profession?: string | null;
+            etudiant: number;
+        };
+        /**
+         * @description * `PERE` - Père
+         *     * `MERE` - Mère
+         *     * `TUTEUR` - Tuteur
+         * @enum {string}
+         */
+        AffiliationTypeEnum: "PERE" | "MERE" | "TUTEUR";
         AnneeScolaire: {
             readonly id: number;
             est_courante?: boolean;
@@ -848,6 +1316,8 @@ export interface components {
             /** Format: date */
             date_fin: string;
         };
+        /** @enum {unknown} */
+        BlankEnum: "";
         Classe: {
             readonly id: number;
             readonly libelle_auto: string;
@@ -876,6 +1346,43 @@ export interface components {
             contacts?: string | null;
             email?: string | null;
             groupe_scolaire: number;
+        };
+        Etudiant: {
+            readonly id: number;
+            pole: components["schemas"]["PoleEnum"];
+            readonly affiliations: components["schemas"]["Affiliation"][];
+            readonly situation_bac: components["schemas"]["SituationBac"];
+            readonly matricule: string;
+            numero_interne_archive?: string | null;
+            nom: string;
+            prenoms: string;
+            sexe: components["schemas"]["SexeEnum"];
+            /** Format: date */
+            date_naissance?: string | null;
+            lieu_naissance?: string | null;
+            nationalite?: string | null;
+            email?: string | null;
+            telephone?: string | null;
+            adresse?: string | null;
+            photo?: string | null;
+            situation_matrimoniale?: (components["schemas"]["SituationMatrimonialeEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
+        };
+        EtudiantList: {
+            readonly id: number;
+            matricule: string;
+            numero_interne_archive?: string | null;
+            nom: string;
+            prenoms: string;
+            sexe: components["schemas"]["SexeEnum"];
+            /** Format: date */
+            date_naissance?: string | null;
+            lieu_naissance?: string | null;
+            nationalite?: string | null;
+            email?: string | null;
+            telephone?: string | null;
+            adresse?: string | null;
+            photo?: string | null;
+            situation_matrimoniale?: (components["schemas"]["SituationMatrimonialeEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
         };
         Filiere: {
             readonly id: number;
@@ -910,6 +1417,14 @@ export interface components {
             niveau: number;
             option_filiere: number;
         };
+        /**
+         * @description * `TB` - Très bien
+         *     * `B` - Bien
+         *     * `AB` - Assez bien
+         *     * `P` - Passable
+         * @enum {string}
+         */
+        MentionEnum: "TB" | "B" | "AB" | "P";
         ModaliteFormation: {
             readonly id: number;
             code: components["schemas"]["CodeEnum"];
@@ -932,12 +1447,29 @@ export interface components {
             a_examen_national?: boolean;
             ecole: number;
         };
+        /** @enum {unknown} */
+        NullEnum: null;
         OptionFiliere: {
             readonly id: number;
             readonly filiere_libelle: string;
             nom: string;
             sigle: string;
             filiere: number;
+        };
+        PaginatedAffiliationList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Affiliation"][];
         };
         PaginatedAnneeScolaireList: {
             /** @example 123 */
@@ -983,6 +1515,21 @@ export interface components {
              */
             previous?: string | null;
             results: components["schemas"]["Ecole"][];
+        };
+        PaginatedEtudiantListList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["EtudiantList"][];
         };
         PaginatedFiliereList: {
             /** @example 123 */
@@ -1104,6 +1651,45 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["SessionExamen"][];
         };
+        PaginatedSituationBacList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["SituationBac"][];
+        };
+        PaginatedTypePieceList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["TypePiece"][];
+        };
+        PatchedAffiliation: {
+            readonly id?: number;
+            type?: components["schemas"]["AffiliationTypeEnum"];
+            nom?: string;
+            prenom?: string;
+            contact?: string;
+            profession?: string | null;
+            etudiant?: number;
+        };
         PatchedAnneeScolaire: {
             readonly id?: number;
             est_courante?: boolean;
@@ -1133,6 +1719,26 @@ export interface components {
             contacts?: string | null;
             email?: string | null;
             groupe_scolaire?: number;
+        };
+        PatchedEtudiant: {
+            readonly id?: number;
+            pole?: components["schemas"]["PoleEnum"];
+            readonly affiliations?: components["schemas"]["Affiliation"][];
+            readonly situation_bac?: components["schemas"]["SituationBac"];
+            readonly matricule?: string;
+            numero_interne_archive?: string | null;
+            nom?: string;
+            prenoms?: string;
+            sexe?: components["schemas"]["SexeEnum"];
+            /** Format: date */
+            date_naissance?: string | null;
+            lieu_naissance?: string | null;
+            nationalite?: string | null;
+            email?: string | null;
+            telephone?: string | null;
+            adresse?: string | null;
+            photo?: string | null;
+            situation_matrimoniale?: (components["schemas"]["SituationMatrimonialeEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
         };
         PatchedFiliere: {
             readonly id?: number;
@@ -1200,12 +1806,27 @@ export interface components {
         PatchedSessionExamen: {
             readonly id?: number;
             readonly periode_libelle?: string;
-            type?: components["schemas"]["TypeEnum"];
+            type?: components["schemas"]["SessionExamenTypeEnum"];
             /** Format: date */
             date_debut?: string | null;
             /** Format: date */
             date_fin?: string | null;
             periode?: number;
+        };
+        PatchedSituationBac: {
+            readonly id?: number;
+            a_le_bac?: boolean;
+            annee_obtention?: number | null;
+            serie?: string | null;
+            mention?: (components["schemas"]["MentionEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
+            etablissement?: string | null;
+            ville?: string | null;
+            etudiant?: number;
+        };
+        PatchedTypePiece: {
+            readonly id?: number;
+            code?: string;
+            libelle?: string;
         };
         Periode: {
             readonly id: number;
@@ -1253,7 +1874,7 @@ export interface components {
         SessionExamen: {
             readonly id: number;
             readonly periode_libelle: string;
-            type: components["schemas"]["TypeEnum"];
+            type: components["schemas"]["SessionExamenTypeEnum"];
             /** Format: date */
             date_debut?: string | null;
             /** Format: date */
@@ -1265,7 +1886,35 @@ export interface components {
          *     * `RATTRAPAGE` - Rattrapage
          * @enum {string}
          */
-        TypeEnum: "NORMALE" | "RATTRAPAGE";
+        SessionExamenTypeEnum: "NORMALE" | "RATTRAPAGE";
+        /**
+         * @description * `M` - Masculin
+         *     * `F` - Féminin
+         * @enum {string}
+         */
+        SexeEnum: "M" | "F";
+        SituationBac: {
+            readonly id: number;
+            a_le_bac?: boolean;
+            annee_obtention?: number | null;
+            serie?: string | null;
+            mention?: (components["schemas"]["MentionEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
+            etablissement?: string | null;
+            ville?: string | null;
+            etudiant: number;
+        };
+        /**
+         * @description * `CELIBATAIRE` - Célibataire
+         *     * `MARIE` - Marié(e)
+         *     * `AUTRE` - Autre
+         * @enum {string}
+         */
+        SituationMatrimonialeEnum: "CELIBATAIRE" | "MARIE" | "AUTRE";
+        TypePiece: {
+            readonly id: number;
+            code: string;
+            libelle: string;
+        };
     };
     responses: never;
     parameters: never;
@@ -1393,6 +2042,636 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SanteDegradee"];
+                };
+            };
+        };
+    };
+    personnes_affiliations_list: {
+        parameters: {
+            query?: {
+                etudiant?: number;
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+                /**
+                 * @description * `PERE` - Père
+                 *     * `MERE` - Mère
+                 *     * `TUTEUR` - Tuteur
+                 */
+                type?: "MERE" | "PERE" | "TUTEUR";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedAffiliationList"];
+                };
+            };
+        };
+    };
+    personnes_affiliations_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Affiliation"];
+                "application/x-www-form-urlencoded": components["schemas"]["Affiliation"];
+                "multipart/form-data": components["schemas"]["Affiliation"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Affiliation"];
+                };
+            };
+        };
+    };
+    personnes_affiliations_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this affiliation. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Affiliation"];
+                };
+            };
+        };
+    };
+    personnes_affiliations_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this affiliation. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Affiliation"];
+                "application/x-www-form-urlencoded": components["schemas"]["Affiliation"];
+                "multipart/form-data": components["schemas"]["Affiliation"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Affiliation"];
+                };
+            };
+        };
+    };
+    personnes_affiliations_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this affiliation. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    personnes_affiliations_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this affiliation. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedAffiliation"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedAffiliation"];
+                "multipart/form-data": components["schemas"]["PatchedAffiliation"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Affiliation"];
+                };
+            };
+        };
+    };
+    personnes_etudiants_list: {
+        parameters: {
+            query?: {
+                a_le_bac?: boolean;
+                nationalite?: string;
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+                /**
+                 * @description * `M` - Masculin
+                 *     * `F` - Féminin
+                 */
+                sexe?: "F" | "M";
+                /**
+                 * @description * `CELIBATAIRE` - Célibataire
+                 *     * `MARIE` - Marié(e)
+                 *     * `AUTRE` - Autre
+                 */
+                situation_matrimoniale?: "AUTRE" | "CELIBATAIRE" | "MARIE" | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedEtudiantListList"];
+                };
+            };
+        };
+    };
+    personnes_etudiants_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Etudiant"];
+                "application/x-www-form-urlencoded": components["schemas"]["Etudiant"];
+                "multipart/form-data": components["schemas"]["Etudiant"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Etudiant"];
+                };
+            };
+        };
+    };
+    personnes_etudiants_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this etudiant. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Etudiant"];
+                };
+            };
+        };
+    };
+    personnes_etudiants_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this etudiant. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Etudiant"];
+                "application/x-www-form-urlencoded": components["schemas"]["Etudiant"];
+                "multipart/form-data": components["schemas"]["Etudiant"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Etudiant"];
+                };
+            };
+        };
+    };
+    personnes_etudiants_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this etudiant. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    personnes_etudiants_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this etudiant. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedEtudiant"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedEtudiant"];
+                "multipart/form-data": components["schemas"]["PatchedEtudiant"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Etudiant"];
+                };
+            };
+        };
+    };
+    personnes_situation_bac_list: {
+        parameters: {
+            query?: {
+                a_le_bac?: boolean;
+                etudiant?: number;
+                /**
+                 * @description * `TB` - Très bien
+                 *     * `B` - Bien
+                 *     * `AB` - Assez bien
+                 *     * `P` - Passable
+                 */
+                mention?: "AB" | "B" | "P" | "TB" | null;
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedSituationBacList"];
+                };
+            };
+        };
+    };
+    personnes_situation_bac_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SituationBac"];
+                "application/x-www-form-urlencoded": components["schemas"]["SituationBac"];
+                "multipart/form-data": components["schemas"]["SituationBac"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SituationBac"];
+                };
+            };
+        };
+    };
+    personnes_situation_bac_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this situation bac. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SituationBac"];
+                };
+            };
+        };
+    };
+    personnes_situation_bac_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this situation bac. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SituationBac"];
+                "application/x-www-form-urlencoded": components["schemas"]["SituationBac"];
+                "multipart/form-data": components["schemas"]["SituationBac"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SituationBac"];
+                };
+            };
+        };
+    };
+    personnes_situation_bac_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this situation bac. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    personnes_situation_bac_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this situation bac. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedSituationBac"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedSituationBac"];
+                "multipart/form-data": components["schemas"]["PatchedSituationBac"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SituationBac"];
+                };
+            };
+        };
+    };
+    personnes_types_piece_list: {
+        parameters: {
+            query?: {
+                code__icontains?: string;
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedTypePieceList"];
+                };
+            };
+        };
+    };
+    personnes_types_piece_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TypePiece"];
+                "application/x-www-form-urlencoded": components["schemas"]["TypePiece"];
+                "multipart/form-data": components["schemas"]["TypePiece"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TypePiece"];
+                };
+            };
+        };
+    };
+    personnes_types_piece_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this type piece. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TypePiece"];
+                };
+            };
+        };
+    };
+    personnes_types_piece_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this type piece. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TypePiece"];
+                "application/x-www-form-urlencoded": components["schemas"]["TypePiece"];
+                "multipart/form-data": components["schemas"]["TypePiece"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TypePiece"];
+                };
+            };
+        };
+    };
+    personnes_types_piece_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this type piece. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    personnes_types_piece_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this type piece. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedTypePiece"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedTypePiece"];
+                "multipart/form-data": components["schemas"]["PatchedTypePiece"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TypePiece"];
                 };
             };
         };
