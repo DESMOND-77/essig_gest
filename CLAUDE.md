@@ -17,8 +17,8 @@ Prompt de mission détaillé : `prompts/PROMPT MAÎTRE — AGENT PRINCIPAL DE D�
 
 | Dossier | Contenu | État |
 |---|---|---|
-| `backend/` | Django 5.2 LTS + DRF, Python 3.13, MySQL 8.4. Modules : `comptes` (utilisateur/rôle/audit), `core` (health, exceptions, schéma). Les 6 modules métier (`referentiel`, `personnes`, `scolarite`, `tresorerie`, `paie`, `resultats`) **restent à créer**. | Socle terminé |
-| `frontend/` | React 19 + TypeScript strict + Vite + React Router 7 + Tailwind v4 + shadcn/ui (minimal) + TanStack Query. Auth JWT SPA. Aucun écran métier ni layout applicatif. | Amorce SPA |
+| `backend/` | Django 5.2 LTS + DRF, Python 3.13, MySQL 8.4. Modules : `comptes` (utilisateur/rôle/audit), `core` (health, exceptions, schéma), `referentiel` (11 entités académiques, API CRUD `/api/v1/referentiel/`, `seed_referentiel`) **livrés**. Modules métier restants (`personnes`, `scolarite`, `tresorerie`, `paie`, `resultats`) **à créer**. | `referentiel` livré (Phase 1) |
+| `frontend/` | React 19 + TypeScript strict + Vite + React Router 7 + Tailwind v4 + shadcn/ui (minimal) + TanStack Query. Auth JWT SPA. AppShell (sidebar 6 modules, topbar, fil d'Ariane, toasts) + scaffold CRUD générique piloté par `Descripteur` + 11 écrans `/referentiel/*`. | AppShell + référentiel (Phase 1) |
 | `db/` | Migrations SQL MySQL 8.4 (49 tables + 13 vues) + harnais de tests SQL. **Référence de conception uniquement** — non appliquée par Django (voir « Sources de vérité »). | Complet |
 | `infra/` | Docker Compose (`caddy` / `web` / `db`), `Caddyfile`, Dockerfiles, `entrypoint.sh`, `backup.sh`. Validé statiquement, **jamais exécuté au runtime**. | Écrit |
 | `docs/superpowers/` | `specs/` (designs validés), `plans/` (plans d'implémentation). | — |
@@ -101,8 +101,6 @@ adapter le front → tests.
   créer `test_<DB_NAME>`).
 - Namespace URL `v1:` requis (`SpectacularSwaggerView(url_name="v1:schema")`) — ne pas le retirer.
 - `SPECTACULAR` : `SERVE_PERMISSIONS = IsAdminUser` en prod (schéma non public).
-- `utilisateur_role.ecole_id` est encore un `PositiveIntegerField` sans FK → devient une vraie FK
-  vers `referentiel.Ecole` en Phase 1.
 - `Utilisateur.derniere_connexion` non branché (collision avec `last_login` d'`AbstractBaseUser`) —
   TODO dans `settings/base.py`.
 - Infra Docker/Caddy jamais lancée bout-en-bout : à vérifier dans un environnement réseau normal
