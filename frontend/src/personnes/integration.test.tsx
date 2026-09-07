@@ -30,11 +30,13 @@ beforeEach(() => {
 afterEach(() => vi.restoreAllMocks());
 
 describe("routes personnes", () => {
-  it("câble personnes/etudiants, :id et types-piece", () => {
+  it("câble personnes/etudiants, :id, types-piece, inscriptions, pieces-dossier", () => {
     expect(routesPersonnes[0].path).toBe("personnes");
     const segs = routesPersonnes[0].children!.map((r) => r.path);
     expect(segs).toContain("etudiants");
     expect(segs).toContain("types-piece");
+    expect(segs).toContain("inscriptions");
+    expect(segs).toContain("pieces-dossier");
   });
 
   it("rend la liste des étudiants depuis l'API mockée", async () => {

@@ -3,6 +3,7 @@ import { AppShell } from "./app/AppShell";
 import { LoginPage } from "./auth/LoginPage";
 import { routesPersonnes } from "./personnes/routes";
 import { routesReferentiel } from "./referentiel/routes";
+import { routesScolarite } from "./scolarite/routes";
 
 export const router = createBrowserRouter([
   { path: "/connexion", element: <LoginPage /> },
@@ -13,6 +14,7 @@ export const router = createBrowserRouter([
       { index: true, element: <p className="text-gray-600">Bienvenue. Choisissez un module.</p> },
       ...routesReferentiel,
       ...routesPersonnes,
+      ...routesScolarite,
     ],
   },
 ]);

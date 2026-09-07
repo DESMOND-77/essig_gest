@@ -11,7 +11,7 @@ const rendre = () =>
   );
 
 describe("Sidebar", () => {
-  it("affiche Référentiel et Personnes comme liens actifs", () => {
+  it("affiche Référentiel, Personnes et Scolarité comme liens actifs", () => {
     rendre();
     expect(screen.getByRole("link", { name: /référentiel/i })).toHaveAttribute(
       "href",
@@ -21,11 +21,15 @@ describe("Sidebar", () => {
       "href",
       "/personnes/etudiants",
     );
+    expect(screen.getByRole("link", { name: /scolarité/i })).toHaveAttribute(
+      "href",
+      "/scolarite/modalites-paiement",
+    );
   });
 
-  it("désactive les 4 modules à venir", () => {
+  it("désactive les 3 modules à venir", () => {
     rendre();
-    for (const nom of [/scolarité/i, /trésorerie/i, /paie/i, /résultats/i]) {
+    for (const nom of [/trésorerie/i, /paie/i, /résultats/i]) {
       expect(screen.getByText(nom).closest("a")).toBeNull();
     }
   });
