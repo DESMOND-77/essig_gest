@@ -1,25 +1,14 @@
-from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
-from rest_framework import filters, viewsets
 
-from comptes.audit import AuditLogMixin
-from core.mixins import SuppressionProtegeeMixin
+from core.viewsets import _BaseCrudViewSet
 
 from . import filters as ref_filters
 from . import models, permissions, serializers
 
 
 @extend_schema(tags=["referentiel"])
-class _BaseReferentielViewSet(
-    SuppressionProtegeeMixin, AuditLogMixin, viewsets.ModelViewSet
-):
+class _BaseReferentielViewSet(_BaseCrudViewSet):
     permission_classes = [permissions.PeutEcrireReferentiel]
-    filter_backends = [
-        DjangoFilterBackend,
-        filters.SearchFilter,
-        filters.OrderingFilter,
-    ]
-    ordering = ["id"]
 
 
 class GroupeScolaireViewSet(_BaseReferentielViewSet):
