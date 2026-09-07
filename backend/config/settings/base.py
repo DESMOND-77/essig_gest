@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "comptes",
     "referentiel",
     "personnes",
+    "scolarite",
 ]
 
 MIDDLEWARE = [
