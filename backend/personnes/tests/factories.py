@@ -1,3 +1,5 @@
+import datetime as dt
+
 import factory
 
 from personnes import models
@@ -54,7 +56,7 @@ class InscriptionFactory(factory.django.DjangoModelFactory):
     numero_ordre = factory.Sequence(lambda n: n + 1)
     type = models.Inscription.Type.INSCRIPTION
     statut = models.Inscription.Statut.NOUVEAU
-    date_inscription = "2025-10-01"
+    date_inscription = factory.LazyFunction(lambda: dt.date(2025, 10, 1))
 
 
 class PieceDossierFactory(factory.django.DjangoModelFactory):
