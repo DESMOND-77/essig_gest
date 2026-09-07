@@ -9,6 +9,8 @@ export type Champ = {
   fkEndpoint?: string;
   fkLabel?: (o: Record<string, unknown>) => string;
   aide?: string;
+  /** Rendu seulement en création (masqué quand `valeurs` est fourni à `ResourceForm`). */
+  creationSeule?: boolean;
 };
 
 export type Colonne = {

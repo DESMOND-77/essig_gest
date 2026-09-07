@@ -89,4 +89,36 @@ describe("ResourceForm", () => {
     expect(await screen.findByText("Nom requis")).toBeInTheDocument();
     expect(apiFetchMock).not.toHaveBeenCalled();
   });
+
+  it("masque un champ creationSeule en édition et l'affiche en création", () => {
+    const d: Descripteur = {
+      titre: "T",
+      endpoint: "x/y",
+      roleEcriture: ["DIRECTION"],
+      colonnes: [],
+      champs: [
+        { nom: "nom", label: "Nom", type: "text", requis: true },
+        {
+          nom: "pole",
+          label: "Pôle",
+          type: "select",
+          creationSeule: true,
+          options: [{ valeur: "ESSIG", label: "ESSIG" }],
+        },
+      ],
+      schema: z.object({ nom: z.string().min(1), pole: z.string().optional() }),
+    };
+    const { unmount } = render(
+      <ResourceForm descripteur={d} onFerme={() => {}} />,
+      { wrapper },
+    );
+    expect(screen.getByLabelText("Pôle")).toBeInTheDocument();
+    unmount();
+
+    render(
+      <ResourceForm descripteur={d} valeurs={{ id: 1, nom: "A" }} onFerme={() => {}} />,
+      { wrapper },
+    );
+    expect(screen.queryByLabelText("Pôle")).toBeNull();
+  });
 });

@@ -59,7 +59,9 @@ export function ResourceForm({
 
   return (
     <form onSubmit={handleSubmit(soumettre)} className="space-y-3">
-      {descripteur.champs.map((c) => (
+      {descripteur.champs
+        .filter((c) => !(c.creationSeule && valeurs))
+        .map((c) => (
         <div key={c.nom} className="flex flex-col gap-1">
           <label className="text-sm font-medium" htmlFor={c.nom}>
             {c.label}
