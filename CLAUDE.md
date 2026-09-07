@@ -17,8 +17,8 @@ Prompt de mission détaillé : `prompts/PROMPT MAÎTRE — AGENT PRINCIPAL DE D�
 
 | Dossier | Contenu | État |
 |---|---|---|
-| `backend/` | Django 5.2 LTS + DRF, Python 3.13, MySQL 8.4. Modules : `comptes` (utilisateur/rôle/audit), `core` (health, exceptions, schéma), `referentiel` (11 entités académiques, API CRUD `/api/v1/referentiel/`, `seed_referentiel`) **livrés**. Modules métier restants (`personnes`, `scolarite`, `tresorerie`, `paie`, `resultats`) **à créer**. | `referentiel` livré (Phase 1) |
-| `frontend/` | React 19 + TypeScript strict + Vite + React Router 7 + Tailwind v4 + shadcn/ui (minimal) + TanStack Query. Auth JWT SPA. AppShell (sidebar 6 modules, topbar, fil d'Ariane, toasts) + scaffold CRUD générique piloté par `Descripteur` + 11 écrans `/referentiel/*`. | AppShell + référentiel (Phase 1) |
+| `backend/` | Django 5.2 LTS + DRF, Python 3.13, MySQL 8.4. Modules : `comptes` (utilisateur/rôle/audit), `core` (health, exceptions, schéma, `viewsets._BaseCrudViewSet` partagé), `referentiel` (11 entités, `/api/v1/referentiel/`, `seed_referentiel`), `personnes` (étudiant/affiliation/situation_bac/type_piece, matricule serveur, `/api/v1/personnes/`, `seed_personnes`) **livrés**. Modules métier restants (`scolarite`, `tresorerie`, `paie`, `resultats`) **à créer**. | `personnes` livré (Phase 2) |
+| `frontend/` | React 19 + TypeScript strict + Vite + React Router 7 + Tailwind v4 + shadcn/ui (minimal) + TanStack Query. Auth JWT SPA. AppShell (sidebar 6 modules, topbar, fil d'Ariane, toasts) + scaffold CRUD générique `Descripteur` + 11 écrans `/referentiel/*` + écrans `/personnes/*` (liste étudiants, `type_piece`, fiche étudiant). | AppShell + référentiel + personnes (Phase 2) |
 | `db/` | Migrations SQL MySQL 8.4 (49 tables + 13 vues) + harnais de tests SQL. **Référence de conception uniquement** — non appliquée par Django (voir « Sources de vérité »). | Complet |
 | `infra/` | Docker Compose (`caddy` / `web` / `db`), `Caddyfile`, Dockerfiles, `entrypoint.sh`, `backup.sh`. Validé statiquement, **jamais exécuté au runtime**. | Écrit |
 | `docs/superpowers/` | `specs/` (designs validés), `plans/` (plans d'implémentation). | — |
@@ -51,6 +51,8 @@ python manage.py spectacular --file /tmp/schema.yml   # doit rester 0 Error
 pytest                                                # DB_USER=root (pytest crée test_<DB_NAME>)
 ruff check .                                          # select E,F,I,UP,B,DJ ; migrations exclues
 python manage.py seed_socle --admin-login <l> --admin-password <m>
+python manage.py seed_referentiel                     # groupe, écoles, modalités, année, périodes
+python manage.py seed_personnes                       # types de pièce (idempotent)
 
 # Référence SQL (indépendante de Django)
 bash db/run.sh                                        # migrations + assertions sur MySQL 8.4 jetable
