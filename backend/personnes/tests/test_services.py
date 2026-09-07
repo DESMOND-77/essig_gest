@@ -42,3 +42,23 @@ def test_compteur_jamais_reinitialise():
     m = services.generer_matricule("CFPA", "Z", "W")
     assert m == "CFPA-FCVZXWX4"
     assert CompteurMatricule.objects.get(pole="CFPA").valeur == 4
+
+
+def test_attribuer_numero_ordre_incremente_par_ecole_annee():
+    from referentiel.tests import factories as rf
+
+    e1, e2 = rf.EcoleFactory(), rf.EcoleFactory()
+    a = rf.AnneeScolaireFactory()
+    assert services.attribuer_numero_ordre(e1, a) == 1
+    assert services.attribuer_numero_ordre(e1, a) == 2
+    assert services.attribuer_numero_ordre(e2, a) == 1  # séquence distincte
+
+
+def test_attribuer_numero_ordre_sequence_par_annee():
+    from referentiel.tests import factories as rf
+
+    e = rf.EcoleFactory()
+    a1, a2 = rf.AnneeScolaireFactory(), rf.AnneeScolaireFactory()
+    services.attribuer_numero_ordre(e, a1)
+    services.attribuer_numero_ordre(e, a1)
+    assert services.attribuer_numero_ordre(e, a2) == 1  # nouvelle année repart à 1

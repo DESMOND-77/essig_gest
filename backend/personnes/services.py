@@ -3,7 +3,7 @@ import unicodedata
 
 from django.db import transaction
 
-from .models import CompteurMatricule
+from .models import CompteurInscription, CompteurMatricule
 
 
 def _deux_lettres(mot: str) -> str:
@@ -30,3 +30,13 @@ def generer_matricule(pole: str, nom: str, prenoms: str) -> str:
     compteur.valeur += 1
     compteur.save(update_fields=["valeur"])
     return f"{pole}-FCV{initiales(nom, prenoms)}{compteur.valeur}"
+
+
+@transaction.atomic
+def attribuer_numero_ordre(ecole, annee_scolaire) -> int:
+    compteur, _ = CompteurInscription.objects.select_for_update().get_or_create(
+        ecole=ecole, annee_scolaire=annee_scolaire
+    )
+    compteur.valeur += 1
+    compteur.save(update_fields=["valeur"])
+    return compteur.valeur
