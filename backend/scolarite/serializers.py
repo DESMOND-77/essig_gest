@@ -8,10 +8,16 @@ _AUDIT = ["cree_par", "modifie_par", "cree_le", "modifie_le"]
 
 
 class ModalitePaiementSerializer(serializers.ModelSerializer):
+    # Déclaration explicite : `montant_total` est un GeneratedField, que
+    # drf-spectacular ne sait pas introspecter (il tente d'instancier un
+    # DecimalField sans max_digits/decimal_places).
+    montant_total = serializers.DecimalField(
+        max_digits=12, decimal_places=0, read_only=True
+    )
+
     class Meta:
         model = models.ModalitePaiement
         fields = "__all__"
-        read_only_fields = ["montant_total"]
 
 
 class EcheanceSerializer(AuditableSerializerMixin, serializers.ModelSerializer):

@@ -133,3 +133,130 @@ def test_types_piece_crud_par_scolarite():
         format="json",
     )
     assert resp.status_code == 201
+
+
+def _grille(classe, **kw):
+    from scolarite.tests import factories as sf
+
+    return sf.ModalitePaiementFactory(
+        niveau=classe.niveau, annee_scolaire=classe.annee_scolaire, **kw
+    )
+
+
+def test_creation_inscription_transaction_complete():
+    from referentiel.tests import factories as rf
+
+    c, _ = _client(Role.Code.SCOLARITE)
+    classe = rf.ClasseFactory()
+    _grille(classe)
+    etu = f.EtudiantFactory()
+    resp = c.post(
+        "/api/v1/personnes/inscriptions/",
+        {"etudiant": etu.pk, "classe": classe.pk, "date_inscription": "2025-10-01"},
+        format="json",
+    )
+    assert resp.status_code == 201, resp.data
+    assert resp.data["numero_ordre"] == 1
+    assert resp.data["ecole"] == classe.niveau.ecole_id
+    assert len(resp.data["echeances"]) == 10
+    assert (
+        JournalAudit.objects.filter(
+            action="CREATION", table_cible="inscription"
+        ).count()
+        == 1
+    )
+
+
+def test_creation_inscription_sans_grille_400_et_rollback():
+    from referentiel.tests import factories as rf
+
+    c, _ = _client(Role.Code.SCOLARITE)
+    classe = rf.ClasseFactory()  # pas de grille
+    etu = f.EtudiantFactory()
+    resp = c.post(
+        "/api/v1/personnes/inscriptions/",
+        {"etudiant": etu.pk, "classe": classe.pk, "date_inscription": "2025-10-01"},
+        format="json",
+    )
+    assert resp.status_code == 400
+    assert models.Inscription.objects.count() == 0  # rollback total
+
+
+def test_creation_inscription_cout_negocie():
+    from referentiel.tests import factories as rf
+
+    c, _ = _client(Role.Code.SCOLARITE)
+    classe = rf.ClasseFactory()
+    _grille(classe)
+    etu = f.EtudiantFactory()
+    resp = c.post(
+        "/api/v1/personnes/inscriptions/",
+        {
+            "etudiant": etu.pk,
+            "classe": classe.pk,
+            "date_inscription": "2025-10-01",
+            "cout_scolarite_negocie": 600000,
+        },
+        format="json",
+    )
+    assert resp.status_code == 201
+    assert sum(int(e["montant_prevu"]) for e in resp.data["echeances"]) == 600000
+
+
+def test_patch_inscription_refuse_classe_et_numero():
+    from referentiel.tests import factories as rf
+
+    c, _ = _client(Role.Code.SCOLARITE)
+    i = f.InscriptionFactory()
+    autre_classe = rf.ClasseFactory()
+    resp = c.patch(
+        f"/api/v1/personnes/inscriptions/{i.pk}/",
+        {"numero_ordre": 999, "classe": autre_classe.pk, "etat": "ABANDON"},
+        format="json",
+    )
+    assert resp.status_code == 200
+    i.refresh_from_db()
+    assert i.numero_ordre != 999
+    assert i.classe_id != autre_classe.pk
+    assert i.etat == "ABANDON"
+
+
+def test_suppression_inscription_avec_echeances_409_sans_audit():
+    from scolarite.tests import factories as sf
+
+    c, _ = _client(Role.Code.DIRECTION)
+    i = f.InscriptionFactory()
+    sf.EcheanceFactory(inscription=i, numero=0)
+    resp = c.delete(f"/api/v1/personnes/inscriptions/{i.pk}/")
+    assert resp.status_code == 409
+    assert not JournalAudit.objects.filter(
+        action="SUPPRESSION", table_cible="inscription"
+    ).exists()
+
+
+def test_suppression_inscription_sans_enfant_204():
+    c, _ = _client(Role.Code.DIRECTION)
+    i = f.InscriptionFactory()
+    assert c.delete(f"/api/v1/personnes/inscriptions/{i.pk}/").status_code == 204
+
+
+@pytest.mark.parametrize(
+    "role,attendu",
+    [("SCOLARITE", 201), ("DIRECTION", 201), ("COMPTABLE", 403), ("DAF", 403)],
+)
+def test_rbac_inscriptions(role, attendu):
+    from referentiel.tests import factories as rf
+
+    c, _ = _client(role)
+    classe = rf.ClasseFactory()
+    _grille(classe)
+    resp = c.post(
+        "/api/v1/personnes/inscriptions/",
+        {
+            "etudiant": f.EtudiantFactory().pk,
+            "classe": classe.pk,
+            "date_inscription": "2025-10-01",
+        },
+        format="json",
+    )
+    assert resp.status_code == attendu

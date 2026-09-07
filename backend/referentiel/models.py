@@ -259,3 +259,7 @@ class SessionExamen(models.Model):
 
     def __str__(self):
         return f"{self.type} — {self.periode}"
+
+
+# Alias de choix pour SPECTACULAR_SETTINGS.ENUM_NAME_OVERRIDES (cf. personnes.models).
+SESSION_EXAMEN_TYPE_CHOICES = SessionExamen.Type.choices

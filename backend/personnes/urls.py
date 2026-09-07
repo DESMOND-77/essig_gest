@@ -7,5 +7,7 @@ router.register("etudiants", views.EtudiantViewSet)
 router.register("affiliations", views.AffiliationViewSet)
 router.register("situation-bac", views.SituationBacViewSet)
 router.register("types-piece", views.TypePieceViewSet)
+router.register("inscriptions", views.InscriptionViewSet)
+router.register("pieces-dossier", views.PieceDossierViewSet)
 
 urlpatterns = router.urls

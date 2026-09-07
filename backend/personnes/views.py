@@ -1,3 +1,4 @@
+from django.db import transaction
 from drf_spectacular.utils import extend_schema
 
 from core.viewsets import _BaseCrudViewSet
@@ -46,3 +47,30 @@ class TypePieceViewSet(_BasePersonnesViewSet):
     filterset_class = p_filters.TypePieceFilter
     search_fields = ["code", "libelle"]
     ordering_fields = ["code", "id"]
+
+
+class InscriptionViewSet(_BasePersonnesViewSet):
+    permission_classes = [permissions.PeutEcrireInscriptions]
+    queryset = models.Inscription.objects.select_related(
+        "etudiant", "classe__niveau__ecole", "annee_scolaire", "cree_par", "modifie_par"
+    ).prefetch_related("echeances", "pieces_dossier")
+    filterset_class = p_filters.InscriptionFilter
+    search_fields = ["numero_ordre", "etudiant__matricule", "etudiant__nom"]
+    ordering_fields = ["numero_ordre", "date_inscription", "id"]
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return serializers.InscriptionListSerializer
+        return serializers.InscriptionSerializer
+
+    def perform_create(self, serializer):
+        with transaction.atomic():
+            super().perform_create(serializer)  # AuditLogMixin.perform_create
+
+
+class PieceDossierViewSet(_BasePersonnesViewSet):
+    permission_classes = [permissions.PeutEcrireInscriptions]
+    queryset = models.PieceDossier.objects.select_related("inscription", "type_piece")
+    serializer_class = serializers.PieceDossierSerializer
+    filterset_class = p_filters.PieceDossierFilter
+    ordering_fields = ["id"]

@@ -244,6 +244,166 @@ export interface paths {
         patch: operations["personnes_etudiants_partial_update"];
         trace?: never;
     };
+    "/api/v1/personnes/inscriptions/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["personnes_inscriptions_list"];
+        put?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        post: operations["personnes_inscriptions_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/personnes/inscriptions/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["personnes_inscriptions_retrieve"];
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        put: operations["personnes_inscriptions_update"];
+        post?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        delete: operations["personnes_inscriptions_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        patch: operations["personnes_inscriptions_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/personnes/pieces-dossier/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["personnes_pieces_dossier_list"];
+        put?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        post: operations["personnes_pieces_dossier_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/personnes/pieces-dossier/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["personnes_pieces_dossier_retrieve"];
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        put: operations["personnes_pieces_dossier_update"];
+        post?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        delete: operations["personnes_pieces_dossier_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        patch: operations["personnes_pieces_dossier_partial_update"];
+        trace?: never;
+    };
     "/api/v1/personnes/situation-bac/": {
         parameters: {
             query?: never;
@@ -1284,6 +1444,166 @@ export interface paths {
         patch: operations["referentiel_sessions_examen_partial_update"];
         trace?: never;
     };
+    "/api/v1/scolarite/echeances/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["scolarite_echeances_list"];
+        put?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        post: operations["scolarite_echeances_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/scolarite/echeances/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["scolarite_echeances_retrieve"];
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        put: operations["scolarite_echeances_update"];
+        post?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        delete: operations["scolarite_echeances_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        patch: operations["scolarite_echeances_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/scolarite/modalites-paiement/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["scolarite_modalites_paiement_list"];
+        put?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        post: operations["scolarite_modalites_paiement_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/scolarite/modalites-paiement/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["scolarite_modalites_paiement_retrieve"];
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        put: operations["scolarite_modalites_paiement_update"];
+        post?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        delete: operations["scolarite_modalites_paiement_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        patch: operations["scolarite_modalites_paiement_partial_update"];
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1335,6 +1655,30 @@ export interface components {
          * @enum {string}
          */
         CodeEnum: "FI" | "FC" | "FL" | "FT";
+        /**
+         * @description À combiner avec `ModelSerializer` sur un modèle héritant de `core.models.Auditable`.
+         *
+         *     Pose `cree_par` à la création et `modifie_par` à la mise à jour depuis
+         *     `context["request"].user`. Le serializer concret doit déclarer
+         *     `cree_par`, `modifie_par`, `cree_le`, `modifie_le` en `read_only`.
+         */
+        Echeance: {
+            readonly id: number;
+            /** Format: date-time */
+            readonly cree_le: string;
+            /** Format: date-time */
+            readonly modifie_le: string;
+            /** Format: int64 */
+            numero: number;
+            /** Format: decimal */
+            montant_prevu: string;
+            /** Format: date */
+            date_prevue: string;
+            pris_en_charge_bourse?: boolean;
+            readonly cree_par: number | null;
+            readonly modifie_par: number | null;
+            inscription: number;
+        };
         Ecole: {
             readonly id: number;
             readonly groupe_scolaire_libelle: string;
@@ -1347,6 +1691,14 @@ export interface components {
             email?: string | null;
             groupe_scolaire: number;
         };
+        /**
+         * @description * `ACTIVE` - Active
+         *     * `ABANDON` - Abandon
+         *     * `EXCLU` - Exclu
+         *     * `DIPLOME` - Diplômé
+         * @enum {string}
+         */
+        EtatEnum: "ACTIVE" | "ABANDON" | "EXCLU" | "DIPLOME";
         Etudiant: {
             readonly id: number;
             pole: components["schemas"]["PoleEnum"];
@@ -1400,6 +1752,71 @@ export interface components {
             email?: string | null;
             adresse?: string | null;
         };
+        /**
+         * @description À combiner avec `ModelSerializer` sur un modèle héritant de `core.models.Auditable`.
+         *
+         *     Pose `cree_par` à la création et `modifie_par` à la mise à jour depuis
+         *     `context["request"].user`. Le serializer concret doit déclarer
+         *     `cree_par`, `modifie_par`, `cree_le`, `modifie_le` en `read_only`.
+         */
+        Inscription: {
+            readonly id: number;
+            readonly echeances: components["schemas"]["Echeance"][];
+            readonly pieces_dossier: components["schemas"]["PieceDossier"][];
+            /** Format: date-time */
+            readonly cree_le: string;
+            /** Format: date-time */
+            readonly modifie_le: string;
+            readonly numero_ordre: number;
+            type?: components["schemas"]["InscriptionTypeEnum"];
+            statut?: components["schemas"]["StatutEnum"];
+            etablissement_provenance?: string | null;
+            est_boursier?: boolean;
+            /** Format: decimal */
+            cout_scolarite_negocie?: string | null;
+            /** Format: date */
+            date_inscription: string;
+            etat?: components["schemas"]["EtatEnum"];
+            readonly cree_par: number | null;
+            readonly modifie_par: number | null;
+            etudiant: number;
+            classe: number;
+            readonly ecole: number;
+            readonly annee_scolaire: number;
+        };
+        InscriptionList: {
+            readonly id: number;
+            readonly etudiant_libelle: string;
+            readonly classe_libelle: string;
+            readonly ecole_libelle: string;
+            /** Format: date-time */
+            readonly cree_le: string;
+            /** Format: date-time */
+            readonly modifie_le: string;
+            /** Format: int64 */
+            numero_ordre: number;
+            type: components["schemas"]["InscriptionTypeEnum"];
+            statut: components["schemas"]["StatutEnum"];
+            etablissement_provenance?: string | null;
+            est_boursier?: boolean;
+            /** Format: decimal */
+            cout_scolarite_negocie?: string | null;
+            /** Format: date */
+            date_inscription: string;
+            etat?: components["schemas"]["EtatEnum"];
+            readonly cree_par: number | null;
+            readonly modifie_par: number | null;
+            etudiant: number;
+            classe: number;
+            ecole: number;
+            annee_scolaire: number;
+        };
+        /**
+         * @description * `INSCRIPTION` - Inscription
+         *     * `REINSCRIPTION` - Réinscription
+         * @enum {string}
+         */
+        InscriptionTypeEnum: "INSCRIPTION" | "REINSCRIPTION";
         LoginRequete: {
             login: string;
             password: string;
@@ -1429,6 +1846,19 @@ export interface components {
             readonly id: number;
             code: components["schemas"]["CodeEnum"];
             libelle: string;
+        };
+        ModalitePaiement: {
+            readonly id: number;
+            /** Format: decimal */
+            readonly montant_total: string;
+            /** Format: decimal */
+            montant_inscription_reinscription: string;
+            /** Format: int64 */
+            nombre_echeance: number;
+            /** Format: decimal */
+            montant_echeance: string;
+            niveau: number;
+            annee_scolaire: number;
         };
         Moi: {
             readonly id: number;
@@ -1501,6 +1931,21 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["Classe"][];
         };
+        PaginatedEcheanceList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Echeance"][];
+        };
         PaginatedEcoleList: {
             /** @example 123 */
             count: number;
@@ -1561,6 +2006,21 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["GroupeScolaire"][];
         };
+        PaginatedInscriptionListList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["InscriptionList"][];
+        };
         PaginatedMatiereList: {
             /** @example 123 */
             count: number;
@@ -1590,6 +2050,21 @@ export interface components {
              */
             previous?: string | null;
             results: components["schemas"]["ModaliteFormation"][];
+        };
+        PaginatedModalitePaiementList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["ModalitePaiement"][];
         };
         PaginatedNiveauList: {
             /** @example 123 */
@@ -1635,6 +2110,21 @@ export interface components {
              */
             previous?: string | null;
             results: components["schemas"]["Periode"][];
+        };
+        PaginatedPieceDossierList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["PieceDossier"][];
         };
         PaginatedSessionExamenList: {
             /** @example 123 */
@@ -1708,6 +2198,30 @@ export interface components {
             option_filiere?: number;
             modalite_formation?: number;
         };
+        /**
+         * @description À combiner avec `ModelSerializer` sur un modèle héritant de `core.models.Auditable`.
+         *
+         *     Pose `cree_par` à la création et `modifie_par` à la mise à jour depuis
+         *     `context["request"].user`. Le serializer concret doit déclarer
+         *     `cree_par`, `modifie_par`, `cree_le`, `modifie_le` en `read_only`.
+         */
+        PatchedEcheance: {
+            readonly id?: number;
+            /** Format: date-time */
+            readonly cree_le?: string;
+            /** Format: date-time */
+            readonly modifie_le?: string;
+            /** Format: int64 */
+            numero?: number;
+            /** Format: decimal */
+            montant_prevu?: string;
+            /** Format: date */
+            date_prevue?: string;
+            pris_en_charge_bourse?: boolean;
+            readonly cree_par?: number | null;
+            readonly modifie_par?: number | null;
+            inscription?: number;
+        };
         PatchedEcole: {
             readonly id?: number;
             readonly groupe_scolaire_libelle?: string;
@@ -1756,6 +2270,38 @@ export interface components {
             email?: string | null;
             adresse?: string | null;
         };
+        /**
+         * @description À combiner avec `ModelSerializer` sur un modèle héritant de `core.models.Auditable`.
+         *
+         *     Pose `cree_par` à la création et `modifie_par` à la mise à jour depuis
+         *     `context["request"].user`. Le serializer concret doit déclarer
+         *     `cree_par`, `modifie_par`, `cree_le`, `modifie_le` en `read_only`.
+         */
+        PatchedInscription: {
+            readonly id?: number;
+            readonly echeances?: components["schemas"]["Echeance"][];
+            readonly pieces_dossier?: components["schemas"]["PieceDossier"][];
+            /** Format: date-time */
+            readonly cree_le?: string;
+            /** Format: date-time */
+            readonly modifie_le?: string;
+            readonly numero_ordre?: number;
+            type?: components["schemas"]["InscriptionTypeEnum"];
+            statut?: components["schemas"]["StatutEnum"];
+            etablissement_provenance?: string | null;
+            est_boursier?: boolean;
+            /** Format: decimal */
+            cout_scolarite_negocie?: string | null;
+            /** Format: date */
+            date_inscription?: string;
+            etat?: components["schemas"]["EtatEnum"];
+            readonly cree_par?: number | null;
+            readonly modifie_par?: number | null;
+            etudiant?: number;
+            classe?: number;
+            readonly ecole?: number;
+            readonly annee_scolaire?: number;
+        };
         PatchedMatiere: {
             readonly id?: number;
             readonly niveau_libelle?: string;
@@ -1773,6 +2319,19 @@ export interface components {
             readonly id?: number;
             code?: components["schemas"]["CodeEnum"];
             libelle?: string;
+        };
+        PatchedModalitePaiement: {
+            readonly id?: number;
+            /** Format: decimal */
+            readonly montant_total?: string;
+            /** Format: decimal */
+            montant_inscription_reinscription?: string;
+            /** Format: int64 */
+            nombre_echeance?: number;
+            /** Format: decimal */
+            montant_echeance?: string;
+            niveau?: number;
+            annee_scolaire?: number;
         };
         PatchedNiveau: {
             readonly id?: number;
@@ -1802,6 +2361,14 @@ export interface components {
             /** Format: date */
             date_fin?: string;
             annee_scolaire?: number;
+        };
+        PatchedPieceDossier: {
+            readonly id?: number;
+            fournie?: boolean;
+            /** Format: date */
+            date_reception?: string | null;
+            inscription?: number;
+            type_piece?: number;
         };
         PatchedSessionExamen: {
             readonly id?: number;
@@ -1838,6 +2405,14 @@ export interface components {
             /** Format: date */
             date_fin: string;
             annee_scolaire: number;
+        };
+        PieceDossier: {
+            readonly id: number;
+            fournie?: boolean;
+            /** Format: date */
+            date_reception?: string | null;
+            inscription: number;
+            type_piece: number;
         };
         /**
          * @description * `ESSIG` - ESSIG
@@ -1910,6 +2485,12 @@ export interface components {
          * @enum {string}
          */
         SituationMatrimonialeEnum: "CELIBATAIRE" | "MARIE" | "AUTRE";
+        /**
+         * @description * `NOUVEAU` - Nouveau
+         *     * `ANCIEN` - Ancien
+         * @enum {string}
+         */
+        StatutEnum: "NOUVEAU" | "ANCIEN";
         TypePiece: {
             readonly id: number;
             code: string;
@@ -2362,6 +2943,331 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Etudiant"];
+                };
+            };
+        };
+    };
+    personnes_inscriptions_list: {
+        parameters: {
+            query?: {
+                annee_scolaire?: number;
+                classe?: number;
+                ecole?: number;
+                est_boursier?: boolean;
+                /**
+                 * @description * `ACTIVE` - Active
+                 *     * `ABANDON` - Abandon
+                 *     * `EXCLU` - Exclu
+                 *     * `DIPLOME` - Diplômé
+                 */
+                etat?: "ABANDON" | "ACTIVE" | "DIPLOME" | "EXCLU";
+                etudiant?: number;
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+                /**
+                 * @description * `NOUVEAU` - Nouveau
+                 *     * `ANCIEN` - Ancien
+                 */
+                statut?: "ANCIEN" | "NOUVEAU";
+                /**
+                 * @description * `INSCRIPTION` - Inscription
+                 *     * `REINSCRIPTION` - Réinscription
+                 */
+                type?: "INSCRIPTION" | "REINSCRIPTION";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedInscriptionListList"];
+                };
+            };
+        };
+    };
+    personnes_inscriptions_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Inscription"];
+                "application/x-www-form-urlencoded": components["schemas"]["Inscription"];
+                "multipart/form-data": components["schemas"]["Inscription"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Inscription"];
+                };
+            };
+        };
+    };
+    personnes_inscriptions_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this inscription. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Inscription"];
+                };
+            };
+        };
+    };
+    personnes_inscriptions_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this inscription. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Inscription"];
+                "application/x-www-form-urlencoded": components["schemas"]["Inscription"];
+                "multipart/form-data": components["schemas"]["Inscription"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Inscription"];
+                };
+            };
+        };
+    };
+    personnes_inscriptions_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this inscription. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    personnes_inscriptions_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this inscription. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedInscription"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedInscription"];
+                "multipart/form-data": components["schemas"]["PatchedInscription"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Inscription"];
+                };
+            };
+        };
+    };
+    personnes_pieces_dossier_list: {
+        parameters: {
+            query?: {
+                fournie?: boolean;
+                inscription?: number;
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+                type_piece?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedPieceDossierList"];
+                };
+            };
+        };
+    };
+    personnes_pieces_dossier_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PieceDossier"];
+                "application/x-www-form-urlencoded": components["schemas"]["PieceDossier"];
+                "multipart/form-data": components["schemas"]["PieceDossier"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PieceDossier"];
+                };
+            };
+        };
+    };
+    personnes_pieces_dossier_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this piece dossier. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PieceDossier"];
+                };
+            };
+        };
+    };
+    personnes_pieces_dossier_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this piece dossier. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PieceDossier"];
+                "application/x-www-form-urlencoded": components["schemas"]["PieceDossier"];
+                "multipart/form-data": components["schemas"]["PieceDossier"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PieceDossier"];
+                };
+            };
+        };
+    };
+    personnes_pieces_dossier_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this piece dossier. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    personnes_pieces_dossier_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this piece dossier. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedPieceDossier"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedPieceDossier"];
+                "multipart/form-data": components["schemas"]["PatchedPieceDossier"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PieceDossier"];
                 };
             };
         };
@@ -4369,6 +5275,311 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SessionExamen"];
+                };
+            };
+        };
+    };
+    scolarite_echeances_list: {
+        parameters: {
+            query?: {
+                inscription?: number;
+                numero?: number;
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                pris_en_charge_bourse?: boolean;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedEcheanceList"];
+                };
+            };
+        };
+    };
+    scolarite_echeances_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Echeance"];
+                "application/x-www-form-urlencoded": components["schemas"]["Echeance"];
+                "multipart/form-data": components["schemas"]["Echeance"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Echeance"];
+                };
+            };
+        };
+    };
+    scolarite_echeances_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this echeance. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Echeance"];
+                };
+            };
+        };
+    };
+    scolarite_echeances_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this echeance. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Echeance"];
+                "application/x-www-form-urlencoded": components["schemas"]["Echeance"];
+                "multipart/form-data": components["schemas"]["Echeance"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Echeance"];
+                };
+            };
+        };
+    };
+    scolarite_echeances_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this echeance. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    scolarite_echeances_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this echeance. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedEcheance"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedEcheance"];
+                "multipart/form-data": components["schemas"]["PatchedEcheance"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Echeance"];
+                };
+            };
+        };
+    };
+    scolarite_modalites_paiement_list: {
+        parameters: {
+            query?: {
+                annee_scolaire?: number;
+                niveau?: number;
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedModalitePaiementList"];
+                };
+            };
+        };
+    };
+    scolarite_modalites_paiement_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ModalitePaiement"];
+                "application/x-www-form-urlencoded": components["schemas"]["ModalitePaiement"];
+                "multipart/form-data": components["schemas"]["ModalitePaiement"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModalitePaiement"];
+                };
+            };
+        };
+    };
+    scolarite_modalites_paiement_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this modalite paiement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModalitePaiement"];
+                };
+            };
+        };
+    };
+    scolarite_modalites_paiement_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this modalite paiement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ModalitePaiement"];
+                "application/x-www-form-urlencoded": components["schemas"]["ModalitePaiement"];
+                "multipart/form-data": components["schemas"]["ModalitePaiement"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModalitePaiement"];
+                };
+            };
+        };
+    };
+    scolarite_modalites_paiement_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this modalite paiement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    scolarite_modalites_paiement_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this modalite paiement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedModalitePaiement"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedModalitePaiement"];
+                "multipart/form-data": components["schemas"]["PatchedModalitePaiement"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModalitePaiement"];
                 };
             };
         };

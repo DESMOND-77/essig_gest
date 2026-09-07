@@ -169,6 +169,14 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": "Système de gestion du groupe scolaire",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
+    # Plusieurs modèles ont un champ `type` avec des jeux de choix différents
+    # (affiliation, session d'examen, inscription) : on nomme chaque enum via des
+    # alias de choix exposés au niveau module (cf. les *_TYPE_CHOICES).
+    "ENUM_NAME_OVERRIDES": {
+        "AffiliationTypeEnum": "personnes.models.AFFILIATION_TYPE_CHOICES",
+        "SessionExamenTypeEnum": "referentiel.models.SESSION_EXAMEN_TYPE_CHOICES",
+        "InscriptionTypeEnum": "personnes.models.INSCRIPTION_TYPE_CHOICES",
+    },
 }
 
 CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])

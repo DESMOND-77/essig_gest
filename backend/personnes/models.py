@@ -220,3 +220,9 @@ class PieceDossier(models.Model):
 
     def __str__(self):
         return f"{self.type_piece} / insc {self.inscription_id}"
+
+
+# Alias de choix exposés au niveau module pour SPECTACULAR_SETTINGS.ENUM_NAME_OVERRIDES
+# (drf-spectacular résout ces chemins via django.utils.module_loading.import_string).
+AFFILIATION_TYPE_CHOICES = Affiliation.Type.choices
+INSCRIPTION_TYPE_CHOICES = Inscription.Type.choices
