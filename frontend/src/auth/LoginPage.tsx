@@ -8,7 +8,7 @@ import { useAuth } from "./AuthContext";
 
 const schema = z.object({
   login: z.string().min(1, "Login requis"),
-  password: z.string().min(10, "Au moins 10 caractères"),
+  password: z.string().min(1, "Au moins 1 caractères"),
 });
 type Champs = z.infer<typeof schema>;
 
