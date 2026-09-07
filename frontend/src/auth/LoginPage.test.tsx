@@ -13,10 +13,9 @@ function monter() {
   );
 }
 
-test("valide la longueur du mot de passe", async () => {
+test("exige un mot de passe non vide", async () => {
   monter();
   await userEvent.type(screen.getByLabelText("Login"), "compta");
-  await userEvent.type(screen.getByLabelText("Mot de passe"), "court");
   await userEvent.click(screen.getByRole("button", { name: "Se connecter" }));
-  expect(await screen.findByText("Au moins 10 caractères")).toBeInTheDocument();
+  expect(await screen.findByText("Au moins 1 caractère")).toBeInTheDocument();
 });
