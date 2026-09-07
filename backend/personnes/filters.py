@@ -31,3 +31,28 @@ class TypePieceFilter(df.FilterSet):
     class Meta:
         model = models.TypePiece
         fields = {"code": ["icontains"]}
+
+
+class InscriptionFilter(df.FilterSet):
+    class Meta:
+        model = models.Inscription
+        fields = {
+            "etudiant": ["exact"],
+            "classe": ["exact"],
+            "ecole": ["exact"],
+            "annee_scolaire": ["exact"],
+            "type": ["exact"],
+            "statut": ["exact"],
+            "etat": ["exact"],
+            "est_boursier": ["exact"],
+        }
+
+
+class PieceDossierFilter(df.FilterSet):
+    class Meta:
+        model = models.PieceDossier
+        fields = {
+            "inscription": ["exact"],
+            "type_piece": ["exact"],
+            "fournie": ["exact"],
+        }

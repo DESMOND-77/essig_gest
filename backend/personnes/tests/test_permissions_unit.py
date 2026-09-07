@@ -38,3 +38,15 @@ def test_ecriture_refusee_a_lanonyme():
     req = _rf.post("/x")
     req.user = AnonymousUser()
     assert PeutEcrirePersonnes().has_permission(req, None) is False
+
+
+@pytest.mark.parametrize(
+    "code,attendu",
+    [("DIRECTION", True), ("SCOLARITE", True), ("DAF", False), ("COMPTABLE", False)],
+)
+def test_ecriture_inscriptions(code, attendu):
+    from personnes.permissions import PeutEcrireInscriptions
+
+    req = _rf.post("/x")
+    req.user = _user_avec(code)
+    assert PeutEcrireInscriptions().has_permission(req, None) is attendu
