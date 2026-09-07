@@ -11,15 +11,21 @@ const rendre = () =>
   );
 
 describe("Sidebar", () => {
-  it("affiche Référentiel comme lien actif", () => {
+  it("affiche Référentiel et Personnes comme liens actifs", () => {
     rendre();
-    const lien = screen.getByRole("link", { name: /référentiel/i });
-    expect(lien).toHaveAttribute("href", "/referentiel/ecoles");
+    expect(screen.getByRole("link", { name: /référentiel/i })).toHaveAttribute(
+      "href",
+      "/referentiel/ecoles",
+    );
+    expect(screen.getByRole("link", { name: /personnes/i })).toHaveAttribute(
+      "href",
+      "/personnes/etudiants",
+    );
   });
 
-  it("désactive les 5 modules à venir", () => {
+  it("désactive les 4 modules à venir", () => {
     rendre();
-    for (const nom of [/personnes/i, /scolarité/i, /trésorerie/i, /paie/i, /résultats/i]) {
+    for (const nom of [/scolarité/i, /trésorerie/i, /paie/i, /résultats/i]) {
       expect(screen.getByText(nom).closest("a")).toBeNull();
     }
   });

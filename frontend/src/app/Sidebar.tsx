@@ -4,7 +4,7 @@ type Module = { cle: string; libelle: string; chemin: string; disponible: boolea
 
 export const NAV_MODULES: Module[] = [
   { cle: "referentiel", libelle: "Référentiel", chemin: "/referentiel/ecoles", disponible: true },
-  { cle: "personnes", libelle: "Personnes", chemin: "/personnes", disponible: false },
+  { cle: "personnes", libelle: "Personnes", chemin: "/personnes/etudiants", disponible: true },
   { cle: "scolarite", libelle: "Scolarité", chemin: "/scolarite", disponible: false },
   { cle: "tresorerie", libelle: "Trésorerie", chemin: "/tresorerie", disponible: false },
   { cle: "paie", libelle: "Paie", chemin: "/paie", disponible: false },
