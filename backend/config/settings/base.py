@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "core",
     "comptes",
     "referentiel",
+    "personnes",
 ]
 
 MIDDLEWARE = [
