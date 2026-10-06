@@ -2,8 +2,12 @@ from rest_framework import serializers
 
 from core.serializers import AuditableSerializerMixin
 from referentiel.models import Ecole
-from scolarite.serializers import EcheanceSerializer
-from scolarite.services import generer_echeancier
+from scolarite.serializers import (
+    BourseSerializer,
+    EcheanceSerializer,
+    FraisInscriptionSerializer,
+)
+from scolarite.services import generer_echeancier, materialiser_frais_obligatoires
 
 from . import models, services
 from .services import attribuer_numero_ordre
@@ -90,6 +94,8 @@ class InscriptionSerializer(
 ):
     echeances = EcheanceSerializer(many=True, read_only=True)
     pieces_dossier = PieceDossierSerializer(many=True, read_only=True)
+    frais_inscription = FraisInscriptionSerializer(many=True, read_only=True)
+    bourses = BourseSerializer(many=True, read_only=True)
 
     class Meta:
         model = models.Inscription
@@ -139,4 +145,5 @@ class InscriptionSerializer(
         )
         inscription = super().create(validated_data)  # pose cree_par (mixin)
         generer_echeancier(inscription)
+        materialiser_frais_obligatoires(inscription)
         return inscription

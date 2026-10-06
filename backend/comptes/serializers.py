@@ -1,3 +1,4 @@
+from django.utils import timezone
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -5,6 +6,12 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class LoginSerializer(TokenObtainPairSerializer):
     username_field = "login"
+
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        self.user.derniere_connexion = timezone.now()
+        self.user.save(update_fields=["derniere_connexion"])
+        return data
 
 
 class LoginRequeteSerializer(serializers.Serializer):

@@ -53,7 +53,7 @@ class InscriptionViewSet(_BasePersonnesViewSet):
     permission_classes = [permissions.PeutEcrireInscriptions]
     queryset = models.Inscription.objects.select_related(
         "etudiant", "classe__niveau__ecole", "annee_scolaire", "cree_par", "modifie_par"
-    ).prefetch_related("echeances", "pieces_dossier")
+    ).prefetch_related("echeances", "pieces_dossier", "frais_inscription", "bourses")
     filterset_class = p_filters.InscriptionFilter
     search_fields = ["numero_ordre", "etudiant__matricule", "etudiant__nom"]
     ordering_fields = ["numero_ordre", "date_inscription", "id"]

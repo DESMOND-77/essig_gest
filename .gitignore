@@ -19,3 +19,7 @@ __pycache__/
 frontend/node_modules/
 frontend/dist/
 frontend/.env
+graphify-out/
+
+#Ignore vscode AI rules
+.github/instructions/codacy.instructions.md

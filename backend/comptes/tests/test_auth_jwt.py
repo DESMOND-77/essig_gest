@@ -79,3 +79,15 @@ def test_refresh_refuse_si_compte_desactive(utilisateur):
     utilisateur.save()
     r = c.post("/api/v1/auth/refresh/")
     assert r.status_code == 403
+
+
+def test_login_met_a_jour_derniere_connexion(utilisateur):
+    assert utilisateur.derniere_connexion is None
+    r = APIClient().post(
+        "/api/v1/auth/login/",
+        {"login": "compta", "password": "motdepasse42"},
+        format="json",
+    )
+    assert r.status_code == 200
+    utilisateur.refresh_from_db()
+    assert utilisateur.derniere_connexion is not None

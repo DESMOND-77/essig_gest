@@ -32,3 +32,26 @@ def test_unq_echeance():
     e = f.EcheanceFactory(numero=0)
     with pytest.raises(IntegrityError), transaction.atomic():
         f.EcheanceFactory(inscription=e.inscription, numero=0)
+
+
+def test_db_tables_3b():
+    assert models.TypeFrais._meta.db_table == "type_frais"
+    assert models.FraisInscription._meta.db_table == "frais_inscription"
+    assert models.Bourse._meta.db_table == "bourse"
+
+
+def test_unq_type_frais_code():
+    f.TypeFraisFactory(code="TENUE")
+    with pytest.raises(IntegrityError), transaction.atomic():
+        f.TypeFraisFactory(code="TENUE")
+
+
+def test_unq_frais_inscription():
+    fi = f.FraisInscriptionFactory()
+    with pytest.raises(IntegrityError), transaction.atomic():
+        f.FraisInscriptionFactory(inscription=fi.inscription, type_frais=fi.type_frais)
+
+
+def test_bourse_perimetre_defaut():
+    b = f.BourseFactory()
+    assert b.perimetre == "SCOLARITE_HORS_INSCRIPTION"

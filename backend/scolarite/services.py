@@ -1,9 +1,10 @@
 import calendar
 import datetime as dt
 
+from django.db.models import Q
 from rest_framework import serializers
 
-from .models import Echeance, ModalitePaiement
+from .models import Echeance, FraisInscription, ModalitePaiement, TypeFrais
 
 
 def _ajouter_mois(d: dt.date, k: int) -> dt.date:
@@ -70,4 +71,29 @@ def generer_echeancier(inscription) -> list:
             )
         )
     Echeance.objects.bulk_create(lignes)
+    return lignes
+
+
+def materialiser_frais_obligatoires(inscription) -> list:
+    """Matérialise les frais obligatoires actifs dont le périmètre correspond."""
+    ecole = inscription.ecole
+    niveau = inscription.classe.niveau
+    annee = inscription.annee_scolaire
+    types = (
+        TypeFrais.objects.filter(obligatoire=True, actif=True)
+        .filter(Q(ecole__isnull=True) | Q(ecole=ecole))
+        .filter(Q(niveau__isnull=True) | Q(niveau=niveau))
+        .filter(Q(annee_scolaire__isnull=True) | Q(annee_scolaire=annee))
+    )
+    lignes = []
+    for type_frais in types:
+        ligne, _ = FraisInscription.objects.get_or_create(
+            inscription=inscription,
+            type_frais=type_frais,
+            defaults={
+                "montant_du": type_frais.montant_defaut,
+                "cree_par": inscription.cree_par,
+            },
+        )
+        lignes.append(ligne)
     return lignes

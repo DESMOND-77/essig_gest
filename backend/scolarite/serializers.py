@@ -25,3 +25,23 @@ class EcheanceSerializer(AuditableSerializerMixin, serializers.ModelSerializer):
         model = models.Echeance
         fields = "__all__"
         read_only_fields = _AUDIT
+
+
+class TypeFraisSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.TypeFrais
+        fields = "__all__"
+
+
+class FraisInscriptionSerializer(AuditableSerializerMixin, serializers.ModelSerializer):
+    class Meta:
+        model = models.FraisInscription
+        fields = "__all__"
+        read_only_fields = _AUDIT
+
+
+class BourseSerializer(AuditableSerializerMixin, serializers.ModelSerializer):
+    class Meta:
+        model = models.Bourse
+        fields = "__all__"
+        read_only_fields = _AUDIT

@@ -60,3 +60,51 @@ def test_rbac_echeance_patch(role, attendu):
     assert resp.status_code == attendu
     if attendu == 200:
         assert e.__class__.objects.get(pk=e.pk).modifie_par is not None
+
+
+@pytest.mark.parametrize(
+    "role,attendu",
+    [("DIRECTION", 201), ("DAF", 403), ("COMPTABLE", 403), ("SCOLARITE", 403)],
+)
+def test_rbac_types_frais(role, attendu):
+    c, _ = _client(role)
+    resp = c.post(
+        "/api/v1/scolarite/types-frais/",
+        {"code": f"X_{role}", "libelle": "X", "montant_defaut": 1000},
+        format="json",
+    )
+    assert resp.status_code == attendu
+
+
+@pytest.mark.parametrize(
+    "role,attendu",
+    [("DIRECTION", 201), ("DAF", 201), ("COMPTABLE", 201), ("SCOLARITE", 403)],
+)
+def test_rbac_frais_inscription(role, attendu):
+    from personnes.tests import factories as pf
+    from scolarite.tests import factories as sf
+
+    c, _ = _client(role)
+    i = pf.InscriptionFactory()
+    tf = sf.TypeFraisFactory()
+    resp = c.post(
+        "/api/v1/scolarite/frais-inscription/",
+        {"inscription": i.pk, "type_frais": tf.pk, "montant_du": 12000},
+        format="json",
+    )
+    assert resp.status_code == attendu
+    if attendu == 201:
+        assert resp.data["cree_par"] is not None
+
+
+def test_rbac_bourse_daf():
+    from personnes.tests import factories as pf
+
+    c, _ = _client("DAF")
+    i = pf.InscriptionFactory()
+    resp = c.post(
+        "/api/v1/scolarite/bourses/",
+        {"inscription": i.pk, "organisme": "Fondation X", "montant_couvert": 250000},
+        format="json",
+    )
+    assert resp.status_code == 201

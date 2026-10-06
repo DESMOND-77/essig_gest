@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import Utilisateur
+from .models import Role, Utilisateur, UtilisateurRole
 
 
 @admin.register(Utilisateur)
@@ -47,3 +47,19 @@ class UtilisateurAdmin(UserAdmin):
             },
         ),
     )
+
+@admin.register(Role)
+class RoleAdmin(admin.ModelAdmin):
+    """Formulaire d'administration des roles."""
+
+    ordering = ("code",)
+    list_display = ("code", "libelle")
+    search_fields = ("code", "libelle")
+
+@admin.register(UtilisateurRole)
+class UtilisateurRoleAdmin(admin.ModelAdmin):
+    """Formulaire d'administration des roles des utilisateurs."""
+
+    ordering = ("utilisateur", "role", "ecole")
+    list_display = ("utilisateur", "role", "ecole")
+    search_fields = ("utilisateur__login", "role__code", "ecole__nom")

@@ -24,3 +24,32 @@ class EcheanceFactory(factory.django.DjangoModelFactory):
     numero = factory.Sequence(lambda n: n)
     montant_prevu = 70000
     date_prevue = "2025-11-01"
+
+
+class TypeFraisFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = models.TypeFrais
+
+    code = factory.Sequence(lambda n: f"FRAIS_{n}")
+    libelle = factory.LazyAttribute(lambda o: f"Frais {o.code}")
+    montant_defaut = 15000
+    obligatoire = False
+    actif = True
+
+
+class FraisInscriptionFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = models.FraisInscription
+
+    inscription = factory.SubFactory(InscriptionFactory)
+    type_frais = factory.SubFactory(TypeFraisFactory)
+    montant_du = 15000
+
+
+class BourseFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = models.Bourse
+
+    inscription = factory.SubFactory(InscriptionFactory)
+    organisme = factory.Sequence(lambda n: f"Organisme {n}")
+    montant_couvert = 300000

@@ -260,3 +260,31 @@ def test_rbac_inscriptions(role, attendu):
         format="json",
     )
     assert resp.status_code == attendu
+
+
+def test_creation_inscription_materialise_les_frais_obligatoires():
+    from referentiel.tests import factories as rf
+    from scolarite.tests import factories as sf
+
+    c, _ = _client(Role.Code.SCOLARITE)
+    classe = rf.ClasseFactory()
+    sf.ModalitePaiementFactory(
+        niveau=classe.niveau,
+        annee_scolaire=classe.annee_scolaire,
+    )
+    sf.TypeFraisFactory(
+        code="MUTUELLE", obligatoire=True, actif=True, montant_defaut=5000
+    )
+    sf.TypeFraisFactory(code="PHOTOCOPIE", obligatoire=False, actif=True)
+    resp = c.post(
+        "/api/v1/personnes/inscriptions/",
+        {
+            "etudiant": f.EtudiantFactory().pk,
+            "classe": classe.pk,
+            "date_inscription": "2025-10-01",
+        },
+        format="json",
+    )
+    assert resp.status_code == 201, resp.data
+    mutuelle = sf.TypeFraisFactory._meta.model.objects.get(code="MUTUELLE")
+    assert {fi["type_frais"] for fi in resp.data["frais_inscription"]} == {mutuelle.pk}

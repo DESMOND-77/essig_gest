@@ -72,3 +72,39 @@ def test_echeancier_negocie_inferieur_a_inscription_leve_400():
     i = _inscription_avec_grille(cout_scolarite_negocie=50000)  # < 105000
     with pytest.raises(ValidationError):
         services.generer_echeancier(i)
+
+
+def test_materialiser_frais_obligatoires_scope_et_idempotence():
+    i = pf.InscriptionFactory()
+    ecole = i.classe.niveau.ecole
+    niveau = i.classe.niveau
+    annee = i.annee_scolaire
+
+    f.TypeFraisFactory(
+        code="MUTUELLE", obligatoire=True, actif=True, montant_defaut=5000
+    )
+    f.TypeFraisFactory(
+        code="TENUE", obligatoire=True, actif=True, ecole=ecole, montant_defaut=20000
+    )
+    autre_niveau = i.classe.__class__._meta.get_field("niveau").related_model.objects.create(
+        ecole=ecole, code="ZZ", libelle="Autre", ordre=99
+    )
+    f.TypeFraisFactory(code="SOUTENANCE", obligatoire=True, actif=True, niveau=autre_niveau)
+    f.TypeFraisFactory(code="PHOTOCOPIE", obligatoire=False, actif=True)
+    f.TypeFraisFactory(code="EXAMEN", obligatoire=True, actif=False)
+
+    lignes = services.materialiser_frais_obligatoires(i)
+    codes = {
+        fi.type_frais.code
+        for fi in models.FraisInscription.objects.filter(inscription=i)
+    }
+    assert codes == {"MUTUELLE", "TENUE"}
+    assert (
+        models.FraisInscription.objects.get(
+            inscription=i, type_frais__code="TENUE"
+        ).montant_du
+        == 20000
+    )
+
+    services.materialiser_frais_obligatoires(i)
+    assert models.FraisInscription.objects.filter(inscription=i).count() == 2
