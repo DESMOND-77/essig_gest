@@ -37,18 +37,18 @@ type EcheanceListe = {
 export function SituationPaiement() {
   const { toast } = useToast();
 
-  // Create hook instances - wrapped in useMemo for stability
-  const inscriptionsHooks = React.useMemo(() =>
+  // Create hook instances with useMemo for stability
+  const inscriptionsHook = React.useMemo(() =>
     createResourceHooks<InscriptionListe>("personnes/inscriptions"), []);
 
-  const echeancesHooks = React.useMemo(() =>
+  const echeancesHook = React.useMemo(() =>
     createResourceHooks<EcheanceListe>("scolarite/echeances"), []);
 
-  // Call hooks with stable parameters
-  const inscriptionsResult = inscriptionsHooks.useListe({});
-  const echeancesResult = echeancesHooks.useListe({});
-
+  // Call hooks directly in component body (following ResourcePage pattern)
+  const inscriptionsResult = inscriptionsHook.useListe({});
   const { data: inscriptionsData, isLoading: inscriptionsLoading, isError: inscriptionsError } = inscriptionsResult;
+
+  const echeancesResult = echeancesHook.useListe({});
   const { data: echeancesData, isLoading: echeancesLoading, isError: echeancesError } = echeancesResult;
 
   // State for our component
@@ -59,19 +59,19 @@ export function SituationPaiement() {
 
   // Update state when hook data changes
   useEffect(() => {
-    if (inscriptionsData) {
-      setInscriptions(inscriptionsData.results ?? []);
+    if (inscriptionsData?.results) {
+      setInscriptions(inscriptionsData.results);
     }
-  }, [inscriptionsData]);
+  }, [inscriptionsData?.results]);
 
   useEffect(() => {
-    if (echeancesData) {
-      setEcheances(echeancesData.results ?? []);
+    if (echeancesData?.results) {
+      setEcheances(echeancesData.results);
     }
-  }, [echeancesData]);
+  }, [echeancesData?.results]);
 
-  // Update loading/error states - using useCallback to avoid function recreation
-  const updateLoadingErrorState = React.useCallback(() => {
+  // Update loading/error states
+  useEffect(() => {
     const isLoading = inscriptionsLoading || echeancesLoading;
     const hasError = inscriptionsError || echeancesError;
 
@@ -82,10 +82,6 @@ export function SituationPaiement() {
       toast("Impossible de charger les données de situation de paiement");
     }
   }, [inscriptionsLoading, echeancesLoading, inscriptionsError, echeancesError, toast]);
-
-  useEffect(() => {
-    updateLoadingErrorState();
-  }, [updateLoadingErrorState]);
 
   // Calculate payment situation for each inscription
   const situationsPaiement = useMemo(() => {
@@ -131,8 +127,8 @@ export function SituationPaiement() {
   // Refresh data
   const loadData = useCallback(async () => {
     try {
-      inscriptionsHooks.useListe({}).refetch();
-      echeancesHooks.useListe({}).refetch();
+      inscriptionsHook.useListe({}).refetch();
+      echeancesHook.useListe({}).refetch();
     } catch (error) {
       toast("Une erreur est survenue lors du chargement des données");
     }
