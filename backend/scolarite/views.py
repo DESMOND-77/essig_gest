@@ -13,7 +13,7 @@ class _BaseScolariteViewSet(_BaseCrudViewSet):
 
 class TypeFraisViewSet(_BaseScolariteViewSet):
     permission_classes = [permissions.PeutEcrireTarifs]
-    queryset = models.TypeFrais.objects.select_related("ecole", "niveau", "annee_scolaire")
+    queryset = models.TypeFrais.objects.all()
     serializer_class = serializers.TypeFraisSerializer
     filterset_class = s_filters.TypeFraisFilter
     search_fields = ["code", "libelle"]

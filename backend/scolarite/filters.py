@@ -15,7 +15,6 @@ class EcheanceFilter(df.FilterSet):
         fields = {
             "inscription": ["exact"],
             "numero": ["exact"],
-            "pris_en_charge_bourse": ["exact"],
         }
 
 
@@ -23,21 +22,25 @@ class TypeFraisFilter(df.FilterSet):
     class Meta:
         model = models.TypeFrais
         fields = {
-            "ecole": ["exact"],
-            "niveau": ["exact"],
-            "annee_scolaire": ["exact"],
-            "obligatoire": ["exact"],
-            "actif": ["exact"],
+            "libelle": ["exact"],
+            "code": ["exact"],
         }
 
 
 class FraisInscriptionFilter(df.FilterSet):
     class Meta:
         model = models.FraisInscription
-        fields = {"inscription": ["exact"], "type_frais": ["exact"], "exonere": ["exact"]}
+        fields = {
+            "niveau": ["exact"],
+            "annee_scolaire": ["exact"],
+        }
 
 
 class BourseFilter(df.FilterSet):
     class Meta:
         model = models.Bourse
-        fields = {"inscription": ["exact"]}
+        fields = {
+            "etudiant": ["exact"],
+            "annee_scolaire": ["exact"],
+            "type": ["exact"],
+        }
