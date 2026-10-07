@@ -180,14 +180,15 @@ def appliquer_bourse_etudiant(etudiant_id, annee_scolaire_id, bourse_id=None):
                 annee_scolaire_id=annee_scolaire_id
             )
         except Bourse.DoesNotExist:
-            raise ObjectDoesNotExist(f"Bourse avec id {bours_id} non trouvée pour cet étudiant/année")
+            raise ObjectDoesNotExist(f"Bourse avec id {bourse_id} non trouvée pour cet étudiant/année")
     else:
         # Appliquer la première bourse disponible
         bourse = Bourse.objects.filter(
             etudiant_id=etudiant_id,
             annee_scolaire_id=annee_scolaire_id,
-            date_attribution__lte=dt.date.today(),
-            date_fin_validite__gte=dt.date.today()
+            date_attribution__lte=dt.date.today()
+        ).filter(
+            Q(date_fin_validite__isnull=True) | Q(date_fin_validite__gte=dt.date.today())
         ).first()
 
         if not bourse:
@@ -317,7 +318,7 @@ def preparer_donnees_fiche_scolarite(inscription_id):
     etudiant_data = {
         'id': inscription.etudiant.id,
         'nom': inscription.etudiant.nom,
-        'prenom': inscription.etudiant.prenom,
+        'prenoms': inscription.etudiant.prenoms,
         'date_naissance': inscription.etudiant.date_naissance,
         'email': inscription.etudiant.email,
         'telephone': getattr(inscription.etudiant, 'telephone', ''),
@@ -329,9 +330,9 @@ def preparer_donnees_fiche_scolarite(inscription_id):
         'date_inscription': inscription.date_inscription,
         'statut': inscription.statut,
         'niveau': {
-            'id': inscription.niveau.id,
-            'code': inscription.niveau.code,
-            'libelle': inscription.niveau.libelle,
+            'id': inscription.classe.niveau.id,
+            'code': inscription.classe.niveau.code,
+            'libelle': inscription.classe.niveau.libelle,
         },
         'annee_scolaire': {
             'id': inscription.annee_scolaire.id,

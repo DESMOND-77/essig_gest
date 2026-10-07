@@ -20,13 +20,16 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, *args, **opts):
         for code, libelle, montant, obligatoire, actif in CATALOGUE:
+            description = f"Montant par défaut: {montant} FCFA"
+            if obligatoire:
+                description += ", Obligatoire"
+            if not actif:
+                description += ", Inactif"
             TypeFrais.objects.get_or_create(
                 code=code,
                 defaults={
                     "libelle": libelle,
-                    "montant_defaut": montant,
-                    "obligatoire": obligatoire,
-                    "actif": actif,
+                    "description": description,
                 },
             )
         self.stdout.write(self.style.SUCCESS("Catalogue de frais amorcé."))

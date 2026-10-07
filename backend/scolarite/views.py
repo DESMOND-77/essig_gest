@@ -33,11 +33,11 @@ class FraisInscriptionViewSet(_BaseScolariteViewSet):
 class BourseViewSet(_BaseScolariteViewSet):
     permission_classes = [permissions.PeutEcrireFraisEleve]
     queryset = models.Bourse.objects.select_related(
-        "inscription", "cree_par", "modifie_par"
+        "etudiant", "cree_par", "modifie_par"
     )
     serializer_class = serializers.BourseSerializer
     filterset_class = s_filters.BourseFilter
-    search_fields = ["organisme"]
+    search_fields = []
     ordering_fields = ["id"]
 
 

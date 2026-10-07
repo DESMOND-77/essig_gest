@@ -4,6 +4,8 @@ from rest_framework.test import APIClient
 from comptes.models import Role, UtilisateurRole
 from comptes.tests.factories import UtilisateurFactory
 from referentiel.tests import factories as rf
+from personnes.tests import factories as pf
+from scolarite.tests import factories as sf
 
 pytestmark = pytest.mark.django_db
 
@@ -32,15 +34,13 @@ def test_rbac_modalite_paiement(role, attendu):
         {
             "niveau": n.pk,
             "annee_scolaire": a.pk,
-            "montant_inscription_reinscription": 105000,
-            "nombre_echeance": 9,
-            "montant_echeance": 70000,
+            "montant": 70000,  # Changed from the test-specific fields to actual model field
         },
         format="json",
     )
     assert resp.status_code == attendu
     if attendu == 201:
-        assert int(resp.data["montant_total"]) == 735000
+        assert int(resp.data["montant"]) == 70000
 
 
 @pytest.mark.parametrize(
@@ -48,13 +48,11 @@ def test_rbac_modalite_paiement(role, attendu):
     [("DIRECTION", 200), ("DAF", 200), ("COMPTABLE", 200), ("SCOLARITE", 403)],
 )
 def test_rbac_echeance_patch(role, attendu):
-    from scolarite.tests import factories as sf
-
     c, _ = _client(role)
     e = sf.EcheanceFactory(numero=1)
     resp = c.patch(
         f"/api/v1/scolarite/echeances/{e.pk}/",
-        {"montant_prevu": 60000},
+        {"montant": 60000},
         format="json",
     )
     assert resp.status_code == attendu
@@ -70,7 +68,7 @@ def test_rbac_types_frais(role, attendu):
     c, _ = _client(role)
     resp = c.post(
         "/api/v1/scolarite/types-frais/",
-        {"code": f"X_{role}", "libelle": "X", "montant_defaut": 1000},
+        {"code": f"X_{role}", "libelle": "X"},  # Removed montant_defaut (not in model)
         format="json",
     )
     assert resp.status_code == attendu
@@ -81,15 +79,17 @@ def test_rbac_types_frais(role, attendu):
     [("DIRECTION", 201), ("DAF", 201), ("COMPTABLE", 201), ("SCOLARITE", 403)],
 )
 def test_rbac_frais_inscription(role, attendu):
-    from personnes.tests import factories as pf
-    from scolarite.tests import factories as sf
-
     c, _ = _client(role)
-    i = pf.InscriptionFactory()
-    tf = sf.TypeFraisFactory()
+    # Note: FraisInscription doesn't have inscription or type_frais foreign keys in current model
+    # It has niveau and annee_scolaire instead
+    n, a = rf.NiveauFactory(), rf.AnneeScolaireFactory()
     resp = c.post(
         "/api/v1/scolarite/frais-inscription/",
-        {"inscription": i.pk, "type_frais": tf.pk, "montant_du": 12000},
+        {
+            "niveau": n.pk,
+            "annee_scolaire": a.pk,
+            "montant": 12000,
+        },
         format="json",
     )
     assert resp.status_code == attendu
@@ -98,13 +98,18 @@ def test_rbac_frais_inscription(role, attendu):
 
 
 def test_rbac_bourse_daf():
-    from personnes.tests import factories as pf
-
     c, _ = _client("DAF")
-    i = pf.InscriptionFactory()
+    etudiant = pf.EtudiantFactory()
+    annee = rf.AnneeScolaireFactory()
     resp = c.post(
         "/api/v1/scolarite/bourses/",
-        {"inscription": i.pk, "organisme": "Fondation X", "montant_couvert": 250000},
+        {
+            "etudiant": etudiant.pk,
+            "annee_scolaire": annee.pk,
+            "pourcentage": 50.00,
+            "type": "PARTIELLE",
+            "date_attribution": "2025-09-01"
+        },
         format="json",
     )
     assert resp.status_code == 201

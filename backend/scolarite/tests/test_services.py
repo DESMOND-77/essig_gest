@@ -198,6 +198,11 @@ class ScolariteServicesTest(TestCase):
 
         # Test with fixed amount bourse
         Bourse.objects.filter(etudiant=self.etudiant).delete()  # Remove previous
+        # Reset échéance payments to initial state for clean test
+        Echeance.objects.filter(inscription=self.inscription).update(
+            montant_paye=0,
+            statut='à payer'
+        )
         bourse_fixe = Bourse.objects.create(
             etudiant=self.etudiant,
             annee_scolaire=self.annee,
@@ -263,7 +268,7 @@ class ScolariteServicesTest(TestCase):
 
         # Check etudiant data
         self.assertEqual(donnees['etudiant']['nom'], "Doe")
-        self.assertEqual(donnees['etudiant']['prenom'], "John")
+        self.assertEqual(donnees['etudiant']['prenoms'], "John")
 
         # Check situation financière
         self.assertIn('total_du', donnees['situation_financiere'])

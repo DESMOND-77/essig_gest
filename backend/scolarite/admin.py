@@ -4,27 +4,27 @@ from .models import ModalitePaiement, TypeFrais, FraisInscription, Echeance, Bou
 
 @admin.register(ModalitePaiement)
 class ModalitePaiementAdmin(admin.ModelAdmin):
-    list_display = ('niveau', 'annee_scolaire', 'montant', 'date_creation')
-    list_filter = ('niveau', 'annee_scolaire', 'date_creation')
+    list_display = ('niveau', 'annee_scolaire', 'montant', 'cree_le')
+    list_filter = ('niveau', 'annee_scolaire', 'cree_le')
     search_fields = ('niveau__code', 'niveau__libelle', 'annee_scolaire__libelle')
-    ordering = ('-date_creation',)
-    readonly_fields = ('date_creation', 'date_modification')
+    ordering = ('-cree_le',)
+    readonly_fields = ('cree_le', 'modifie_le')
 
 @admin.register(TypeFrais)
 class TypeFraisAdmin(admin.ModelAdmin):
-    list_display = ('libelle', 'code', 'description', 'date_creation')
-    list_filter = ('date_creation',)
+    list_display = ('libelle', 'code', 'description', 'cree_le')
+    list_filter = ('cree_le',)
     search_fields = ('libelle', 'code')
     ordering = ('libelle',)
-    readonly_fields = ('date_creation',)
+    readonly_fields = ('cree_le',)
 
 @admin.register(FraisInscription)
 class FraisInscriptionAdmin(admin.ModelAdmin):
-    list_display = ('niveau', 'annee_scolaire', 'montant', 'date_creation')
-    list_filter = ('niveau', 'annee_scolaire', 'date_creation')
+    list_display = ('niveau', 'annee_scolaire', 'montant', 'cree_le')
+    list_filter = ('niveau', 'annee_scolaire', 'cree_le')
     search_fields = ('niveau__code', 'niveau__libelle', 'annee_scolaire__libelle')
-    ordering = ('-date_creation',)
-    readonly_fields = ('date_creation',)
+    ordering = ('-cree_le',)
+    readonly_fields = ('cree_le',)
 
 @admin.register(Echeance)
 class EcheanceAdmin(admin.ModelAdmin):
@@ -32,7 +32,7 @@ class EcheanceAdmin(admin.ModelAdmin):
     list_filter = ('statut', 'date_echeance', 'inscription__etudiant__nom')
     search_fields = ('inscription__etudiant__nom', 'inscription__etudiant__prenom', 'numero')
     ordering = ('inscription', 'numero')
-    readonly_fields = ('date_creation',)
+    readonly_fields = ('cree_le', 'modifie_le')
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -44,7 +44,7 @@ class BourseAdmin(admin.ModelAdmin):
     list_filter = ('type', 'annee_scolaire', 'date_attribution')
     search_fields = ('etudiant__nom', 'etudiant__prenom', 'annee_scolaire__libelle')
     ordering = ('-date_attribution',)
-    readonly_fields = ('date_creation',)
+    readonly_fields = ('cree_le',)
 
     def get_montant(self, obj):
         if obj.pourcentage is not None:

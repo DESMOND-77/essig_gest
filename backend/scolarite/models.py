@@ -1,10 +1,11 @@
 # backend/scolarite/models.py
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from core.models import Auditable
 from referentiel.models import Niveau, AnneeScolaire
 from personnes.models import Etudiant
 
-class ModalitePaiement(models.Model):
+class ModalitePaiement(Auditable):
     """Modalité de paiement (grille tarifaire) par niveau et année scolaire"""
     niveau = models.ForeignKey(Niveau, on_delete=models.RESTRICT)
     annee_scolaire = models.ForeignKey(AnneeScolaire, on_delete=models.RESTRICT)
@@ -14,8 +15,6 @@ class ModalitePaiement(models.Model):
         validators=[MinValueValidator(1)],
         help_text="Montant en FCFA"
     )
-    date_creation = models.DateTimeField(auto_now_add=True)
-    date_modification = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = ('niveau', 'annee_scolaire', 'montant')
@@ -25,12 +24,11 @@ class ModalitePaiement(models.Model):
     def __str__(self):
         return f"{self.niveau.code} - {self.annee_scolaire.libelle}: {self.montant} FCFA"
 
-class TypeFrais(models.Model):
+class TypeFrais(Auditable):
     """Type/famille de frais (scolarité, inscription, activités, etc.)"""
     libelle = models.CharField(max_length=100, unique=True)
     code = models.CharField(max_length=20, unique=True)
     description = models.TextField(blank=True)
-    date_creation = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = "Type de frais"
@@ -39,7 +37,7 @@ class TypeFrais(models.Model):
     def __str__(self):
         return self.libelle
 
-class FraisInscription(models.Model):
+class FraisInscription(Auditable):
     """Frais d'inscription fixe par niveau et année scolaire"""
     niveau = models.ForeignKey(Niveau, on_delete=models.RESTRICT)
     annee_scolaire = models.ForeignKey(AnneeScolaire, on_delete=models.RESTRICT)
@@ -49,7 +47,6 @@ class FraisInscription(models.Model):
         validators=[MinValueValidator(0)],
         help_text="Montant en FCFA (peut être zéro pour frais gratuits)"
     )
-    date_creation = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ('niveau', 'annee_scolaire')
@@ -59,7 +56,7 @@ class FraisInscription(models.Model):
     def __str__(self):
         return f"{self.niveau.code} - {self.annee_scolaire.libelle}: {self.montant} FCFA"
 
-class Echeance(models.Model):
+class Echeance(Auditable):
     """Échéance de paiement associée à une inscription"""
     STATUT_CHOICES = [
         ('à payer', 'À payer'),
@@ -93,7 +90,6 @@ class Echeance(models.Model):
         help_text="Montant déjà payé pour cette échéance"
     )
     statut = models.CharField(max_length=20, choices=STATUT_CHOICES, default='à payer')
-    date_creation = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ('inscription', 'numero')
@@ -114,7 +110,7 @@ class Echeance(models.Model):
         """Vérifie si l'échéance est entièrement payée"""
         return self.montant_paye >= self.montant
 
-class Bourse(models.Model):
+class Bourse(Auditable):
     """Bourse attribuée à un étudiant pour une année scolaire"""
     TYPE_CHOICES = [
         ('TOTAL', 'Bourse totale'),
@@ -145,7 +141,6 @@ class Bourse(models.Model):
     )
     date_attribution = models.DateField()
     date_fin_validite = models.DateField(null=True, blank=True)
-    date_creation = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = "Bourse"
