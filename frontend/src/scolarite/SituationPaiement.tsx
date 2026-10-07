@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useCallback } from "react";
+import React, { useMemo, useCallback } from "react";
 import { DataState } from "../components/DataState";
 import { createResourceHooks } from "../lib/resource";
 import { useToast } from "../components/ToastProvider";
@@ -45,43 +45,15 @@ export function SituationPaiement() {
     createResourceHooks<EcheanceListe>("scolarite/echeances"), []);
 
   // Call hooks directly in component body (following ResourcePage pattern)
-  const inscriptionsResult = inscriptionsHook.useListe({});
-  const { data: inscriptionsData, isLoading: inscriptionsLoading, isError: inscriptionsError } = inscriptionsResult;
+  const { data: inscriptionsData, isLoading: inscriptionsLoading, isError: inscriptionsError } =
+    inscriptionsHook.useListe({});
 
-  const echeancesResult = echeancesHook.useListe({});
-  const { data: echeancesData, isLoading: echeancesLoading, isError: echeancesError } = echeancesResult;
+  const { data: echeancesData, isLoading: echeancesLoading, isError: echeancesError } =
+    echeancesHook.useListe({});
 
-  // State for our component
-  const [inscriptions, setInscriptions] = useState<InscriptionListe[]>([]);
-  const [echeances, setEcheances] = useState<EcheanceListe[]>([]);
-  const [isComponentLoading, setIsComponentLoading] = useState<boolean>(true);
-  const [isComponentError, setIsComponentError] = useState<boolean>(false);
-
-  // Update state when hook data changes
-  useEffect(() => {
-    if (inscriptionsData?.results) {
-      setInscriptions(inscriptionsData.results);
-    }
-  }, [inscriptionsData?.results]);
-
-  useEffect(() => {
-    if (echeancesData?.results) {
-      setEcheances(echeancesData.results);
-    }
-  }, [echeancesData?.results]);
-
-  // Update loading/error states
-  useEffect(() => {
-    const isLoading = inscriptionsLoading || echeancesLoading;
-    const hasError = inscriptionsError || echeancesError;
-
-    setIsComponentLoading(isLoading);
-    setIsComponentError(hasError);
-
-    if (hasError) {
-      toast("Impossible de charger les données de situation de paiement");
-    }
-  }, [inscriptionsLoading, echeancesLoading, inscriptionsError, echeancesError, toast]);
+  // Prepare inscriptions and echeances arrays from hook data
+  const inscriptions = inscriptionsData?.results ?? [];
+  const echeances = echeancesData?.results ?? [];
 
   // Calculate payment situation for each inscription
   const situationsPaiement = useMemo(() => {
@@ -133,6 +105,10 @@ export function SituationPaiement() {
       toast("Une erreur est survenue lors du chargement des données");
     }
   }, [toast]);
+
+  // Determine loading and error states
+  const isComponentLoading = inscriptionsLoading || echeancesLoading;
+  const isComponentError = inscriptionsError || echeancesError;
 
   if (isComponentLoading) {
     return <DataState statut="chargement" />;
