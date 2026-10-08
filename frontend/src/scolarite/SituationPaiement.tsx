@@ -45,18 +45,26 @@ export function SituationPaiement() {
     createResourceHooks<EcheanceListe>("scolarite/echeances"), []);
 
   // Call hooks directly in component body (following ResourcePage pattern)
-  const { data: inscriptionsData, isLoading: inscriptionsLoading, isError: inscriptionsError } =
-    inscriptionsHook.useListe({});
+  const {
+    data: inscriptionsData,
+    isLoading: inscriptionsLoading,
+    isError: inscriptionsError,
+    refetch: refetchInscriptions
+  } = inscriptionsHook.useListe({});
 
-  const { data: echeancesData, isLoading: echeancesLoading, isError: echeancesError } =
-    echeancesHook.useListe({});
-
-  // Prepare inscriptions and echeances arrays from hook data
-  const inscriptions = inscriptionsData?.results ?? [];
-  const echeances = echeancesData?.results ?? [];
+  const {
+    data: echeancesData,
+    isLoading: echeancesLoading,
+    isError: echeancesError,
+    refetch: refetchEcheances
+  } = echeancesHook.useListe({});
 
   // Calculate payment situation for each inscription
   const situationsPaiement = useMemo(() => {
+    // Prepare inscriptions and echeances arrays from hook data
+    const inscriptions = inscriptionsData?.results ?? [];
+    const echeances = echeancesData?.results ?? [];
+
     // Group écheances by inscription
     const echeancesParInscription: Record<number, EcheanceListe[]> = {};
     echeances.forEach(echeance => {
@@ -94,17 +102,17 @@ export function SituationPaiement() {
         echeances: listeEcheances
       };
     });
-  }, [inscriptions, echeances]);
+  }, [inscriptionsData?.results, echeancesData?.results]);
 
   // Refresh data
-  const loadData = useCallback(async () => {
+  const loadData = useCallback(() => {
     try {
-      inscriptionsHook.useListe({}).refetch();
-      echeancesHook.useListe({}).refetch();
+      refetchInscriptions();
+      refetchEcheances();
     } catch (error) {
       toast("Une erreur est survenue lors du chargement des données");
     }
-  }, [toast]);
+  }, [refetchInscriptions, refetchEcheances, toast]);
 
   // Determine loading and error states
   const isComponentLoading = inscriptionsLoading || echeancesLoading;
