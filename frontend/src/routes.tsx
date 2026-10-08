@@ -4,6 +4,7 @@ import { LoginPage } from "./auth/LoginPage";
 import { routesPersonnes } from "./personnes/routes";
 import { routesReferentiel } from "./referentiel/routes";
 import { routesScolarite } from "./scolarite/routes";
+import { routesTresorerie } from "./tresorerie/routes";
 
 export const router = createBrowserRouter([
   { path: "/connexion", element: <LoginPage /> },
@@ -15,6 +16,7 @@ export const router = createBrowserRouter([
       ...routesReferentiel,
       ...routesPersonnes,
       ...routesScolarite,
+      ...routesTresorerie,
     ],
   },
 ]);
