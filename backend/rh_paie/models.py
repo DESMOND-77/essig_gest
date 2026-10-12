@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator
-from referentiel.models import Matiere, Classe
+from referentiel.models import Matiere, Classe, Ecole
 from scolarite.models import AnneeScolaire
 
 
@@ -22,6 +22,29 @@ class Enseignant(models.Model):
         db_table = 'enseignant'
         verbose_name = 'Enseignant'
         verbose_name_plural = 'Enseignants'
+        indexes = [
+            models.Index(fields=['nom', 'prenom']),
+        ]
+
+    def __str__(self):
+        return f"{self.nom} {self.prenom}"
+
+
+class PersonnelAdministratif(models.Model):
+    nom = models.CharField(max_length=60)
+    prenom = models.CharField(max_length=120)
+    poste = models.CharField(max_length=120)
+    ecole = models.ForeignKey(Ecole, on_delete=models.SET_NULL, blank=True, null=True)
+    telephone = models.CharField(max_length=60, blank=True, null=True)
+    email = models.EmailField(max_length=120, blank=True, null=True)
+    salaire_base = models.DecimalField(max_digits=12, decimal_places=0)
+    date_embauche = models.DateField(blank=True, null=True)
+    actif = models.BooleanField(default=True)
+
+    class Meta:
+        db_table = 'personnel_administratif'
+        verbose_name = 'Personnel Administratif'
+        verbose_name_plural = 'Personnels Administratifs'
         indexes = [
             models.Index(fields=['nom', 'prenom']),
         ]
