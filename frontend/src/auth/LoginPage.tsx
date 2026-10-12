@@ -35,7 +35,7 @@ export function LoginPage() {
       </label>
       <label className="block">
         <span className="text-sm">Mot de passe</span>
-        <input type="password" className="mt-1 w-full rounded border p-2" {...register("password")} />
+        <input type="password" autoComplete="current-password"className="mt-1 w-full rounded border p-2" {...register("password")} />
         {errors.password && <em className="text-sm text-red-600">{errors.password.message}</em>}
       </label>
       {erreur && <p role="alert" className="text-sm text-red-600">{erreur}</p>}

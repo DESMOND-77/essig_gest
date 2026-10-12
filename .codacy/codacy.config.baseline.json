@@ -6,8 +6,8 @@
     "organization": null,
     "repositoryId": null,
     "repositoryName": null,
-    "createdAt": "2026-10-07T05:55:33.828Z",
-    "updatedAt": "2026-10-07T05:55:33.828Z",
+    "createdAt": "2026-10-11T10:35:34.678Z",
+    "updatedAt": "2026-10-11T10:35:34.678Z",
     "languages": [
       "CSS",
       "Dockerfile",
@@ -4604,7 +4604,10 @@
           "patternId": "Lizard_parameter-count-medium"
         },
         {
-          "patternId": "Lizard_nloc-critical"
+          "patternId": "Lizard_nloc-critical",
+          "parameters": {
+            "threshold": "110"
+          }
         },
         {
           "patternId": "Lizard_ccn-critical"

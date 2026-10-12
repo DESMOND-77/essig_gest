@@ -16,9 +16,9 @@ Prompt de mission détaillé : `prompts/PROMPT MAÎTRE — AGENT PRINCIPAL DE D�
 ## Architecture (monorepo)
 
 | Dossier | Contenu | État |
-|---|---|---|
-| `backend/` | Django 5.2 LTS + DRF, Python 3.13, MySQL 8.4. Modules : `comptes` (utilisateur/rôle/audit), `core` (health, exceptions, schéma, `viewsets._BaseCrudViewSet`, `models.Auditable` + `serializers.AuditableSerializerMixin`), `referentiel` (11 entités, `seed_referentiel`), `personnes` (étudiant/affiliation/situation_bac/type_piece + **inscription/piece_dossier**, matricule + numéro d'ordre serveur, `seed_personnes`), `scolarite` (**partiel — grilles tarifaires + échéancier ; frais/bourses = Phase 3B**) **livrés**. Modules métier restants (`tresorerie`, `paie`, `resultats`) **à créer**. | `scolarite` partiel (Phase 3A) |
-| `frontend/` | React 19 + TypeScript strict + Vite + React Router 7 + Tailwind v4 + shadcn/ui (minimal) + TanStack Query. Auth JWT SPA. AppShell (sidebar 6 modules, topbar, fil d'Ariane, toasts) + scaffold CRUD générique `Descripteur` + écrans `/referentiel/*`, `/personnes/*` (étudiants, `type_piece`, fiche étudiant, **inscriptions + fiche inscription, pièces de dossier**), `/scolarite/*` (**grilles tarifaires, échéances**). | AppShell + référentiel + personnes + scolarité (Phase 3A) |
+| --- | --- | --- |
+| `backend/` | Django 5.2 LTS + DRF, Python 3.13, MySQL 8.4. Modules : `comptes` (utilisateur/rôle/audit), `core` (health, exceptions, schéma, `viewsets._BaseCrudViewSet`, `models.Auditable` + `serializers.AuditableSerializerMixin`), `referentiel` (11 entités, `seed_referentiel`), `personnes` (étudiant/affiliation/situation_bac/type_piece + **inscription/piece_dossier**, matricule + numéro d'ordre serveur, `seed_personnes`), `scolarite` (**partiel — grilles tarifaires + échéancier ; frais/bourses = Phase 3B**) **livrés**. `tresorerie` (comptes bancaires, mouvements, encaissements, dépenses, arrêtés de caisse, billetage, virements) **implémenté**. Modules métier restants (`paie`, `resultats`) **à créer**. | `scolarite` partiel (Phase 3A), `tresorerie` implémenté (Phase 5) |
+| `frontend/` | React 19 + TypeScript strict + Vite + React Router 7 + Tailwind v4 + shadcn/ui (minimal) + TanStack Query. Auth JWT SPA. AppShell (sidebar 6 modules, topbar, fil d'Ariane, toasts) + scaffold CRUD générique `Descripteur` + écrans `/referentiel/*`, `/personnes/*` (étudiants, `type_piece`, fiche étudiant, **inscriptions + fiche inscription, pièces de dossier**), `/scolarite/*` (**grilles tarifaires, échéances**). Module `tresorerie` en attente d'implémentation (placeholder). | AppShell + référentiel + personnes + scolarité (Phase 3A) |
 | `db/` | Migrations SQL MySQL 8.4 (49 tables + 13 vues) + harnais de tests SQL. **Référence de conception uniquement** — non appliquée par Django (voir « Sources de vérité »). | Complet |
 | `infra/` | Docker Compose (`caddy` / `web` / `db`), `Caddyfile`, Dockerfiles, `entrypoint.sh`, `backup.sh`. Validé statiquement, **jamais exécuté au runtime**. | Écrit |
 | `docs/superpowers/` | `specs/` (designs validés), `plans/` (plans d'implémentation). | — |
@@ -48,7 +48,8 @@ python manage.py check
 python manage.py makemigrations --check --dry-run
 python manage.py migrate
 python manage.py spectacular --file /tmp/schema.yml   # doit rester 0 Error
-pytest                                                # DB_USER=root (pytest crée test_<DB_NAME>)
+pytest                                                # DB_USER=root (pytest crée test_<DB_NAME>) — inclut les tests de la trésorerie
+pytest backend/tresorerie/tests/                      # Tests spécifiques trésorerie
 ruff check .                                          # select E,F,I,UP,B,DJ ; migrations exclues
 python manage.py seed_socle --admin-login <l> --admin-password <m>
 python manage.py seed_referentiel                     # groupe, écoles, modalités, année, périodes
@@ -62,13 +63,32 @@ npm run typecheck          # tsc -b --noEmit
 npm test                   # vitest
 npm run build
 npm run gen:api            # régénère src/api/schema.d.ts — exige le backend sur :8000
+# Pour développer le module trésorerie (frontend) :
+# 1. Implementer les descripteurs dans frontend/src/tresorerie/config/
+# 2. Créer les composants dans frontend/src/tresorerie/ (ou utiliser ResourcePage générique)
+# 3. Mettre à jour frontend/src/tresorerie/routes.tsx avec les vrais descripteurs
 
 # Infra
 docker compose --env-file .env -f infra/docker-compose.yml config
-```
 
-Après changement d'API : serializers → `@extend_schema` → `spectacular` → `npm run gen:api` →
-adapter le front → tests.
+Après changement d'API : serializers → `@extend_schema` → `spectacular` → `npm run gen:api` → adapter le front → tests.
+
+## Module trésorerie (Phase 5)
+
+Le module trésorerie implémente la gestion des encaissements, dépenses, virements et autres opérations financières.
+Il s'intègre avec les phases existantes, particulièrement la phase 4 (scolarité/facturation).
+
+### Points d'intégration clés
+- Le modèle `Encaissement` référence `personnes.Inscription` via une clé étrangère
+- Le modèle `ImputationEncaissement` travaille avec le modèle existant `scolarite.Echeance`
+- Le solde théorique d'un arrêté de caisse est calculé à partir du grand livre unifié (`mouvement`)
+- Réutiliser la fonction `calculer_reste_a_payer_inscription` de `scolarite.services` lorsqu'approprié
+
+### Conventions spécifiques
+- Tous les montants utilisent `DecimalField(max_digits=12, decimal_places=0)` (entiers en FCFA)
+- Jamais de `FloatField` pour les montants financiers
+- Toutes les opérations financières sont transactionnelles (`transaction.atomic`)
+- Les numéros de reçu sont générés de manière concurrency-safe via `encaissement_service.generer_numero_recu_unique()`
 
 ## Conventions
 

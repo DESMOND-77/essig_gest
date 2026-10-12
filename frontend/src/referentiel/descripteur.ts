@@ -19,13 +19,13 @@ export type Colonne = {
   rendu?: (ligne: Record<string, unknown>) => string;
 };
 
-export type Descripteur<T extends { id: number } = { id: number }> = {
+export type Descripteur<T extends { id: number } = { id: number }, S extends ZodTypeAny = ZodTypeAny> = {
   titre: string;
   endpoint: string; // ex. "referentiel/ecoles"
   roleEcriture: string[]; // ["DIRECTION"] ou ["DIRECTION","SCOLARITE"]
   colonnes: Colonne[];
   champs: Champ[];
-  schema: ZodTypeAny;
+  schema: S;
   triDefaut?: string;
   filtres?: { nom: string; label: string; fkEndpoint?: string; options?: { valeur: string; label: string }[] }[];
   rechercheActive?: boolean;
