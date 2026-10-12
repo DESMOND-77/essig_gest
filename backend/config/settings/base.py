@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "personnes",
     "scolarite",
     "tresorerie",
+    "rh_paie",
 ]
 
 MIDDLEWARE = [
