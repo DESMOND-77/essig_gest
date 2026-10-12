@@ -1,7 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator
-from referentiel.models import Matiere, Classe, Ecole
-from scolarite.models import AnneeScolaire
+from referentiel.models import Matiere, Classe, Ecole, AnneeScolaire
 from tresorerie.models import Compte, Mouvement
 from comptes.models import Utilisateur
 
@@ -87,7 +86,7 @@ class SalaireEnseignant(models.Model):
         blank=True,
         null=True
     )
-    annee_scolaire = models.ForeignKey('scolarite.AnneeScolaire', on_delete=models.CASCADE)
+    annee_scolaire = models.ForeignKey('referentiel.AnneeScolaire', on_delete=models.CASCADE)
     mois = models.CharField(
         max_length=4,
         choices=[
@@ -101,9 +100,9 @@ class SalaireEnseignant(models.Model):
     montant = models.DecimalField(max_digits=12, decimal_places=0)
     compte = models.ForeignKey(Compte, on_delete=models.CASCADE)
     mouvement = models.BigIntegerField()  # Will be ForeignKey to Mouvement after migration
-    cree_par = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, blank=True, null=True)
+    cree_par = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, blank=True, null=True, related_name='salaire_enseignant_cree_par')
     cree_le = models.DateTimeField(auto_now_add=True)
-    modifie_par = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, blank=True, null=True)
+    modifie_par = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, blank=True, null=True, related_name='salaire_enseignant_modifie_par')
     modifie_le = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -123,7 +122,7 @@ class SalaireEnseignant(models.Model):
 
 class SalaireAdministration(models.Model):
     personnel_administratif = models.ForeignKey('rh_paie.PersonnelAdministratif', on_delete=models.CASCADE)
-    annee_scolaire = models.ForeignKey('scolarite.AnneeScolaire', on_delete=models.CASCADE)
+    annee_scolaire = models.ForeignKey('referentiel.AnneeScolaire', on_delete=models.CASCADE)
     mois = models.CharField(
         max_length=4,
         choices=[
@@ -138,9 +137,9 @@ class SalaireAdministration(models.Model):
     montant_paye = models.DecimalField(max_digits=12, decimal_places=0)
     compte = models.ForeignKey(Compte, on_delete=models.CASCADE)
     mouvement = models.BigIntegerField()  # Will be ForeignKey to Mouvement after migration
-    cree_par = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, blank=True, null=True)
+    cree_par = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, blank=True, null=True, related_name='salaire_administration_cree_par')
     cree_le = models.DateTimeField(auto_now_add=True)
-    modifie_par = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, blank=True, null=True)
+    modifie_par = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, blank=True, null=True, related_name='salaire_administration_modifie_par')
     modifie_le = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -172,9 +171,9 @@ class AvancePersonnel(models.Model):
     mouvement = models.BigIntegerField()  # Will be ForeignKey to Mouvement after migration
     regularise_salaire_admin_id = models.IntegerField(blank=True, null=True)  # FK to salaire_administration
     regularisee = models.BooleanField(default=False)
-    cree_par = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, blank=True, null=True)
+    cree_par = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, blank=True, null=True, related_name='avance_personnel_cree_par')
     cree_le = models.DateTimeField(auto_now_add=True)
-    modifie_par = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, blank=True, null=True)
+    modifie_par = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, blank=True, null=True, related_name='avance_personnel_modifie_par')
     modifie_le = models.DateTimeField(auto_now=True)
 
     class Meta:
