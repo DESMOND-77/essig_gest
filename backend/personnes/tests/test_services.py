@@ -25,15 +25,15 @@ def test_generer_matricule_format_et_increment():
     m2 = services.generer_matricule("ESSIG", "Autre", "Personne")
     assert m1 == "ESSIG-FCVGUDE1"
     assert m2 == "ESSIG-FCVAUPE2"
-    assert CompteurMatricule.objects.get(pole="ESSIG").valeur == 2
+    assert CompteurMatricule.objects.get(ecole_sigle="ESSIG").valeur == 2
 
 
-def test_compteur_isole_par_pole():
+def test_compteur_isole_par_ecole():
     services.generer_matricule("ESSIG", "A", "B")
     services.generer_matricule("ESSIG", "C", "D")
     services.generer_matricule("UPSS", "E", "F")
-    assert CompteurMatricule.objects.get(pole="ESSIG").valeur == 2
-    assert CompteurMatricule.objects.get(pole="UPSS").valeur == 1
+    assert CompteurMatricule.objects.get(ecole_sigle="ESSIG").valeur == 2
+    assert CompteurMatricule.objects.get(ecole_sigle="UPSS").valeur == 1
 
 
 def test_compteur_jamais_reinitialise():
@@ -41,7 +41,7 @@ def test_compteur_jamais_reinitialise():
         services.generer_matricule("CFPA", "X", "Y")
     m = services.generer_matricule("CFPA", "Z", "W")
     assert m == "CFPA-FCVZXWX4"
-    assert CompteurMatricule.objects.get(pole="CFPA").valeur == 4
+    assert CompteurMatricule.objects.get(ecole_sigle="CFPA").valeur == 4
 
 
 def test_attribuer_numero_ordre_incremente_par_ecole_annee():

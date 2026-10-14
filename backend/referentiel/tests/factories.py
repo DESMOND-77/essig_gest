@@ -3,21 +3,12 @@ import factory
 from referentiel import models
 
 
-class GroupeScolaireFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = models.GroupeScolaire
-
-    nom = factory.Sequence(lambda n: f"Groupe {n}")
-
-
 class EcoleFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.Ecole
 
-    groupe_scolaire = factory.SubFactory(GroupeScolaireFactory)
     nom = factory.Sequence(lambda n: f"Ecole {n}")
     sigle = factory.Sequence(lambda n: f"E{n}")
-    pole = models.Ecole.Pole.ESSIG
     regime = models.Ecole.Regime.LMD
 
 

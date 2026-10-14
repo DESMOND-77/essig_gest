@@ -4,10 +4,10 @@ from django.db import transaction
 from referentiel import models, services
 
 ECOLES = [
-    ("École Supérieure des Sciences et Ingénierie de Gestion", "ESSIG", "ESSIG", "LMD"),
-    ("Université Privée des Sciences de la Santé", "UPSS", "UPSS", "LMD"),
-    ("Centre de Formation Professionnelle et d'Apprentissage", "CFPA", "CFPA", "CLASSIQUE"),
-    ("CICI", "CICI", "CICI", "CLASSIQUE"),
+    ("École Supérieure des Sciences et Ingénierie de Gestion", "ESSIG", "LMD"),
+    ("Université Privée des Sciences de la Santé", "UPSS", "LMD"),
+    ("Centre de Formation Professionnelle et d'Apprentissage", "CFPA", "CLASSIQUE"),
+    ("CICI", "CICI", "CLASSIQUE"),
 ]
 MODALITES = [
     ("FI", "Formation initiale"),
@@ -18,20 +18,17 @@ MODALITES = [
 
 
 class Command(BaseCommand):
-    help = "Amorce idempotente du référentiel (groupe, écoles, modalités, année, périodes)."
+    help = "Amorce idempotente du référentiel (écoles, modalités, année, périodes)."
 
     def add_arguments(self, parser):
-        parser.add_argument("--groupe-nom", default="Groupe Scolaire USIA")
         parser.add_argument("--annee", default="2025-2026")
 
     @transaction.atomic
     def handle(self, *args, **opts):
-        groupe, _ = models.GroupeScolaire.objects.get_or_create(nom=opts["groupe_nom"])
-        for nom, sigle, pole, regime in ECOLES:
+        for nom, sigle, regime in ECOLES:
             models.Ecole.objects.get_or_create(
-                groupe_scolaire=groupe,
-                pole=pole,
-                defaults={"nom": nom, "sigle": sigle, "regime": regime},
+                sigle=sigle,
+                defaults={"nom": nom, "regime": regime},
             )
         for code, libelle in MODALITES:
             models.ModaliteFormation.objects.get_or_create(

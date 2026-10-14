@@ -13,7 +13,6 @@ export const TableauBord = () => {
   // Default filters
   const filters = {
     jours: parseInt(searchParams.get('jours') || '30', 10),
-    groupeScolaireId: searchParams.get('groupeScolaireId') || undefined,
     ecoleId: searchParams.get('ecoleId') || undefined,
     anneeScolaireId: searchParams.get('anneeScolaireId') || undefined,
     compteId: searchParams.get('compteId') || undefined,
@@ -50,7 +49,7 @@ export const TableauBord = () => {
     return () => {
       isMounted = false;
     };
-  }, [filters.jours, filters.groupeScolaireId, filters.ecoleId, filters.anneeScolaireId, filters.compteId, filters.limiteMontant, filters.limit]);
+  }, [filters.jours, filters.ecoleId, filters.anneeScolaireId, filters.compteId, filters.limiteMontant, filters.limit]);
 
   if (isLoading) {
     return <div className="text-center py-8">Chargement du tableau de bord...</div>;

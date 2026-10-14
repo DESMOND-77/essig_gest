@@ -324,6 +324,29 @@ export interface paths {
         patch: operations["personnes_inscriptions_partial_update"];
         trace?: never;
     };
+    "/api/v1/personnes/inscriptions/{id}/reste-a-payer/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Reste à payer courant de l'inscription (échéances dues - montants déjà imputés).
+         *
+         *     Calcul informatif, exposé pour que le frontend puisse l'afficher avant un encaissement
+         *     (cf. scolarite.services.calculer_reste_a_payer_inscription) ; le backend reste seul
+         *     responsable du contrôle réel au moment de l'imputation.
+         */
+        get: operations["personnes_inscriptions_reste_a_payer_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/personnes/pieces-dossier/": {
         parameters: {
             query?: never;
@@ -884,86 +907,6 @@ export interface paths {
         patch: operations["referentiel_filieres_partial_update"];
         trace?: never;
     };
-    "/api/v1/referentiel/groupes-scolaires/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * @description Base CRUD partagée par les modules métier.
-         *
-         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
-         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
-         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
-         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
-         */
-        get: operations["referentiel_groupes_scolaires_list"];
-        put?: never;
-        /**
-         * @description Base CRUD partagée par les modules métier.
-         *
-         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
-         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
-         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
-         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
-         */
-        post: operations["referentiel_groupes_scolaires_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/referentiel/groupes-scolaires/{id}/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * @description Base CRUD partagée par les modules métier.
-         *
-         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
-         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
-         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
-         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
-         */
-        get: operations["referentiel_groupes_scolaires_retrieve"];
-        /**
-         * @description Base CRUD partagée par les modules métier.
-         *
-         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
-         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
-         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
-         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
-         */
-        put: operations["referentiel_groupes_scolaires_update"];
-        post?: never;
-        /**
-         * @description Base CRUD partagée par les modules métier.
-         *
-         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
-         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
-         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
-         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
-         */
-        delete: operations["referentiel_groupes_scolaires_destroy"];
-        options?: never;
-        head?: never;
-        /**
-         * @description Base CRUD partagée par les modules métier.
-         *
-         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
-         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
-         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
-         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
-         */
-        patch: operations["referentiel_groupes_scolaires_partial_update"];
-        trace?: never;
-    };
     "/api/v1/referentiel/matieres/": {
         parameters: {
             query?: never;
@@ -1444,6 +1387,501 @@ export interface paths {
         patch: operations["referentiel_sessions_examen_partial_update"];
         trace?: never;
     };
+    "/api/v1/rh-paie/affectations-enseignement/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les affectations d'enseignement */
+        get: operations["rh_paie_affectations_enseignement_list"];
+        put?: never;
+        /** @description ViewSet pour gérer les affectations d'enseignement */
+        post: operations["rh_paie_affectations_enseignement_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rh-paie/affectations-enseignement/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les affectations d'enseignement */
+        get: operations["rh_paie_affectations_enseignement_retrieve"];
+        /** @description ViewSet pour gérer les affectations d'enseignement */
+        put: operations["rh_paie_affectations_enseignement_update"];
+        post?: never;
+        /** @description ViewSet pour gérer les affectations d'enseignement */
+        delete: operations["rh_paie_affectations_enseignement_destroy"];
+        options?: never;
+        head?: never;
+        /** @description ViewSet pour gérer les affectations d'enseignement */
+        patch: operations["rh_paie_affectations_enseignement_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/rh-paie/affectations-enseignement/par_classe/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Récupérer toutes les affectations d'une classe */
+        get: operations["rh_paie_affectations_enseignement_par_classe_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rh-paie/affectations-enseignement/par_enseignant/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Récupérer toutes les affectations d'un enseignant */
+        get: operations["rh_paie_affectations_enseignement_par_enseignant_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rh-paie/avances-personnel/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les avances au personnel */
+        get: operations["rh_paie_avances_personnel_list"];
+        put?: never;
+        /** @description ViewSet pour gérer les avances au personnel */
+        post: operations["rh_paie_avances_personnel_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rh-paie/avances-personnel/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les avances au personnel */
+        get: operations["rh_paie_avances_personnel_retrieve"];
+        /** @description ViewSet pour gérer les avances au personnel */
+        put: operations["rh_paie_avances_personnel_update"];
+        post?: never;
+        /** @description ViewSet pour gérer les avances au personnel */
+        delete: operations["rh_paie_avances_personnel_destroy"];
+        options?: never;
+        head?: never;
+        /** @description ViewSet pour gérer les avances au personnel */
+        patch: operations["rh_paie_avances_personnel_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/rh-paie/avances-personnel/{id}/regulariser/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Régulariser une avance sur un salaire */
+        post: operations["rh_paie_avances_personnel_regulariser_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rh-paie/enseignants/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les enseignants */
+        get: operations["rh_paie_enseignants_list"];
+        put?: never;
+        /** @description ViewSet pour gérer les enseignants */
+        post: operations["rh_paie_enseignants_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rh-paie/enseignants/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les enseignants */
+        get: operations["rh_paie_enseignants_retrieve"];
+        /** @description ViewSet pour gérer les enseignants */
+        put: operations["rh_paie_enseignants_update"];
+        post?: never;
+        /** @description ViewSet pour gérer les enseignants */
+        delete: operations["rh_paie_enseignants_destroy"];
+        options?: never;
+        head?: never;
+        /** @description ViewSet pour gérer les enseignants */
+        patch: operations["rh_paie_enseignants_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/rh-paie/enseignants/{id}/activer/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Activer un enseignant */
+        post: operations["rh_paie_enseignants_activer_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rh-paie/enseignants/{id}/desactiver/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Désactiver un enseignant */
+        post: operations["rh_paie_enseignants_desactiver_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rh-paie/personnel-administratif/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer le personnel administratif */
+        get: operations["rh_paie_personnel_administratif_list"];
+        put?: never;
+        /** @description ViewSet pour gérer le personnel administratif */
+        post: operations["rh_paie_personnel_administratif_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rh-paie/personnel-administratif/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer le personnel administratif */
+        get: operations["rh_paie_personnel_administratif_retrieve"];
+        /** @description ViewSet pour gérer le personnel administratif */
+        put: operations["rh_paie_personnel_administratif_update"];
+        post?: never;
+        /** @description ViewSet pour gérer le personnel administratif */
+        delete: operations["rh_paie_personnel_administratif_destroy"];
+        options?: never;
+        head?: never;
+        /** @description ViewSet pour gérer le personnel administratif */
+        patch: operations["rh_paie_personnel_administratif_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/rh-paie/personnel-administratif/{id}/activer/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Activer un personnel administratif */
+        post: operations["rh_paie_personnel_administratif_activer_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rh-paie/personnel-administratif/{id}/desactiver/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Désactiver un personnel administratif */
+        post: operations["rh_paie_personnel_administratif_desactiver_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rh-paie/salaires-administration/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les salaires du personnel administratif */
+        get: operations["rh_paie_salaires_administration_list"];
+        put?: never;
+        /** @description ViewSet pour gérer les salaires du personnel administratif */
+        post: operations["rh_paie_salaires_administration_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rh-paie/salaires-administration/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les salaires du personnel administratif */
+        get: operations["rh_paie_salaires_administration_retrieve"];
+        /** @description ViewSet pour gérer les salaires du personnel administratif */
+        put: operations["rh_paie_salaires_administration_update"];
+        post?: never;
+        /** @description ViewSet pour gérer les salaires du personnel administratif */
+        delete: operations["rh_paie_salaires_administration_destroy"];
+        options?: never;
+        head?: never;
+        /** @description ViewSet pour gérer les salaires du personnel administratif */
+        patch: operations["rh_paie_salaires_administration_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/rh-paie/salaires-administration/{id}/payer/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Payer un salaire du personnel administratif */
+        post: operations["rh_paie_salaires_administration_payer_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rh-paie/salaires-administration/{id}/valider/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Valider un salaire du personnel administratif */
+        post: operations["rh_paie_salaires_administration_valider_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rh-paie/salaires-enseignant/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les salaires des enseignants */
+        get: operations["rh_paie_salaires_enseignant_list"];
+        put?: never;
+        /** @description ViewSet pour gérer les salaires des enseignants */
+        post: operations["rh_paie_salaires_enseignant_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rh-paie/salaires-enseignant/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les salaires des enseignants */
+        get: operations["rh_paie_salaires_enseignant_retrieve"];
+        /** @description ViewSet pour gérer les salaires des enseignants */
+        put: operations["rh_paie_salaires_enseignant_update"];
+        post?: never;
+        /** @description ViewSet pour gérer les salaires des enseignants */
+        delete: operations["rh_paie_salaires_enseignant_destroy"];
+        options?: never;
+        head?: never;
+        /** @description ViewSet pour gérer les salaires des enseignants */
+        patch: operations["rh_paie_salaires_enseignant_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/rh-paie/salaires-enseignant/{id}/payer/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Payer un salaire d'enseignant */
+        post: operations["rh_paie_salaires_enseignant_payer_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rh-paie/salaires-enseignant/{id}/valider/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Valider un salaire d'enseignant */
+        post: operations["rh_paie_salaires_enseignant_valider_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/scolarite/bourses/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["scolarite_bourses_list"];
+        put?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        post: operations["scolarite_bourses_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/scolarite/bourses/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["scolarite_bourses_retrieve"];
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        put: operations["scolarite_bourses_update"];
+        post?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        delete: operations["scolarite_bourses_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        patch: operations["scolarite_bourses_partial_update"];
+        trace?: never;
+    };
     "/api/v1/scolarite/echeances/": {
         parameters: {
             query?: never;
@@ -1522,6 +1960,86 @@ export interface paths {
          *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         patch: operations["scolarite_echeances_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/scolarite/frais-inscription/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["scolarite_frais_inscription_list"];
+        put?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        post: operations["scolarite_frais_inscription_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/scolarite/frais-inscription/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["scolarite_frais_inscription_retrieve"];
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        put: operations["scolarite_frais_inscription_update"];
+        post?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        delete: operations["scolarite_frais_inscription_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        patch: operations["scolarite_frais_inscription_partial_update"];
         trace?: never;
     };
     "/api/v1/scolarite/modalites-paiement/": {
@@ -1604,12 +2122,826 @@ export interface paths {
         patch: operations["scolarite_modalites_paiement_partial_update"];
         trace?: never;
     };
+    "/api/v1/scolarite/types-frais/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["scolarite_types_frais_list"];
+        put?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        post: operations["scolarite_types_frais_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/scolarite/types-frais/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["scolarite_types_frais_retrieve"];
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        put: operations["scolarite_types_frais_update"];
+        post?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        delete: operations["scolarite_types_frais_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        patch: operations["scolarite_types_frais_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/tresorerie/arretes-caisse/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les arrêtés de caisse */
+        get: operations["tresorerie_arretes_caisse_list"];
+        put?: never;
+        /** @description ViewSet pour gérer les arrêtés de caisse */
+        post: operations["tresorerie_arretes_caisse_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/arretes-caisse/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les arrêtés de caisse */
+        get: operations["tresorerie_arretes_caisse_retrieve"];
+        /** @description ViewSet pour gérer les arrêtés de caisse */
+        put: operations["tresorerie_arretes_caisse_update"];
+        post?: never;
+        /** @description ViewSet pour gérer les arrêtés de caisse */
+        delete: operations["tresorerie_arretes_caisse_destroy"];
+        options?: never;
+        head?: never;
+        /** @description ViewSet pour gérer les arrêtés de caisse */
+        patch: operations["tresorerie_arretes_caisse_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/tresorerie/arretes-caisse/{id}/billetage/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Enregistrer une ligne de billetage pour un arrêté de caisse */
+        post: operations["tresorerie_arretes_caisse_billetage_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/arretes-caisse/{id}/billetage_batch/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Enregistrer un lot de lignes de billetage pour un arrêté de caisse (opération atomique) */
+        post: operations["tresorerie_arretes_caisse_billetage_batch_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/arretes-caisse/{id}/valider/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Valider un arrêté de caisse */
+        post: operations["tresorerie_arretes_caisse_valider_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/arretes-caisse/solde-theorique/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Prévisualisation du solde théorique d'une caisse à une date, avant création de
+         *     l'arrêté (le même calcul que `creer_arrete_caisse` exécute lui-même à la création).
+         */
+        get: operations["tresorerie_arretes_caisse_solde_theorique_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/billetage/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les lignes de billetage */
+        get: operations["tresorerie_billetage_list"];
+        put?: never;
+        /** @description ViewSet pour gérer les lignes de billetage */
+        post: operations["tresorerie_billetage_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/billetage/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les lignes de billetage */
+        get: operations["tresorerie_billetage_retrieve"];
+        /** @description ViewSet pour gérer les lignes de billetage */
+        put: operations["tresorerie_billetage_update"];
+        post?: never;
+        /** @description ViewSet pour gérer les lignes de billetage */
+        delete: operations["tresorerie_billetage_destroy"];
+        options?: never;
+        head?: never;
+        /** @description ViewSet pour gérer les lignes de billetage */
+        patch: operations["tresorerie_billetage_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/tresorerie/categories-mouvement/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les catégories de mouvement */
+        get: operations["tresorerie_categories_mouvement_list"];
+        put?: never;
+        /** @description ViewSet pour gérer les catégories de mouvement */
+        post: operations["tresorerie_categories_mouvement_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/categories-mouvement/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les catégories de mouvement */
+        get: operations["tresorerie_categories_mouvement_retrieve"];
+        /** @description ViewSet pour gérer les catégories de mouvement */
+        put: operations["tresorerie_categories_mouvement_update"];
+        post?: never;
+        /** @description ViewSet pour gérer les catégories de mouvement */
+        delete: operations["tresorerie_categories_mouvement_destroy"];
+        options?: never;
+        head?: never;
+        /** @description ViewSet pour gérer les catégories de mouvement */
+        patch: operations["tresorerie_categories_mouvement_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/tresorerie/comptes/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les comptes */
+        get: operations["tresorerie_comptes_list"];
+        put?: never;
+        /** @description ViewSet pour gérer les comptes */
+        post: operations["tresorerie_comptes_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/comptes/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les comptes */
+        get: operations["tresorerie_comptes_retrieve"];
+        /** @description ViewSet pour gérer les comptes */
+        put: operations["tresorerie_comptes_update"];
+        post?: never;
+        /** @description ViewSet pour gérer les comptes */
+        delete: operations["tresorerie_comptes_destroy"];
+        options?: never;
+        head?: never;
+        /** @description ViewSet pour gérer les comptes */
+        patch: operations["tresorerie_comptes_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/tresorerie/depenses/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les dépenses */
+        get: operations["tresorerie_depenses_list"];
+        put?: never;
+        /** @description ViewSet pour gérer les dépenses */
+        post: operations["tresorerie_depenses_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/depenses/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les dépenses */
+        get: operations["tresorerie_depenses_retrieve"];
+        /** @description ViewSet pour gérer les dépenses */
+        put: operations["tresorerie_depenses_update"];
+        post?: never;
+        /** @description ViewSet pour gérer les dépenses */
+        delete: operations["tresorerie_depenses_destroy"];
+        options?: never;
+        head?: never;
+        /** @description ViewSet pour gérer les dépenses */
+        patch: operations["tresorerie_depenses_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/tresorerie/depenses/{id}/annuler/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Annuler une dépense */
+        post: operations["tresorerie_depenses_annuler_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/depenses/{id}/payer/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Marquer une dépense comme payée */
+        post: operations["tresorerie_depenses_payer_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/depenses/{id}/valider/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Valider une dépense engagée */
+        post: operations["tresorerie_depenses_valider_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/encaissements/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les encaissements */
+        get: operations["tresorerie_encaissements_list"];
+        put?: never;
+        /** @description ViewSet pour gérer les encaissements */
+        post: operations["tresorerie_encaissements_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/encaissements/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les encaissements */
+        get: operations["tresorerie_encaissements_retrieve"];
+        /** @description ViewSet pour gérer les encaissements */
+        put: operations["tresorerie_encaissements_update"];
+        post?: never;
+        /** @description ViewSet pour gérer les encaissements */
+        delete: operations["tresorerie_encaissements_destroy"];
+        options?: never;
+        head?: never;
+        /** @description ViewSet pour gérer les encaissements */
+        patch: operations["tresorerie_encaissements_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/tresorerie/encaissements/{id}/annuler/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Annuler un encaissement */
+        post: operations["tresorerie_encaissements_annuler_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/encaissements/{id}/imputer/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Imputer un encaissement sur des échéances et/ou frais */
+        post: operations["tresorerie_encaissements_imputer_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/encaissements/{id}/recu/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Générer le reçu d'un encaissement (PDF) */
+        get: operations["tresorerie_encaissements_recu_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/encaissements/{id}/valider/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Valider un encaissement */
+        post: operations["tresorerie_encaissements_valider_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/imputations-encaissement/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les imputations d'encaissement (lecture seule) */
+        get: operations["tresorerie_imputations_encaissement_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/imputations-encaissement/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les imputations d'encaissement (lecture seule) */
+        get: operations["tresorerie_imputations_encaissement_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/mouvements/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les mouvements (lecture seule selon les spécifications) */
+        get: operations["tresorerie_mouvements_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/mouvements/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les mouvements (lecture seule selon les spécifications) */
+        get: operations["tresorerie_mouvements_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/mouvements/piece/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Générer la pièce justificative d'un mouvement (PDF) */
+        get: operations["tresorerie_mouvements_piece_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/tableau-de-bord/depenses-recentes/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get recent expenses */
+        get: operations["tresorerie_tableau_de_bord_depenses_recentes_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/tableau-de-bord/ecarts-caisse/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get important cash discrepancies */
+        get: operations["tresorerie_tableau_de_bord_ecarts_caisse_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/tableau-de-bord/encaissements-recents/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get recent encaissements */
+        get: operations["tresorerie_tableau_de_bord_encaissements_recents_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/tableau-de-bord/flux/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get incoming/outgoing flows for a period */
+        get: operations["tresorerie_tableau_de_bord_flux_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/tableau-de-bord/previsionnel/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get treasury forecast */
+        get: operations["tresorerie_tableau_de_bord_previsionnel_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/tableau-de-bord/solde/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get global balance by account type */
+        get: operations["tresorerie_tableau_de_bord_solde_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/tableau-de-bord/solde-par-compte/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get balance for each account */
+        get: operations["tresorerie_tableau_de_bord_solde_par_compte_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/virements/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les virements */
+        get: operations["tresorerie_virements_list"];
+        put?: never;
+        /** @description ViewSet pour gérer les virements */
+        post: operations["tresorerie_virements_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/virements/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description ViewSet pour gérer les virements */
+        get: operations["tresorerie_virements_retrieve"];
+        /** @description ViewSet pour gérer les virements */
+        put: operations["tresorerie_virements_update"];
+        post?: never;
+        /** @description ViewSet pour gérer les virements */
+        delete: operations["tresorerie_virements_destroy"];
+        options?: never;
+        head?: never;
+        /** @description ViewSet pour gérer les virements */
+        patch: operations["tresorerie_virements_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/tresorerie/virements/{id}/annuler/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Annuler un virement */
+        post: operations["tresorerie_virements_annuler_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/virements/{id}/engager/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Soumettre un virement brouillon pour validation (maker) */
+        post: operations["tresorerie_virements_engager_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tresorerie/virements/{id}/valider/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Valider un virement en attente de validation (checker) : crée les mouvements */
+        post: operations["tresorerie_virements_valider_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         AccessToken: {
             readonly access: string;
+        };
+        /** @description Serializer pour le modèle AffectationEnseignement */
+        AffectationEnseignement: {
+            readonly id: number;
+            enseignant: number;
+            readonly enseignant_nom: string;
+            matiere: number;
+            readonly matiere_nom: string;
+            classe: number;
+            readonly classe_nom: string;
+            annee_scolaire: number;
+            readonly annee_scolaire_libelle: string;
+            volume_horaire_prevu: number;
+            /** Format: decimal */
+            taux_horaire: string;
+            /** Format: decimal */
+            montant_prevu: string;
+            readonly cree_par: number | null;
+            /** Format: date-time */
+            readonly cree_le: string;
+            readonly modifie_par: number | null;
+            /** Format: date-time */
+            readonly modifie_le: string;
         };
         Affiliation: {
             readonly id: number;
@@ -1636,8 +2968,178 @@ export interface components {
             /** Format: date */
             date_fin: string;
         };
+        /** @description Serializer pour le modèle ArreteCaisse */
+        ArreteCaisse: {
+            readonly id: number;
+            compte: number;
+            readonly compte_code: string;
+            readonly compte_libelle: string;
+            /** Format: date */
+            date: string;
+            /**
+             * Solde théorique (FCFA)
+             * Format: decimal
+             */
+            readonly solde_theorique: string;
+            /**
+             * Solde physique (FCFA)
+             * Format: decimal
+             */
+            solde_physique: string;
+            /**
+             * Écart (FCFA)
+             * Format: decimal
+             */
+            readonly ecart: string;
+            fait_par?: number | null;
+            readonly fait_par_nom: string;
+            /** Validé par */
+            valide_par?: number | null;
+            readonly valide_par_nom: string;
+            readonly cree_par: number | null;
+            readonly cree_par_nom: string;
+            /** Format: date-time */
+            readonly cree_le: string;
+            readonly modifie_par: number | null;
+            readonly modifie_par_nom: string;
+            /** Format: date-time */
+            readonly modifie_le: string;
+        };
+        /** @description Serializer pour le modèle AvancePersonnel */
+        AvancePersonnel: {
+            readonly id: number;
+            beneficiaire: components["schemas"]["BeneficiaireEnum"];
+            enseignant: number | null;
+            readonly enseignant_nom: string;
+            personnel_administratif: number | null;
+            readonly personnel_administratif_nom: string;
+            /** Format: date */
+            date: string;
+            /** Format: decimal */
+            montant: string;
+            motif?: string | null;
+            compte: number;
+            readonly compte_code: string;
+            readonly compte_libelle: string;
+            readonly mouvement: number;
+            readonly regularise_salaire_admin_id: number;
+            readonly regularisee: boolean;
+            readonly cree_par: number | null;
+            readonly cree_par_nom: string;
+            /** Format: date-time */
+            readonly cree_le: string;
+            readonly modifie_par: number | null;
+            readonly modifie_par_nom: string;
+            /** Format: date-time */
+            readonly modifie_le: string;
+        };
+        /**
+         * @description * `ENSEIGNANT` - Enseignant
+         *     * `ADMIN` - Administratif
+         * @enum {string}
+         */
+        BeneficiaireEnum: "ENSEIGNANT" | "ADMIN";
+        /** @description Serializer pour le modèle Billetage */
+        Billetage: {
+            readonly id: number;
+            arrete_caisse: number;
+            /** Format: date */
+            readonly arrete_caisse_date: string;
+            readonly arrete_caisse_compte_code: string;
+            /**
+             * Dénomination (FCFA)
+             * Format: int64
+             */
+            denomination: number;
+            /**
+             * Quantité
+             * Format: int64
+             */
+            quantite: number;
+            /**
+             * Montant (FCFA)
+             * Format: decimal
+             */
+            readonly montant: string;
+            readonly cree_par: number | null;
+            readonly cree_par_nom: string;
+            /** Format: date-time */
+            readonly cree_le: string;
+            readonly modifie_par: number | null;
+            readonly modifie_par_nom: string;
+            /** Format: date-time */
+            readonly modifie_le: string;
+        };
         /** @enum {unknown} */
         BlankEnum: "";
+        /**
+         * @description À combiner avec `ModelSerializer` sur un modèle héritant de `core.models.Auditable`.
+         *
+         *     Pose `cree_par` à la création et `modifie_par` à la mise à jour depuis
+         *     `context["request"].user`. Le serializer concret doit déclarer
+         *     `cree_par`, `modifie_par`, `cree_le`, `modifie_le` en `read_only`.
+         */
+        Bourse: {
+            readonly id: number;
+            /** Format: date-time */
+            readonly cree_le: string;
+            /** Format: date-time */
+            readonly modifie_le: string;
+            type: components["schemas"]["BourseTypeEnum"];
+            /**
+             * Format: decimal
+             * @description Pourcentage des échéances pris en charge (NULL si montant_fixe utilisé)
+             */
+            pourcentage?: string | null;
+            /**
+             * Format: decimal
+             * @description Montant fixe en FCFA pris en charge (NULL si pourcentage utilisé)
+             */
+            montant_fixe?: string | null;
+            /** Format: date */
+            date_attribution: string;
+            /** Format: date */
+            date_fin_validite?: string | null;
+            readonly cree_par: number | null;
+            readonly modifie_par: number | null;
+            etudiant: number;
+            annee_scolaire: number;
+        };
+        /**
+         * @description * `TOTAL` - Bourse totale
+         *     * `PARTIELLE` - Bourse partielle
+         *     * `MERITE` - Bourse au mérite
+         *     * `SOCIALE` - Bourse sociale
+         * @enum {string}
+         */
+        BourseTypeEnum: "TOTAL" | "PARTIELLE" | "MERITE" | "SOCIALE";
+        /** @description Serializer pour le modèle CategorieMouvement */
+        CategorieMouvement: {
+            readonly id: number;
+            code: string;
+            /** Libellé */
+            libelle: string;
+            sens: components["schemas"]["CategorieMouvementSensEnum"];
+            readonly cree_par: number | null;
+            /** Format: date-time */
+            readonly cree_le: string;
+            readonly modifie_par: number | null;
+            /** Format: date-time */
+            readonly modifie_le: string;
+        };
+        /**
+         * @description * `ENTREE` - Entrée
+         *     * `SORTIE` - Sortie
+         *     * `NEUTRE` - Neutre
+         * @enum {string}
+         */
+        CategorieMouvementSensEnum: "ENTREE" | "SORTIE" | "NEUTRE";
+        /**
+         * @description * `ECHEANCE` - Échéance
+         *     * `FRAIS` - Frais d'inscription
+         * @enum {string}
+         */
+        CibleEnum: "ECHEANCE" | "FRAIS";
         Classe: {
             readonly id: number;
             readonly libelle_auto: string;
@@ -1655,6 +3157,79 @@ export interface components {
          * @enum {string}
          */
         CodeEnum: "FI" | "FC" | "FL" | "FT";
+        /** @description Serializer pour le modèle Compte */
+        Compte: {
+            readonly id: number;
+            code: string;
+            /** Libellé */
+            libelle: string;
+            type: components["schemas"]["CompteTypeEnum"];
+            /** Numéro bancaire */
+            numero_bancaire?: string | null;
+            banque?: string | null;
+            /**
+             * Solde initial (FCFA)
+             * Format: decimal
+             */
+            solde_initial?: string;
+            readonly solde_actuel: string;
+            actif?: boolean;
+            readonly cree_par: number | null;
+            /** Format: date-time */
+            readonly cree_le: string;
+            readonly modifie_par: number | null;
+            /** Format: date-time */
+            readonly modifie_le: string;
+        };
+        /**
+         * @description * `CAISSE` - Caisse
+         *     * `BANQUE` - Banque
+         *     * `MOBILE_MONEY` - Mobile Money
+         *     * `VIRTUEL` - Virtuel
+         * @enum {string}
+         */
+        CompteTypeEnum: "CAISSE" | "BANQUE" | "MOBILE_MONEY" | "VIRTUEL";
+        /** @description Serializer pour le modèle Depense */
+        Depense: {
+            readonly id: number;
+            /** Format: date */
+            date: string;
+            categorie_mouvement: number;
+            readonly categorie_mouvement_code: string;
+            readonly categorie_mouvement_libelle: string;
+            /** Bénéficiaire */
+            beneficiaire: string;
+            /** Désignation */
+            designation: string;
+            /**
+             * Montant (FCFA)
+             * Format: decimal
+             */
+            montant: string;
+            compte: number;
+            readonly compte_code: string;
+            readonly compte_libelle: string;
+            ecole: number | null;
+            readonly ecole_nom: string;
+            annee_scolaire: number;
+            readonly annee_scolaire_libelle: string;
+            /** Pièce justificative */
+            piece_justificative?: string | null;
+            /** Engagé par */
+            engage_par?: number | null;
+            readonly engage_par_nom: string;
+            /** Validé par */
+            valide_par?: number | null;
+            readonly valide_par_nom: string;
+            readonly cree_par: number | null;
+            readonly cree_par_nom: string;
+            /** Format: date-time */
+            readonly cree_le: string;
+            readonly modifie_par: number | null;
+            readonly modifie_par_nom: string;
+            /** Format: date-time */
+            readonly modifie_le: string;
+        };
         /**
          * @description À combiner avec `ModelSerializer` sur un modèle héritant de `core.models.Auditable`.
          *
@@ -1668,29 +3243,109 @@ export interface components {
             readonly cree_le: string;
             /** Format: date-time */
             readonly modifie_le: string;
-            /** Format: int64 */
+            /** @description 0 = inscription/réinscription, 1..N = échéances suivantes */
             numero: number;
-            /** Format: decimal */
-            montant_prevu: string;
+            /**
+             * Format: decimal
+             * @description Montant de l'échéance en FCFA
+             */
+            montant: string;
             /** Format: date */
-            date_prevue: string;
-            pris_en_charge_bourse?: boolean;
+            date_echeance: string;
+            /** Format: date */
+            date_paiement?: string | null;
+            /**
+             * Format: decimal
+             * @description Montant déjà payé pour cette échéance
+             */
+            montant_paye?: string;
+            statut?: components["schemas"]["EcheanceStatutEnum"];
             readonly cree_par: number | null;
             readonly modifie_par: number | null;
             inscription: number;
         };
+        /**
+         * @description * `à payer` - À payer
+         *     * `partiellement payé` - Partiellement payé
+         *     * `payé` - Payé
+         *     * `en retard` - En retard
+         *     * `surpaye` - Surpayé
+         * @enum {string}
+         */
+        EcheanceStatutEnum: "à payer" | "partiellement payé" | "payé" | "en retard" | "surpaye";
         Ecole: {
             readonly id: number;
-            readonly groupe_scolaire_libelle: string;
             nom: string;
             sigle?: string | null;
-            pole: components["schemas"]["PoleEnum"];
             regime: components["schemas"]["RegimeEnum"];
             logo?: string | null;
             contacts?: string | null;
             email?: string | null;
-            groupe_scolaire: number;
+            adresse?: string | null;
         };
+        /** @description Serializer pour le modèle Encaissement */
+        Encaissement: {
+            readonly id: number;
+            inscription: number;
+            readonly inscription_etudiant_nom: string;
+            /** Format: date */
+            date: string;
+            /**
+             * Montant total (FCFA)
+             * Format: decimal
+             */
+            montant_total: string;
+            /** Mode de paiement */
+            mode: components["schemas"]["ModeEnum"];
+            compte: number;
+            readonly compte_code: string;
+            readonly compte_libelle: string;
+            readonly mouvement: number;
+            /** Numéro de reçu */
+            readonly recu_numero: string;
+            readonly statut: components["schemas"]["EncaissementStatutEnum"];
+            readonly cree_par: number | null;
+            readonly cree_par_nom: string;
+            /** Format: date-time */
+            readonly cree_le: string;
+            readonly modifie_par: number | null;
+            readonly modifie_par_nom: string;
+            /** Format: date-time */
+            readonly modifie_le: string;
+        };
+        /**
+         * @description * `EN_COURS` - En cours
+         *     * `VALIDE` - Validé
+         *     * `ANNULE` - Annulé
+         * @enum {string}
+         */
+        EncaissementStatutEnum: "EN_COURS" | "VALIDE" | "ANNULE";
+        /** @description Serializer pour le modèle Enseignant */
+        Enseignant: {
+            readonly id: number;
+            nom: string;
+            prenom: string;
+            telephone?: string | null;
+            /** Format: email */
+            email?: string | null;
+            specialite?: string | null;
+            statut?: components["schemas"]["EnseignantStatutEnum"];
+            /** Format: decimal */
+            taux_horaire?: string | null;
+            actif?: boolean;
+            readonly cree_par: number | null;
+            /** Format: date-time */
+            readonly cree_le: string;
+            readonly modifie_par: number | null;
+            /** Format: date-time */
+            readonly modifie_le: string;
+        };
+        /**
+         * @description * `VACATAIRE` - Vacataire
+         *     * `PERMANENT` - Permanent
+         * @enum {string}
+         */
+        EnseignantStatutEnum: "VACATAIRE" | "PERMANENT";
         /**
          * @description * `ACTIVE` - Active
          *     * `ABANDON` - Abandon
@@ -1701,7 +3356,7 @@ export interface components {
         EtatEnum: "ACTIVE" | "ABANDON" | "EXCLU" | "DIPLOME";
         Etudiant: {
             readonly id: number;
-            pole: components["schemas"]["PoleEnum"];
+            ecole_sigle: string;
             readonly affiliations: components["schemas"]["Affiliation"][];
             readonly situation_bac: components["schemas"]["SituationBac"];
             readonly matricule: string;
@@ -1743,14 +3398,56 @@ export interface components {
             sigle: string;
             ecole: number;
         };
-        GroupeScolaire: {
+        /**
+         * @description À combiner avec `ModelSerializer` sur un modèle héritant de `core.models.Auditable`.
+         *
+         *     Pose `cree_par` à la création et `modifie_par` à la mise à jour depuis
+         *     `context["request"].user`. Le serializer concret doit déclarer
+         *     `cree_par`, `modifie_par`, `cree_le`, `modifie_le` en `read_only`.
+         */
+        FraisInscription: {
             readonly id: number;
-            nom: string;
-            sigle?: string | null;
-            logo?: string | null;
-            contacts?: string | null;
-            email?: string | null;
-            adresse?: string | null;
+            /** Format: date-time */
+            readonly cree_le: string;
+            /** Format: date-time */
+            readonly modifie_le: string;
+            /**
+             * Format: decimal
+             * @description Montant en FCFA (peut être zéro pour frais gratuits)
+             */
+            montant: string;
+            readonly cree_par: number | null;
+            readonly modifie_par: number | null;
+            niveau: number;
+            annee_scolaire: number;
+        };
+        /** @description Serializer pour le modèle ImputationEncaissement */
+        ImputationEncaissement: {
+            readonly id: number;
+            encaissement: number;
+            readonly encaissement_recu_numero: string;
+            cible: components["schemas"]["CibleEnum"];
+            echeance: number | null;
+            readonly echeance_numero: number;
+            /** Format: decimal */
+            readonly echeance_montant: string;
+            frais_inscription: number | null;
+            readonly frais_inscription_libelle: string;
+            /** Format: decimal */
+            readonly frais_inscription_montant: string;
+            /**
+             * Montant imputé (FCFA)
+             * Format: decimal
+             */
+            montant: string;
+            readonly cree_par: number | null;
+            readonly cree_par_nom: string;
+            /** Format: date-time */
+            readonly cree_le: string;
+            readonly modifie_par: number | null;
+            readonly modifie_par_nom: string;
+            /** Format: date-time */
+            readonly modifie_le: string;
         };
         /**
          * @description À combiner avec `ModelSerializer` sur un modèle héritant de `core.models.Auditable`.
@@ -1763,13 +3460,15 @@ export interface components {
             readonly id: number;
             readonly echeances: components["schemas"]["Echeance"][];
             readonly pieces_dossier: components["schemas"]["PieceDossier"][];
+            readonly frais_inscription: components["schemas"]["FraisInscription"][];
+            readonly bourses: components["schemas"]["Bourse"][];
             /** Format: date-time */
             readonly cree_le: string;
             /** Format: date-time */
             readonly modifie_le: string;
             readonly numero_ordre: number;
             type?: components["schemas"]["InscriptionTypeEnum"];
-            statut?: components["schemas"]["StatutEnum"];
+            statut?: components["schemas"]["Statut8c1Enum"];
             etablissement_provenance?: string | null;
             est_boursier?: boolean;
             /** Format: decimal */
@@ -1796,7 +3495,7 @@ export interface components {
             /** Format: int64 */
             numero_ordre: number;
             type: components["schemas"]["InscriptionTypeEnum"];
-            statut: components["schemas"]["StatutEnum"];
+            statut: components["schemas"]["Statut8c1Enum"];
             etablissement_provenance?: string | null;
             est_boursier?: boolean;
             /** Format: decimal */
@@ -1847,25 +3546,107 @@ export interface components {
             code: components["schemas"]["CodeEnum"];
             libelle: string;
         };
+        /**
+         * @description À combiner avec `ModelSerializer` sur un modèle héritant de `core.models.Auditable`.
+         *
+         *     Pose `cree_par` à la création et `modifie_par` à la mise à jour depuis
+         *     `context["request"].user`. Le serializer concret doit déclarer
+         *     `cree_par`, `modifie_par`, `cree_le`, `modifie_le` en `read_only`.
+         */
         ModalitePaiement: {
             readonly id: number;
             /** Format: decimal */
             readonly montant_total: string;
-            /** Format: decimal */
-            montant_inscription_reinscription: string;
-            /** Format: int64 */
-            nombre_echeance: number;
-            /** Format: decimal */
-            montant_echeance: string;
+            /** Format: date-time */
+            readonly cree_le: string;
+            /** Format: date-time */
+            readonly modifie_le: string;
+            /**
+             * Format: decimal
+             * @description Montant en FCFA
+             */
+            montant: string;
+            readonly cree_par: number | null;
+            readonly modifie_par: number | null;
             niveau: number;
             annee_scolaire: number;
         };
+        /**
+         * @description * `ESPECES` - Espèces
+         *     * `VIREMENT` - Virement
+         *     * `MOBILE_MONEY` - Mobile Money
+         *     * `CHEQUE` - Chèque
+         * @enum {string}
+         */
+        ModeEnum: "ESPECES" | "VIREMENT" | "MOBILE_MONEY" | "CHEQUE";
         Moi: {
             readonly id: number;
             readonly login: string;
             readonly email: string;
             readonly roles: components["schemas"]["RoleAffecte"][];
         };
+        /**
+         * @description * `SEPT` - Septembre
+         *     * `OCT` - Octobre
+         *     * `NOV` - Novembre
+         *     * `DEC` - Décembre
+         *     * `JAN` - Janvier
+         *     * `FEV` - Février
+         *     * `MAR` - Mars
+         *     * `AVR` - Avril
+         *     * `MAI` - Mai
+         *     * `JUIN` - Juin
+         *     * `JUIL` - Juillet
+         *     * `AOUT` - Août
+         * @enum {string}
+         */
+        MoisEnum: "SEPT" | "OCT" | "NOV" | "DEC" | "JAN" | "FEV" | "MAR" | "AVR" | "MAI" | "JUIN" | "JUIL" | "AOUT";
+        /** @description Serializer pour le modèle Mouvement (lecture seule selon les spécifications) */
+        Mouvement: {
+            readonly id: number;
+            compte: number;
+            readonly compte_code: string;
+            readonly compte_libelle: string;
+            /**
+             * Date d'opération
+             * Format: date
+             */
+            readonly date_operation: string;
+            readonly sens: components["schemas"]["MouvementSensEnum"];
+            /**
+             * Montant (FCFA)
+             * Format: decimal
+             */
+            readonly montant: string;
+            categorie_mouvement: number;
+            readonly categorie_mouvement_code: string;
+            readonly categorie_mouvement_libelle: string;
+            /** Libellé */
+            readonly libelle: string;
+            /** Référence de peça */
+            readonly piece_reference: string | null;
+            ecole: number | null;
+            readonly ecole_nom: string;
+            annee_scolaire: number;
+            readonly annee_scolaire_libelle: string;
+            virement: number | null;
+            readonly virement_id: number;
+            readonly valide: boolean;
+            readonly cree_par: number | null;
+            readonly cree_par_nom: string;
+            /** Format: date-time */
+            readonly cree_le: string;
+            readonly modifie_par: number | null;
+            readonly modifie_par_nom: string;
+            /** Format: date-time */
+            readonly modifie_le: string;
+        };
+        /**
+         * @description * `DEBIT` - Débit
+         *     * `CREDIT` - Crédit
+         * @enum {string}
+         */
+        MouvementSensEnum: "DEBIT" | "CREDIT";
         Niveau: {
             readonly id: number;
             readonly ecole_libelle: string;
@@ -1885,6 +3666,21 @@ export interface components {
             nom: string;
             sigle: string;
             filiere: number;
+        };
+        PaginatedAffectationEnseignementList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["AffectationEnseignement"][];
         };
         PaginatedAffiliationList: {
             /** @example 123 */
@@ -1916,6 +3712,81 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["AnneeScolaire"][];
         };
+        PaginatedArreteCaisseList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["ArreteCaisse"][];
+        };
+        PaginatedAvancePersonnelList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["AvancePersonnel"][];
+        };
+        PaginatedBilletageList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Billetage"][];
+        };
+        PaginatedBourseList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Bourse"][];
+        };
+        PaginatedCategorieMouvementList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["CategorieMouvement"][];
+        };
         PaginatedClasseList: {
             /** @example 123 */
             count: number;
@@ -1930,6 +3801,36 @@ export interface components {
              */
             previous?: string | null;
             results: components["schemas"]["Classe"][];
+        };
+        PaginatedCompteList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Compte"][];
+        };
+        PaginatedDepenseList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Depense"][];
         };
         PaginatedEcheanceList: {
             /** @example 123 */
@@ -1961,6 +3862,36 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["Ecole"][];
         };
+        PaginatedEncaissementList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Encaissement"][];
+        };
+        PaginatedEnseignantList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Enseignant"][];
+        };
         PaginatedEtudiantListList: {
             /** @example 123 */
             count: number;
@@ -1991,7 +3922,7 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["Filiere"][];
         };
-        PaginatedGroupeScolaireList: {
+        PaginatedFraisInscriptionList: {
             /** @example 123 */
             count: number;
             /**
@@ -2004,7 +3935,22 @@ export interface components {
              * @example http://api.example.org/accounts/?page=2
              */
             previous?: string | null;
-            results: components["schemas"]["GroupeScolaire"][];
+            results: components["schemas"]["FraisInscription"][];
+        };
+        PaginatedImputationEncaissementList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["ImputationEncaissement"][];
         };
         PaginatedInscriptionListList: {
             /** @example 123 */
@@ -2066,6 +4012,21 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["ModalitePaiement"][];
         };
+        PaginatedMouvementList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Mouvement"][];
+        };
         PaginatedNiveauList: {
             /** @example 123 */
             count: number;
@@ -2111,6 +4072,21 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["Periode"][];
         };
+        PaginatedPersonnelAdministratifList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["PersonnelAdministratif"][];
+        };
         PaginatedPieceDossierList: {
             /** @example 123 */
             count: number;
@@ -2125,6 +4101,36 @@ export interface components {
              */
             previous?: string | null;
             results: components["schemas"]["PieceDossier"][];
+        };
+        PaginatedSalaireAdministrationList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["SalaireAdministration"][];
+        };
+        PaginatedSalaireEnseignantList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["SalaireEnseignant"][];
         };
         PaginatedSessionExamenList: {
             /** @example 123 */
@@ -2156,6 +4162,21 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["SituationBac"][];
         };
+        PaginatedTypeFraisList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["TypeFrais"][];
+        };
         PaginatedTypePieceList: {
             /** @example 123 */
             count: number;
@@ -2170,6 +4191,44 @@ export interface components {
              */
             previous?: string | null;
             results: components["schemas"]["TypePiece"][];
+        };
+        PaginatedVirementList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Virement"][];
+        };
+        /** @description Serializer pour le modèle AffectationEnseignement */
+        PatchedAffectationEnseignement: {
+            readonly id?: number;
+            enseignant?: number;
+            readonly enseignant_nom?: string;
+            matiere?: number;
+            readonly matiere_nom?: string;
+            classe?: number;
+            readonly classe_nom?: string;
+            annee_scolaire?: number;
+            readonly annee_scolaire_libelle?: string;
+            volume_horaire_prevu?: number;
+            /** Format: decimal */
+            taux_horaire?: string;
+            /** Format: decimal */
+            montant_prevu?: string;
+            readonly cree_par?: number | null;
+            /** Format: date-time */
+            readonly cree_le?: string;
+            readonly modifie_par?: number | null;
+            /** Format: date-time */
+            readonly modifie_le?: string;
         };
         PatchedAffiliation: {
             readonly id?: number;
@@ -2189,6 +4248,149 @@ export interface components {
             /** Format: date */
             date_fin?: string;
         };
+        /** @description Serializer pour le modèle ArreteCaisse */
+        PatchedArreteCaisse: {
+            readonly id?: number;
+            compte?: number;
+            readonly compte_code?: string;
+            readonly compte_libelle?: string;
+            /** Format: date */
+            date?: string;
+            /**
+             * Solde théorique (FCFA)
+             * Format: decimal
+             */
+            readonly solde_theorique?: string;
+            /**
+             * Solde physique (FCFA)
+             * Format: decimal
+             */
+            solde_physique?: string;
+            /**
+             * Écart (FCFA)
+             * Format: decimal
+             */
+            readonly ecart?: string;
+            fait_par?: number | null;
+            readonly fait_par_nom?: string;
+            /** Validé par */
+            valide_par?: number | null;
+            readonly valide_par_nom?: string;
+            readonly cree_par?: number | null;
+            readonly cree_par_nom?: string;
+            /** Format: date-time */
+            readonly cree_le?: string;
+            readonly modifie_par?: number | null;
+            readonly modifie_par_nom?: string;
+            /** Format: date-time */
+            readonly modifie_le?: string;
+        };
+        /** @description Serializer pour le modèle AvancePersonnel */
+        PatchedAvancePersonnel: {
+            readonly id?: number;
+            beneficiaire?: components["schemas"]["BeneficiaireEnum"];
+            enseignant?: number | null;
+            readonly enseignant_nom?: string;
+            personnel_administratif?: number | null;
+            readonly personnel_administratif_nom?: string;
+            /** Format: date */
+            date?: string;
+            /** Format: decimal */
+            montant?: string;
+            motif?: string | null;
+            compte?: number;
+            readonly compte_code?: string;
+            readonly compte_libelle?: string;
+            readonly mouvement?: number;
+            readonly regularise_salaire_admin_id?: number;
+            readonly regularisee?: boolean;
+            readonly cree_par?: number | null;
+            readonly cree_par_nom?: string;
+            /** Format: date-time */
+            readonly cree_le?: string;
+            readonly modifie_par?: number | null;
+            readonly modifie_par_nom?: string;
+            /** Format: date-time */
+            readonly modifie_le?: string;
+        };
+        /** @description Serializer pour le modèle Billetage */
+        PatchedBilletage: {
+            readonly id?: number;
+            arrete_caisse?: number;
+            /** Format: date */
+            readonly arrete_caisse_date?: string;
+            readonly arrete_caisse_compte_code?: string;
+            /**
+             * Dénomination (FCFA)
+             * Format: int64
+             */
+            denomination?: number;
+            /**
+             * Quantité
+             * Format: int64
+             */
+            quantite?: number;
+            /**
+             * Montant (FCFA)
+             * Format: decimal
+             */
+            readonly montant?: string;
+            readonly cree_par?: number | null;
+            readonly cree_par_nom?: string;
+            /** Format: date-time */
+            readonly cree_le?: string;
+            readonly modifie_par?: number | null;
+            readonly modifie_par_nom?: string;
+            /** Format: date-time */
+            readonly modifie_le?: string;
+        };
+        /**
+         * @description À combiner avec `ModelSerializer` sur un modèle héritant de `core.models.Auditable`.
+         *
+         *     Pose `cree_par` à la création et `modifie_par` à la mise à jour depuis
+         *     `context["request"].user`. Le serializer concret doit déclarer
+         *     `cree_par`, `modifie_par`, `cree_le`, `modifie_le` en `read_only`.
+         */
+        PatchedBourse: {
+            readonly id?: number;
+            /** Format: date-time */
+            readonly cree_le?: string;
+            /** Format: date-time */
+            readonly modifie_le?: string;
+            type?: components["schemas"]["BourseTypeEnum"];
+            /**
+             * Format: decimal
+             * @description Pourcentage des échéances pris en charge (NULL si montant_fixe utilisé)
+             */
+            pourcentage?: string | null;
+            /**
+             * Format: decimal
+             * @description Montant fixe en FCFA pris en charge (NULL si pourcentage utilisé)
+             */
+            montant_fixe?: string | null;
+            /** Format: date */
+            date_attribution?: string;
+            /** Format: date */
+            date_fin_validite?: string | null;
+            readonly cree_par?: number | null;
+            readonly modifie_par?: number | null;
+            etudiant?: number;
+            annee_scolaire?: number;
+        };
+        /** @description Serializer pour le modèle CategorieMouvement */
+        PatchedCategorieMouvement: {
+            readonly id?: number;
+            code?: string;
+            /** Libellé */
+            libelle?: string;
+            sens?: components["schemas"]["CategorieMouvementSensEnum"];
+            readonly cree_par?: number | null;
+            /** Format: date-time */
+            readonly cree_le?: string;
+            readonly modifie_par?: number | null;
+            /** Format: date-time */
+            readonly modifie_le?: string;
+        };
         PatchedClasse: {
             readonly id?: number;
             readonly libelle_auto?: string;
@@ -2197,6 +4399,71 @@ export interface components {
             niveau?: number;
             option_filiere?: number;
             modalite_formation?: number;
+        };
+        /** @description Serializer pour le modèle Compte */
+        PatchedCompte: {
+            readonly id?: number;
+            code?: string;
+            /** Libellé */
+            libelle?: string;
+            type?: components["schemas"]["CompteTypeEnum"];
+            /** Numéro bancaire */
+            numero_bancaire?: string | null;
+            banque?: string | null;
+            /**
+             * Solde initial (FCFA)
+             * Format: decimal
+             */
+            solde_initial?: string;
+            readonly solde_actuel?: string;
+            actif?: boolean;
+            readonly cree_par?: number | null;
+            /** Format: date-time */
+            readonly cree_le?: string;
+            readonly modifie_par?: number | null;
+            /** Format: date-time */
+            readonly modifie_le?: string;
+        };
+        /** @description Serializer pour le modèle Depense */
+        PatchedDepense: {
+            readonly id?: number;
+            /** Format: date */
+            date?: string;
+            categorie_mouvement?: number;
+            readonly categorie_mouvement_code?: string;
+            readonly categorie_mouvement_libelle?: string;
+            /** Bénéficiaire */
+            beneficiaire?: string;
+            /** Désignation */
+            designation?: string;
+            /**
+             * Montant (FCFA)
+             * Format: decimal
+             */
+            montant?: string;
+            compte?: number;
+            readonly compte_code?: string;
+            readonly compte_libelle?: string;
+            ecole?: number | null;
+            readonly ecole_nom?: string;
+            annee_scolaire?: number;
+            readonly annee_scolaire_libelle?: string;
+            /** Pièce justificative */
+            piece_justificative?: string | null;
+            /** Engagé par */
+            engage_par?: number | null;
+            readonly engage_par_nom?: string;
+            /** Validé par */
+            valide_par?: number | null;
+            readonly valide_par_nom?: string;
+            readonly cree_par?: number | null;
+            readonly cree_par_nom?: string;
+            /** Format: date-time */
+            readonly cree_le?: string;
+            readonly modifie_par?: number | null;
+            readonly modifie_par_nom?: string;
+            /** Format: date-time */
+            readonly modifie_le?: string;
         };
         /**
          * @description À combiner avec `ModelSerializer` sur un modèle héritant de `core.models.Auditable`.
@@ -2211,32 +4478,90 @@ export interface components {
             readonly cree_le?: string;
             /** Format: date-time */
             readonly modifie_le?: string;
-            /** Format: int64 */
+            /** @description 0 = inscription/réinscription, 1..N = échéances suivantes */
             numero?: number;
-            /** Format: decimal */
-            montant_prevu?: string;
+            /**
+             * Format: decimal
+             * @description Montant de l'échéance en FCFA
+             */
+            montant?: string;
             /** Format: date */
-            date_prevue?: string;
-            pris_en_charge_bourse?: boolean;
+            date_echeance?: string;
+            /** Format: date */
+            date_paiement?: string | null;
+            /**
+             * Format: decimal
+             * @description Montant déjà payé pour cette échéance
+             */
+            montant_paye?: string;
+            statut?: components["schemas"]["EcheanceStatutEnum"];
             readonly cree_par?: number | null;
             readonly modifie_par?: number | null;
             inscription?: number;
         };
         PatchedEcole: {
             readonly id?: number;
-            readonly groupe_scolaire_libelle?: string;
             nom?: string;
             sigle?: string | null;
-            pole?: components["schemas"]["PoleEnum"];
             regime?: components["schemas"]["RegimeEnum"];
             logo?: string | null;
             contacts?: string | null;
             email?: string | null;
-            groupe_scolaire?: number;
+            adresse?: string | null;
+        };
+        /** @description Serializer pour le modèle Encaissement */
+        PatchedEncaissement: {
+            readonly id?: number;
+            inscription?: number;
+            readonly inscription_etudiant_nom?: string;
+            /** Format: date */
+            date?: string;
+            /**
+             * Montant total (FCFA)
+             * Format: decimal
+             */
+            montant_total?: string;
+            /** Mode de paiement */
+            mode?: components["schemas"]["ModeEnum"];
+            compte?: number;
+            readonly compte_code?: string;
+            readonly compte_libelle?: string;
+            readonly mouvement?: number;
+            /** Numéro de reçu */
+            readonly recu_numero?: string;
+            readonly statut?: components["schemas"]["EncaissementStatutEnum"];
+            readonly cree_par?: number | null;
+            readonly cree_par_nom?: string;
+            /** Format: date-time */
+            readonly cree_le?: string;
+            readonly modifie_par?: number | null;
+            readonly modifie_par_nom?: string;
+            /** Format: date-time */
+            readonly modifie_le?: string;
+        };
+        /** @description Serializer pour le modèle Enseignant */
+        PatchedEnseignant: {
+            readonly id?: number;
+            nom?: string;
+            prenom?: string;
+            telephone?: string | null;
+            /** Format: email */
+            email?: string | null;
+            specialite?: string | null;
+            statut?: components["schemas"]["EnseignantStatutEnum"];
+            /** Format: decimal */
+            taux_horaire?: string | null;
+            actif?: boolean;
+            readonly cree_par?: number | null;
+            /** Format: date-time */
+            readonly cree_le?: string;
+            readonly modifie_par?: number | null;
+            /** Format: date-time */
+            readonly modifie_le?: string;
         };
         PatchedEtudiant: {
             readonly id?: number;
-            pole?: components["schemas"]["PoleEnum"];
+            ecole_sigle?: string;
             readonly affiliations?: components["schemas"]["Affiliation"][];
             readonly situation_bac?: components["schemas"]["SituationBac"];
             readonly matricule?: string;
@@ -2261,14 +4586,28 @@ export interface components {
             sigle?: string;
             ecole?: number;
         };
-        PatchedGroupeScolaire: {
+        /**
+         * @description À combiner avec `ModelSerializer` sur un modèle héritant de `core.models.Auditable`.
+         *
+         *     Pose `cree_par` à la création et `modifie_par` à la mise à jour depuis
+         *     `context["request"].user`. Le serializer concret doit déclarer
+         *     `cree_par`, `modifie_par`, `cree_le`, `modifie_le` en `read_only`.
+         */
+        PatchedFraisInscription: {
             readonly id?: number;
-            nom?: string;
-            sigle?: string | null;
-            logo?: string | null;
-            contacts?: string | null;
-            email?: string | null;
-            adresse?: string | null;
+            /** Format: date-time */
+            readonly cree_le?: string;
+            /** Format: date-time */
+            readonly modifie_le?: string;
+            /**
+             * Format: decimal
+             * @description Montant en FCFA (peut être zéro pour frais gratuits)
+             */
+            montant?: string;
+            readonly cree_par?: number | null;
+            readonly modifie_par?: number | null;
+            niveau?: number;
+            annee_scolaire?: number;
         };
         /**
          * @description À combiner avec `ModelSerializer` sur un modèle héritant de `core.models.Auditable`.
@@ -2281,13 +4620,15 @@ export interface components {
             readonly id?: number;
             readonly echeances?: components["schemas"]["Echeance"][];
             readonly pieces_dossier?: components["schemas"]["PieceDossier"][];
+            readonly frais_inscription?: components["schemas"]["FraisInscription"][];
+            readonly bourses?: components["schemas"]["Bourse"][];
             /** Format: date-time */
             readonly cree_le?: string;
             /** Format: date-time */
             readonly modifie_le?: string;
             readonly numero_ordre?: number;
             type?: components["schemas"]["InscriptionTypeEnum"];
-            statut?: components["schemas"]["StatutEnum"];
+            statut?: components["schemas"]["Statut8c1Enum"];
             etablissement_provenance?: string | null;
             est_boursier?: boolean;
             /** Format: decimal */
@@ -2320,16 +4661,28 @@ export interface components {
             code?: components["schemas"]["CodeEnum"];
             libelle?: string;
         };
+        /**
+         * @description À combiner avec `ModelSerializer` sur un modèle héritant de `core.models.Auditable`.
+         *
+         *     Pose `cree_par` à la création et `modifie_par` à la mise à jour depuis
+         *     `context["request"].user`. Le serializer concret doit déclarer
+         *     `cree_par`, `modifie_par`, `cree_le`, `modifie_le` en `read_only`.
+         */
         PatchedModalitePaiement: {
             readonly id?: number;
             /** Format: decimal */
             readonly montant_total?: string;
-            /** Format: decimal */
-            montant_inscription_reinscription?: string;
-            /** Format: int64 */
-            nombre_echeance?: number;
-            /** Format: decimal */
-            montant_echeance?: string;
+            /** Format: date-time */
+            readonly cree_le?: string;
+            /** Format: date-time */
+            readonly modifie_le?: string;
+            /**
+             * Format: decimal
+             * @description Montant en FCFA
+             */
+            montant?: string;
+            readonly cree_par?: number | null;
+            readonly modifie_par?: number | null;
             niveau?: number;
             annee_scolaire?: number;
         };
@@ -2362,6 +4715,29 @@ export interface components {
             date_fin?: string;
             annee_scolaire?: number;
         };
+        /** @description Serializer pour le modèle PersonnelAdministratif */
+        PatchedPersonnelAdministratif: {
+            readonly id?: number;
+            nom?: string;
+            prenom?: string;
+            poste?: string;
+            ecole?: number;
+            readonly ecole_nom?: string;
+            telephone?: string | null;
+            /** Format: email */
+            email?: string | null;
+            /** Format: decimal */
+            salaire_base?: string;
+            /** Format: date */
+            date_embauche?: string | null;
+            actif?: boolean;
+            readonly cree_par?: number | null;
+            /** Format: date-time */
+            readonly cree_le?: string;
+            readonly modifie_par?: number | null;
+            /** Format: date-time */
+            readonly modifie_le?: string;
+        };
         PatchedPieceDossier: {
             readonly id?: number;
             fournie?: boolean;
@@ -2369,6 +4745,68 @@ export interface components {
             date_reception?: string | null;
             inscription?: number;
             type_piece?: number;
+        };
+        /** @description Serializer pour le modèle SalaireAdministration */
+        PatchedSalaireAdministration: {
+            readonly id?: number;
+            personnel_administratif?: number;
+            readonly personnel_administratif_nom?: string;
+            annee_scolaire?: number;
+            readonly annee_scolaire_libelle?: string;
+            mois?: components["schemas"]["MoisEnum"];
+            /** Format: date */
+            date_paiement?: string;
+            /** Format: decimal */
+            montant_du?: string;
+            /** Format: decimal */
+            montant_paye?: string;
+            compte?: number;
+            readonly compte_code?: string;
+            readonly compte_libelle?: string;
+            readonly mouvement?: number;
+            readonly statut?: components["schemas"]["StatutF09Enum"];
+            /** Format: date-time */
+            readonly date_validation?: string | null;
+            readonly valide_par?: number | null;
+            readonly cree_par?: number | null;
+            readonly cree_par_nom?: string;
+            /** Format: date-time */
+            readonly cree_le?: string;
+            readonly modifie_par?: number | null;
+            readonly modifie_par_nom?: string;
+            /** Format: date-time */
+            readonly modifie_le?: string;
+        };
+        /** @description Serializer pour le modèle SalaireEnseignant */
+        PatchedSalaireEnseignant: {
+            readonly id?: number;
+            enseignant?: number;
+            readonly enseignant_nom?: string;
+            affectation_enseignement?: number | null;
+            readonly affectation_enseignement_id?: number;
+            annee_scolaire?: number;
+            readonly annee_scolaire_libelle?: string;
+            mois?: components["schemas"]["MoisEnum"];
+            /** Format: date */
+            date_paiement?: string;
+            /** Format: decimal */
+            montant?: string;
+            compte?: number;
+            readonly compte_code?: string;
+            readonly compte_libelle?: string;
+            readonly mouvement?: number;
+            readonly statut?: components["schemas"]["StatutF09Enum"];
+            /** Format: date-time */
+            readonly date_validation?: string | null;
+            readonly valide_par?: number | null;
+            readonly cree_par?: number | null;
+            readonly cree_par_nom?: string;
+            /** Format: date-time */
+            readonly cree_le?: string;
+            readonly modifie_par?: number | null;
+            readonly modifie_par_nom?: string;
+            /** Format: date-time */
+            readonly modifie_le?: string;
         };
         PatchedSessionExamen: {
             readonly id?: number;
@@ -2390,10 +4828,58 @@ export interface components {
             ville?: string | null;
             etudiant?: number;
         };
+        /**
+         * @description À combiner avec `ModelSerializer` sur un modèle héritant de `core.models.Auditable`.
+         *
+         *     Pose `cree_par` à la création et `modifie_par` à la mise à jour depuis
+         *     `context["request"].user`. Le serializer concret doit déclarer
+         *     `cree_par`, `modifie_par`, `cree_le`, `modifie_le` en `read_only`.
+         */
+        PatchedTypeFrais: {
+            readonly id?: number;
+            /** Format: date-time */
+            readonly cree_le?: string;
+            /** Format: date-time */
+            readonly modifie_le?: string;
+            libelle?: string;
+            code?: string;
+            description?: string;
+            readonly cree_par?: number | null;
+            readonly modifie_par?: number | null;
+        };
         PatchedTypePiece: {
             readonly id?: number;
             code?: string;
             libelle?: string;
+        };
+        /** @description Serializer pour le modèle Virement */
+        PatchedVirement: {
+            readonly id?: number;
+            compte_source?: number;
+            readonly compte_source_code?: string;
+            readonly compte_source_libelle?: string;
+            compte_destination?: number;
+            readonly compte_destination_code?: string;
+            readonly compte_destination_libelle?: string;
+            /**
+             * Montant (FCFA)
+             * Format: decimal
+             */
+            montant?: string;
+            /** Format: date */
+            date?: string;
+            motif?: string;
+            readonly statut?: components["schemas"]["VirementStatutEnum"];
+            readonly cree_par?: number | null;
+            readonly cree_par_nom?: string;
+            /** Format: date-time */
+            readonly cree_le?: string;
+            /** Validé par */
+            readonly valide_par?: number | null;
+            readonly valide_par_nom?: string;
+            readonly modifie_par?: number | null;
+            /** Format: date-time */
+            readonly modifie_le?: string;
         };
         Periode: {
             readonly id: number;
@@ -2406,6 +4892,29 @@ export interface components {
             date_fin: string;
             annee_scolaire: number;
         };
+        /** @description Serializer pour le modèle PersonnelAdministratif */
+        PersonnelAdministratif: {
+            readonly id: number;
+            nom: string;
+            prenom: string;
+            poste: string;
+            ecole: number;
+            readonly ecole_nom: string;
+            telephone?: string | null;
+            /** Format: email */
+            email?: string | null;
+            /** Format: decimal */
+            salaire_base: string;
+            /** Format: date */
+            date_embauche?: string | null;
+            actif?: boolean;
+            readonly cree_par: number | null;
+            /** Format: date-time */
+            readonly cree_le: string;
+            readonly modifie_par: number | null;
+            /** Format: date-time */
+            readonly modifie_le: string;
+        };
         PieceDossier: {
             readonly id: number;
             fournie?: boolean;
@@ -2415,14 +4924,6 @@ export interface components {
             type_piece: number;
         };
         /**
-         * @description * `ESSIG` - ESSIG
-         *     * `UPSS` - UPSS
-         *     * `CFPA` - CFPA
-         *     * `CICI` - CICI
-         * @enum {string}
-         */
-        PoleEnum: "ESSIG" | "UPSS" | "CFPA" | "CICI";
-        /**
          * @description * `LMD` - LMD
          *     * `CLASSIQUE` - Classique
          * @enum {string}
@@ -2431,6 +4932,68 @@ export interface components {
         RoleAffecte: {
             code: string;
             ecole_id: number | null;
+        };
+        /** @description Serializer pour le modèle SalaireAdministration */
+        SalaireAdministration: {
+            readonly id: number;
+            personnel_administratif: number;
+            readonly personnel_administratif_nom: string;
+            annee_scolaire: number;
+            readonly annee_scolaire_libelle: string;
+            mois: components["schemas"]["MoisEnum"];
+            /** Format: date */
+            date_paiement: string;
+            /** Format: decimal */
+            montant_du: string;
+            /** Format: decimal */
+            montant_paye: string;
+            compte: number;
+            readonly compte_code: string;
+            readonly compte_libelle: string;
+            readonly mouvement: number;
+            readonly statut: components["schemas"]["StatutF09Enum"];
+            /** Format: date-time */
+            readonly date_validation: string | null;
+            readonly valide_par: number | null;
+            readonly cree_par: number | null;
+            readonly cree_par_nom: string;
+            /** Format: date-time */
+            readonly cree_le: string;
+            readonly modifie_par: number | null;
+            readonly modifie_par_nom: string;
+            /** Format: date-time */
+            readonly modifie_le: string;
+        };
+        /** @description Serializer pour le modèle SalaireEnseignant */
+        SalaireEnseignant: {
+            readonly id: number;
+            enseignant: number;
+            readonly enseignant_nom: string;
+            affectation_enseignement: number | null;
+            readonly affectation_enseignement_id: number;
+            annee_scolaire: number;
+            readonly annee_scolaire_libelle: string;
+            mois: components["schemas"]["MoisEnum"];
+            /** Format: date */
+            date_paiement: string;
+            /** Format: decimal */
+            montant: string;
+            compte: number;
+            readonly compte_code: string;
+            readonly compte_libelle: string;
+            readonly mouvement: number;
+            readonly statut: components["schemas"]["StatutF09Enum"];
+            /** Format: date-time */
+            readonly date_validation: string | null;
+            readonly valide_par: number | null;
+            readonly cree_par: number | null;
+            readonly cree_par_nom: string;
+            /** Format: date-time */
+            readonly cree_le: string;
+            readonly modifie_par: number | null;
+            readonly modifie_par_nom: string;
+            /** Format: date-time */
+            readonly modifie_le: string;
         };
         SanteDegradee: {
             status: string;
@@ -2490,12 +5053,75 @@ export interface components {
          *     * `ANCIEN` - Ancien
          * @enum {string}
          */
-        StatutEnum: "NOUVEAU" | "ANCIEN";
+        Statut8c1Enum: "NOUVEAU" | "ANCIEN";
+        /**
+         * @description * `BROUILLON` - Brouillon
+         *     * `VALIDÉ` - Validé
+         *     * `PAYÉ` - Payé
+         * @enum {string}
+         */
+        StatutF09Enum: "BROUILLON" | "VALIDÉ" | "PAYÉ";
+        /**
+         * @description À combiner avec `ModelSerializer` sur un modèle héritant de `core.models.Auditable`.
+         *
+         *     Pose `cree_par` à la création et `modifie_par` à la mise à jour depuis
+         *     `context["request"].user`. Le serializer concret doit déclarer
+         *     `cree_par`, `modifie_par`, `cree_le`, `modifie_le` en `read_only`.
+         */
+        TypeFrais: {
+            readonly id: number;
+            /** Format: date-time */
+            readonly cree_le: string;
+            /** Format: date-time */
+            readonly modifie_le: string;
+            libelle: string;
+            code: string;
+            description?: string;
+            readonly cree_par: number | null;
+            readonly modifie_par: number | null;
+        };
         TypePiece: {
             readonly id: number;
             code: string;
             libelle: string;
         };
+        /** @description Serializer pour le modèle Virement */
+        Virement: {
+            readonly id: number;
+            compte_source: number;
+            readonly compte_source_code: string;
+            readonly compte_source_libelle: string;
+            compte_destination: number;
+            readonly compte_destination_code: string;
+            readonly compte_destination_libelle: string;
+            /**
+             * Montant (FCFA)
+             * Format: decimal
+             */
+            montant: string;
+            /** Format: date */
+            date: string;
+            motif: string;
+            readonly statut: components["schemas"]["VirementStatutEnum"];
+            readonly cree_par: number | null;
+            readonly cree_par_nom: string;
+            /** Format: date-time */
+            readonly cree_le: string;
+            /** Validé par */
+            readonly valide_par: number | null;
+            readonly valide_par_nom: string;
+            readonly modifie_par: number | null;
+            /** Format: date-time */
+            readonly modifie_le: string;
+        };
+        /**
+         * @description * `BROUILLON` - Brouillon
+         *     * `EN_ATTENTE_VALIDATION` - En attente de validation
+         *     * `VALIDE` - Validé
+         *     * `ANNULE` - Annulé
+         * @enum {string}
+         */
+        VirementStatutEnum: "BROUILLON" | "EN_ATTENTE_VALIDATION" | "VALIDE" | "ANNULE";
     };
     responses: never;
     parameters: never;
@@ -3115,6 +5741,30 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Inscription"];
+                };
+            };
+        };
+    };
+    personnes_inscriptions_reste_a_payer_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this inscription. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
         };
@@ -3891,18 +6541,11 @@ export interface operations {
     referentiel_ecoles_list: {
         parameters: {
             query?: {
-                groupe_scolaire?: number;
+                nom__icontains?: string;
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
                 /** @description A page number within the paginated result set. */
                 page?: number;
-                /**
-                 * @description * `ESSIG` - ESSIG
-                 *     * `UPSS` - UPSS
-                 *     * `CFPA` - CFPA
-                 *     * `CICI` - CICI
-                 */
-                pole?: "CFPA" | "CICI" | "ESSIG" | "UPSS";
                 /**
                  * @description * `LMD` - LMD
                  *     * `CLASSIQUE` - Classique
@@ -3910,6 +6553,7 @@ export interface operations {
                 regime?: "CLASSIQUE" | "LMD";
                 /** @description A search term. */
                 search?: string;
+                sigle?: string;
             };
             header?: never;
             path?: never;
@@ -4199,157 +6843,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Filiere"];
-                };
-            };
-        };
-    };
-    referentiel_groupes_scolaires_list: {
-        parameters: {
-            query?: {
-                nom__icontains?: string;
-                /** @description Which field to use when ordering the results. */
-                ordering?: string;
-                /** @description A page number within the paginated result set. */
-                page?: number;
-                /** @description A search term. */
-                search?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PaginatedGroupeScolaireList"];
-                };
-            };
-        };
-    };
-    referentiel_groupes_scolaires_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["GroupeScolaire"];
-                "application/x-www-form-urlencoded": components["schemas"]["GroupeScolaire"];
-                "multipart/form-data": components["schemas"]["GroupeScolaire"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GroupeScolaire"];
-                };
-            };
-        };
-    };
-    referentiel_groupes_scolaires_retrieve: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A unique integer value identifying this groupe scolaire. */
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GroupeScolaire"];
-                };
-            };
-        };
-    };
-    referentiel_groupes_scolaires_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A unique integer value identifying this groupe scolaire. */
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["GroupeScolaire"];
-                "application/x-www-form-urlencoded": components["schemas"]["GroupeScolaire"];
-                "multipart/form-data": components["schemas"]["GroupeScolaire"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GroupeScolaire"];
-                };
-            };
-        };
-    };
-    referentiel_groupes_scolaires_destroy: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A unique integer value identifying this groupe scolaire. */
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No response body */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    referentiel_groupes_scolaires_partial_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /** @description A unique integer value identifying this groupe scolaire. */
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": components["schemas"]["PatchedGroupeScolaire"];
-                "application/x-www-form-urlencoded": components["schemas"]["PatchedGroupeScolaire"];
-                "multipart/form-data": components["schemas"]["PatchedGroupeScolaire"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GroupeScolaire"];
                 };
             };
         };
@@ -5279,6 +7772,1355 @@ export interface operations {
             };
         };
     };
+    rh_paie_affectations_enseignement_list: {
+        parameters: {
+            query?: {
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedAffectationEnseignementList"];
+                };
+            };
+        };
+    };
+    rh_paie_affectations_enseignement_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AffectationEnseignement"];
+                "application/x-www-form-urlencoded": components["schemas"]["AffectationEnseignement"];
+                "multipart/form-data": components["schemas"]["AffectationEnseignement"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AffectationEnseignement"];
+                };
+            };
+        };
+    };
+    rh_paie_affectations_enseignement_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Affectation d'enseignement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AffectationEnseignement"];
+                };
+            };
+        };
+    };
+    rh_paie_affectations_enseignement_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Affectation d'enseignement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AffectationEnseignement"];
+                "application/x-www-form-urlencoded": components["schemas"]["AffectationEnseignement"];
+                "multipart/form-data": components["schemas"]["AffectationEnseignement"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AffectationEnseignement"];
+                };
+            };
+        };
+    };
+    rh_paie_affectations_enseignement_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Affectation d'enseignement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    rh_paie_affectations_enseignement_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Affectation d'enseignement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedAffectationEnseignement"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedAffectationEnseignement"];
+                "multipart/form-data": components["schemas"]["PatchedAffectationEnseignement"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AffectationEnseignement"];
+                };
+            };
+        };
+    };
+    rh_paie_affectations_enseignement_par_classe_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AffectationEnseignement"];
+                };
+            };
+        };
+    };
+    rh_paie_affectations_enseignement_par_enseignant_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AffectationEnseignement"];
+                };
+            };
+        };
+    };
+    rh_paie_avances_personnel_list: {
+        parameters: {
+            query?: {
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedAvancePersonnelList"];
+                };
+            };
+        };
+    };
+    rh_paie_avances_personnel_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AvancePersonnel"];
+                "application/x-www-form-urlencoded": components["schemas"]["AvancePersonnel"];
+                "multipart/form-data": components["schemas"]["AvancePersonnel"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AvancePersonnel"];
+                };
+            };
+        };
+    };
+    rh_paie_avances_personnel_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Avance Personnel. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AvancePersonnel"];
+                };
+            };
+        };
+    };
+    rh_paie_avances_personnel_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Avance Personnel. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AvancePersonnel"];
+                "application/x-www-form-urlencoded": components["schemas"]["AvancePersonnel"];
+                "multipart/form-data": components["schemas"]["AvancePersonnel"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AvancePersonnel"];
+                };
+            };
+        };
+    };
+    rh_paie_avances_personnel_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Avance Personnel. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    rh_paie_avances_personnel_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Avance Personnel. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedAvancePersonnel"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedAvancePersonnel"];
+                "multipart/form-data": components["schemas"]["PatchedAvancePersonnel"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AvancePersonnel"];
+                };
+            };
+        };
+    };
+    rh_paie_avances_personnel_regulariser_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Avance Personnel. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AvancePersonnel"];
+                "application/x-www-form-urlencoded": components["schemas"]["AvancePersonnel"];
+                "multipart/form-data": components["schemas"]["AvancePersonnel"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AvancePersonnel"];
+                };
+            };
+        };
+    };
+    rh_paie_enseignants_list: {
+        parameters: {
+            query?: {
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedEnseignantList"];
+                };
+            };
+        };
+    };
+    rh_paie_enseignants_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Enseignant"];
+                "application/x-www-form-urlencoded": components["schemas"]["Enseignant"];
+                "multipart/form-data": components["schemas"]["Enseignant"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Enseignant"];
+                };
+            };
+        };
+    };
+    rh_paie_enseignants_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Enseignant. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Enseignant"];
+                };
+            };
+        };
+    };
+    rh_paie_enseignants_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Enseignant. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Enseignant"];
+                "application/x-www-form-urlencoded": components["schemas"]["Enseignant"];
+                "multipart/form-data": components["schemas"]["Enseignant"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Enseignant"];
+                };
+            };
+        };
+    };
+    rh_paie_enseignants_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Enseignant. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    rh_paie_enseignants_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Enseignant. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedEnseignant"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedEnseignant"];
+                "multipart/form-data": components["schemas"]["PatchedEnseignant"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Enseignant"];
+                };
+            };
+        };
+    };
+    rh_paie_enseignants_activer_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Enseignant. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Enseignant"];
+                "application/x-www-form-urlencoded": components["schemas"]["Enseignant"];
+                "multipart/form-data": components["schemas"]["Enseignant"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Enseignant"];
+                };
+            };
+        };
+    };
+    rh_paie_enseignants_desactiver_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Enseignant. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Enseignant"];
+                "application/x-www-form-urlencoded": components["schemas"]["Enseignant"];
+                "multipart/form-data": components["schemas"]["Enseignant"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Enseignant"];
+                };
+            };
+        };
+    };
+    rh_paie_personnel_administratif_list: {
+        parameters: {
+            query?: {
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedPersonnelAdministratifList"];
+                };
+            };
+        };
+    };
+    rh_paie_personnel_administratif_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PersonnelAdministratif"];
+                "application/x-www-form-urlencoded": components["schemas"]["PersonnelAdministratif"];
+                "multipart/form-data": components["schemas"]["PersonnelAdministratif"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PersonnelAdministratif"];
+                };
+            };
+        };
+    };
+    rh_paie_personnel_administratif_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Personnel Administratif. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PersonnelAdministratif"];
+                };
+            };
+        };
+    };
+    rh_paie_personnel_administratif_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Personnel Administratif. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PersonnelAdministratif"];
+                "application/x-www-form-urlencoded": components["schemas"]["PersonnelAdministratif"];
+                "multipart/form-data": components["schemas"]["PersonnelAdministratif"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PersonnelAdministratif"];
+                };
+            };
+        };
+    };
+    rh_paie_personnel_administratif_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Personnel Administratif. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    rh_paie_personnel_administratif_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Personnel Administratif. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedPersonnelAdministratif"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedPersonnelAdministratif"];
+                "multipart/form-data": components["schemas"]["PatchedPersonnelAdministratif"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PersonnelAdministratif"];
+                };
+            };
+        };
+    };
+    rh_paie_personnel_administratif_activer_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Personnel Administratif. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PersonnelAdministratif"];
+                "application/x-www-form-urlencoded": components["schemas"]["PersonnelAdministratif"];
+                "multipart/form-data": components["schemas"]["PersonnelAdministratif"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PersonnelAdministratif"];
+                };
+            };
+        };
+    };
+    rh_paie_personnel_administratif_desactiver_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Personnel Administratif. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PersonnelAdministratif"];
+                "application/x-www-form-urlencoded": components["schemas"]["PersonnelAdministratif"];
+                "multipart/form-data": components["schemas"]["PersonnelAdministratif"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PersonnelAdministratif"];
+                };
+            };
+        };
+    };
+    rh_paie_salaires_administration_list: {
+        parameters: {
+            query?: {
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedSalaireAdministrationList"];
+                };
+            };
+        };
+    };
+    rh_paie_salaires_administration_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalaireAdministration"];
+                "application/x-www-form-urlencoded": components["schemas"]["SalaireAdministration"];
+                "multipart/form-data": components["schemas"]["SalaireAdministration"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalaireAdministration"];
+                };
+            };
+        };
+    };
+    rh_paie_salaires_administration_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Salaire Administration. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalaireAdministration"];
+                };
+            };
+        };
+    };
+    rh_paie_salaires_administration_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Salaire Administration. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalaireAdministration"];
+                "application/x-www-form-urlencoded": components["schemas"]["SalaireAdministration"];
+                "multipart/form-data": components["schemas"]["SalaireAdministration"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalaireAdministration"];
+                };
+            };
+        };
+    };
+    rh_paie_salaires_administration_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Salaire Administration. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    rh_paie_salaires_administration_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Salaire Administration. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedSalaireAdministration"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedSalaireAdministration"];
+                "multipart/form-data": components["schemas"]["PatchedSalaireAdministration"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalaireAdministration"];
+                };
+            };
+        };
+    };
+    rh_paie_salaires_administration_payer_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Salaire Administration. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalaireAdministration"];
+                "application/x-www-form-urlencoded": components["schemas"]["SalaireAdministration"];
+                "multipart/form-data": components["schemas"]["SalaireAdministration"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalaireAdministration"];
+                };
+            };
+        };
+    };
+    rh_paie_salaires_administration_valider_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Salaire Administration. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalaireAdministration"];
+                "application/x-www-form-urlencoded": components["schemas"]["SalaireAdministration"];
+                "multipart/form-data": components["schemas"]["SalaireAdministration"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalaireAdministration"];
+                };
+            };
+        };
+    };
+    rh_paie_salaires_enseignant_list: {
+        parameters: {
+            query?: {
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedSalaireEnseignantList"];
+                };
+            };
+        };
+    };
+    rh_paie_salaires_enseignant_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalaireEnseignant"];
+                "application/x-www-form-urlencoded": components["schemas"]["SalaireEnseignant"];
+                "multipart/form-data": components["schemas"]["SalaireEnseignant"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalaireEnseignant"];
+                };
+            };
+        };
+    };
+    rh_paie_salaires_enseignant_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Salaire Enseignant. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalaireEnseignant"];
+                };
+            };
+        };
+    };
+    rh_paie_salaires_enseignant_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Salaire Enseignant. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalaireEnseignant"];
+                "application/x-www-form-urlencoded": components["schemas"]["SalaireEnseignant"];
+                "multipart/form-data": components["schemas"]["SalaireEnseignant"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalaireEnseignant"];
+                };
+            };
+        };
+    };
+    rh_paie_salaires_enseignant_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Salaire Enseignant. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    rh_paie_salaires_enseignant_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Salaire Enseignant. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedSalaireEnseignant"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedSalaireEnseignant"];
+                "multipart/form-data": components["schemas"]["PatchedSalaireEnseignant"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalaireEnseignant"];
+                };
+            };
+        };
+    };
+    rh_paie_salaires_enseignant_payer_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Salaire Enseignant. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalaireEnseignant"];
+                "application/x-www-form-urlencoded": components["schemas"]["SalaireEnseignant"];
+                "multipart/form-data": components["schemas"]["SalaireEnseignant"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalaireEnseignant"];
+                };
+            };
+        };
+    };
+    rh_paie_salaires_enseignant_valider_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Salaire Enseignant. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalaireEnseignant"];
+                "application/x-www-form-urlencoded": components["schemas"]["SalaireEnseignant"];
+                "multipart/form-data": components["schemas"]["SalaireEnseignant"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalaireEnseignant"];
+                };
+            };
+        };
+    };
+    scolarite_bourses_list: {
+        parameters: {
+            query?: {
+                annee_scolaire?: number;
+                etudiant?: number;
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+                /**
+                 * @description * `TOTAL` - Bourse totale
+                 *     * `PARTIELLE` - Bourse partielle
+                 *     * `MERITE` - Bourse au mérite
+                 *     * `SOCIALE` - Bourse sociale
+                 */
+                type?: "MERITE" | "PARTIELLE" | "SOCIALE" | "TOTAL";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedBourseList"];
+                };
+            };
+        };
+    };
+    scolarite_bourses_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Bourse"];
+                "application/x-www-form-urlencoded": components["schemas"]["Bourse"];
+                "multipart/form-data": components["schemas"]["Bourse"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Bourse"];
+                };
+            };
+        };
+    };
+    scolarite_bourses_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Bourse. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Bourse"];
+                };
+            };
+        };
+    };
+    scolarite_bourses_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Bourse. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Bourse"];
+                "application/x-www-form-urlencoded": components["schemas"]["Bourse"];
+                "multipart/form-data": components["schemas"]["Bourse"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Bourse"];
+                };
+            };
+        };
+    };
+    scolarite_bourses_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Bourse. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    scolarite_bourses_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Bourse. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedBourse"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedBourse"];
+                "multipart/form-data": components["schemas"]["PatchedBourse"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Bourse"];
+                };
+            };
+        };
+    };
     scolarite_echeances_list: {
         parameters: {
             query?: {
@@ -5288,7 +9130,6 @@ export interface operations {
                 ordering?: string;
                 /** @description A page number within the paginated result set. */
                 page?: number;
-                pris_en_charge_bourse?: boolean;
                 /** @description A search term. */
                 search?: string;
             };
@@ -5338,7 +9179,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description A unique integer value identifying this echeance. */
+                /** @description A unique integer value identifying this Échéance. */
                 id: number;
             };
             cookie?: never;
@@ -5360,7 +9201,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description A unique integer value identifying this echeance. */
+                /** @description A unique integer value identifying this Échéance. */
                 id: number;
             };
             cookie?: never;
@@ -5388,7 +9229,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description A unique integer value identifying this echeance. */
+                /** @description A unique integer value identifying this Échéance. */
                 id: number;
             };
             cookie?: never;
@@ -5409,7 +9250,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description A unique integer value identifying this echeance. */
+                /** @description A unique integer value identifying this Échéance. */
                 id: number;
             };
             cookie?: never;
@@ -5428,6 +9269,158 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Echeance"];
+                };
+            };
+        };
+    };
+    scolarite_frais_inscription_list: {
+        parameters: {
+            query?: {
+                annee_scolaire?: number;
+                niveau?: number;
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedFraisInscriptionList"];
+                };
+            };
+        };
+    };
+    scolarite_frais_inscription_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FraisInscription"];
+                "application/x-www-form-urlencoded": components["schemas"]["FraisInscription"];
+                "multipart/form-data": components["schemas"]["FraisInscription"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FraisInscription"];
+                };
+            };
+        };
+    };
+    scolarite_frais_inscription_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Frais d'inscription. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FraisInscription"];
+                };
+            };
+        };
+    };
+    scolarite_frais_inscription_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Frais d'inscription. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FraisInscription"];
+                "application/x-www-form-urlencoded": components["schemas"]["FraisInscription"];
+                "multipart/form-data": components["schemas"]["FraisInscription"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FraisInscription"];
+                };
+            };
+        };
+    };
+    scolarite_frais_inscription_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Frais d'inscription. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    scolarite_frais_inscription_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Frais d'inscription. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedFraisInscription"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedFraisInscription"];
+                "multipart/form-data": components["schemas"]["PatchedFraisInscription"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FraisInscription"];
                 };
             };
         };
@@ -5490,7 +9483,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description A unique integer value identifying this modalite paiement. */
+                /** @description A unique integer value identifying this Modalité de paiement. */
                 id: number;
             };
             cookie?: never;
@@ -5512,7 +9505,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description A unique integer value identifying this modalite paiement. */
+                /** @description A unique integer value identifying this Modalité de paiement. */
                 id: number;
             };
             cookie?: never;
@@ -5540,7 +9533,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description A unique integer value identifying this modalite paiement. */
+                /** @description A unique integer value identifying this Modalité de paiement. */
                 id: number;
             };
             cookie?: never;
@@ -5561,7 +9554,7 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                /** @description A unique integer value identifying this modalite paiement. */
+                /** @description A unique integer value identifying this Modalité de paiement. */
                 id: number;
             };
             cookie?: never;
@@ -5580,6 +9573,1813 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ModalitePaiement"];
+                };
+            };
+        };
+    };
+    scolarite_types_frais_list: {
+        parameters: {
+            query?: {
+                code?: string;
+                libelle?: string;
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedTypeFraisList"];
+                };
+            };
+        };
+    };
+    scolarite_types_frais_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TypeFrais"];
+                "application/x-www-form-urlencoded": components["schemas"]["TypeFrais"];
+                "multipart/form-data": components["schemas"]["TypeFrais"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TypeFrais"];
+                };
+            };
+        };
+    };
+    scolarite_types_frais_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Type de frais. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TypeFrais"];
+                };
+            };
+        };
+    };
+    scolarite_types_frais_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Type de frais. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TypeFrais"];
+                "application/x-www-form-urlencoded": components["schemas"]["TypeFrais"];
+                "multipart/form-data": components["schemas"]["TypeFrais"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TypeFrais"];
+                };
+            };
+        };
+    };
+    scolarite_types_frais_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Type de frais. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    scolarite_types_frais_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Type de frais. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedTypeFrais"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedTypeFrais"];
+                "multipart/form-data": components["schemas"]["PatchedTypeFrais"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TypeFrais"];
+                };
+            };
+        };
+    };
+    tresorerie_arretes_caisse_list: {
+        parameters: {
+            query?: {
+                /** @description A page number within the paginated result set. */
+                page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedArreteCaisseList"];
+                };
+            };
+        };
+    };
+    tresorerie_arretes_caisse_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ArreteCaisse"];
+                "application/x-www-form-urlencoded": components["schemas"]["ArreteCaisse"];
+                "multipart/form-data": components["schemas"]["ArreteCaisse"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ArreteCaisse"];
+                };
+            };
+        };
+    };
+    tresorerie_arretes_caisse_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Arrêté de caisse. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ArreteCaisse"];
+                };
+            };
+        };
+    };
+    tresorerie_arretes_caisse_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Arrêté de caisse. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ArreteCaisse"];
+                "application/x-www-form-urlencoded": components["schemas"]["ArreteCaisse"];
+                "multipart/form-data": components["schemas"]["ArreteCaisse"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ArreteCaisse"];
+                };
+            };
+        };
+    };
+    tresorerie_arretes_caisse_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Arrêté de caisse. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    tresorerie_arretes_caisse_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Arrêté de caisse. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedArreteCaisse"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedArreteCaisse"];
+                "multipart/form-data": components["schemas"]["PatchedArreteCaisse"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ArreteCaisse"];
+                };
+            };
+        };
+    };
+    tresorerie_arretes_caisse_billetage_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Arrêté de caisse. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ArreteCaisse"];
+                "application/x-www-form-urlencoded": components["schemas"]["ArreteCaisse"];
+                "multipart/form-data": components["schemas"]["ArreteCaisse"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ArreteCaisse"];
+                };
+            };
+        };
+    };
+    tresorerie_arretes_caisse_billetage_batch_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Arrêté de caisse. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ArreteCaisse"];
+                "application/x-www-form-urlencoded": components["schemas"]["ArreteCaisse"];
+                "multipart/form-data": components["schemas"]["ArreteCaisse"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ArreteCaisse"];
+                };
+            };
+        };
+    };
+    tresorerie_arretes_caisse_valider_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Arrêté de caisse. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ArreteCaisse"];
+                "application/x-www-form-urlencoded": components["schemas"]["ArreteCaisse"];
+                "multipart/form-data": components["schemas"]["ArreteCaisse"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ArreteCaisse"];
+                };
+            };
+        };
+    };
+    tresorerie_arretes_caisse_solde_theorique_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    tresorerie_billetage_list: {
+        parameters: {
+            query?: {
+                /** @description A page number within the paginated result set. */
+                page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedBilletageList"];
+                };
+            };
+        };
+    };
+    tresorerie_billetage_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Billetage"];
+                "application/x-www-form-urlencoded": components["schemas"]["Billetage"];
+                "multipart/form-data": components["schemas"]["Billetage"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Billetage"];
+                };
+            };
+        };
+    };
+    tresorerie_billetage_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Billetage. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Billetage"];
+                };
+            };
+        };
+    };
+    tresorerie_billetage_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Billetage. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Billetage"];
+                "application/x-www-form-urlencoded": components["schemas"]["Billetage"];
+                "multipart/form-data": components["schemas"]["Billetage"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Billetage"];
+                };
+            };
+        };
+    };
+    tresorerie_billetage_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Billetage. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    tresorerie_billetage_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Billetage. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedBilletage"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedBilletage"];
+                "multipart/form-data": components["schemas"]["PatchedBilletage"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Billetage"];
+                };
+            };
+        };
+    };
+    tresorerie_categories_mouvement_list: {
+        parameters: {
+            query?: {
+                /** @description A page number within the paginated result set. */
+                page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedCategorieMouvementList"];
+                };
+            };
+        };
+    };
+    tresorerie_categories_mouvement_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CategorieMouvement"];
+                "application/x-www-form-urlencoded": components["schemas"]["CategorieMouvement"];
+                "multipart/form-data": components["schemas"]["CategorieMouvement"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CategorieMouvement"];
+                };
+            };
+        };
+    };
+    tresorerie_categories_mouvement_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Catégorie de mouvement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CategorieMouvement"];
+                };
+            };
+        };
+    };
+    tresorerie_categories_mouvement_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Catégorie de mouvement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CategorieMouvement"];
+                "application/x-www-form-urlencoded": components["schemas"]["CategorieMouvement"];
+                "multipart/form-data": components["schemas"]["CategorieMouvement"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CategorieMouvement"];
+                };
+            };
+        };
+    };
+    tresorerie_categories_mouvement_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Catégorie de mouvement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    tresorerie_categories_mouvement_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Catégorie de mouvement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedCategorieMouvement"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedCategorieMouvement"];
+                "multipart/form-data": components["schemas"]["PatchedCategorieMouvement"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CategorieMouvement"];
+                };
+            };
+        };
+    };
+    tresorerie_comptes_list: {
+        parameters: {
+            query?: {
+                /** @description A page number within the paginated result set. */
+                page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedCompteList"];
+                };
+            };
+        };
+    };
+    tresorerie_comptes_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Compte"];
+                "application/x-www-form-urlencoded": components["schemas"]["Compte"];
+                "multipart/form-data": components["schemas"]["Compte"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Compte"];
+                };
+            };
+        };
+    };
+    tresorerie_comptes_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Compte. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Compte"];
+                };
+            };
+        };
+    };
+    tresorerie_comptes_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Compte. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Compte"];
+                "application/x-www-form-urlencoded": components["schemas"]["Compte"];
+                "multipart/form-data": components["schemas"]["Compte"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Compte"];
+                };
+            };
+        };
+    };
+    tresorerie_comptes_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Compte. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    tresorerie_comptes_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Compte. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedCompte"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedCompte"];
+                "multipart/form-data": components["schemas"]["PatchedCompte"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Compte"];
+                };
+            };
+        };
+    };
+    tresorerie_depenses_list: {
+        parameters: {
+            query?: {
+                /** @description A page number within the paginated result set. */
+                page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedDepenseList"];
+                };
+            };
+        };
+    };
+    tresorerie_depenses_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Depense"];
+                "application/x-www-form-urlencoded": components["schemas"]["Depense"];
+                "multipart/form-data": components["schemas"]["Depense"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Depense"];
+                };
+            };
+        };
+    };
+    tresorerie_depenses_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Dépense. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Depense"];
+                };
+            };
+        };
+    };
+    tresorerie_depenses_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Dépense. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Depense"];
+                "application/x-www-form-urlencoded": components["schemas"]["Depense"];
+                "multipart/form-data": components["schemas"]["Depense"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Depense"];
+                };
+            };
+        };
+    };
+    tresorerie_depenses_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Dépense. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    tresorerie_depenses_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Dépense. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedDepense"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedDepense"];
+                "multipart/form-data": components["schemas"]["PatchedDepense"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Depense"];
+                };
+            };
+        };
+    };
+    tresorerie_depenses_annuler_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Dépense. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Depense"];
+                "application/x-www-form-urlencoded": components["schemas"]["Depense"];
+                "multipart/form-data": components["schemas"]["Depense"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Depense"];
+                };
+            };
+        };
+    };
+    tresorerie_depenses_payer_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Dépense. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Depense"];
+                "application/x-www-form-urlencoded": components["schemas"]["Depense"];
+                "multipart/form-data": components["schemas"]["Depense"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Depense"];
+                };
+            };
+        };
+    };
+    tresorerie_depenses_valider_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Dépense. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Depense"];
+                "application/x-www-form-urlencoded": components["schemas"]["Depense"];
+                "multipart/form-data": components["schemas"]["Depense"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Depense"];
+                };
+            };
+        };
+    };
+    tresorerie_encaissements_list: {
+        parameters: {
+            query?: {
+                /** @description A page number within the paginated result set. */
+                page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedEncaissementList"];
+                };
+            };
+        };
+    };
+    tresorerie_encaissements_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Encaissement"];
+                "application/x-www-form-urlencoded": components["schemas"]["Encaissement"];
+                "multipart/form-data": components["schemas"]["Encaissement"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Encaissement"];
+                };
+            };
+        };
+    };
+    tresorerie_encaissements_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Encaissement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Encaissement"];
+                };
+            };
+        };
+    };
+    tresorerie_encaissements_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Encaissement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Encaissement"];
+                "application/x-www-form-urlencoded": components["schemas"]["Encaissement"];
+                "multipart/form-data": components["schemas"]["Encaissement"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Encaissement"];
+                };
+            };
+        };
+    };
+    tresorerie_encaissements_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Encaissement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    tresorerie_encaissements_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Encaissement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedEncaissement"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedEncaissement"];
+                "multipart/form-data": components["schemas"]["PatchedEncaissement"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Encaissement"];
+                };
+            };
+        };
+    };
+    tresorerie_encaissements_annuler_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Encaissement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Encaissement"];
+                "application/x-www-form-urlencoded": components["schemas"]["Encaissement"];
+                "multipart/form-data": components["schemas"]["Encaissement"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Encaissement"];
+                };
+            };
+        };
+    };
+    tresorerie_encaissements_imputer_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Encaissement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Encaissement"];
+                "application/x-www-form-urlencoded": components["schemas"]["Encaissement"];
+                "multipart/form-data": components["schemas"]["Encaissement"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Encaissement"];
+                };
+            };
+        };
+    };
+    tresorerie_encaissements_recu_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Encaissement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Encaissement"];
+                };
+            };
+        };
+    };
+    tresorerie_encaissements_valider_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Encaissement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Encaissement"];
+                "application/x-www-form-urlencoded": components["schemas"]["Encaissement"];
+                "multipart/form-data": components["schemas"]["Encaissement"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Encaissement"];
+                };
+            };
+        };
+    };
+    tresorerie_imputations_encaissement_list: {
+        parameters: {
+            query?: {
+                /** @description A page number within the paginated result set. */
+                page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedImputationEncaissementList"];
+                };
+            };
+        };
+    };
+    tresorerie_imputations_encaissement_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Imputation d'encaissement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImputationEncaissement"];
+                };
+            };
+        };
+    };
+    tresorerie_mouvements_list: {
+        parameters: {
+            query?: {
+                /** @description A page number within the paginated result set. */
+                page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedMouvementList"];
+                };
+            };
+        };
+    };
+    tresorerie_mouvements_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Mouvement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Mouvement"];
+                };
+            };
+        };
+    };
+    tresorerie_mouvements_piece_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Mouvement"];
+                };
+            };
+        };
+    };
+    tresorerie_tableau_de_bord_depenses_recentes_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    tresorerie_tableau_de_bord_ecarts_caisse_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    tresorerie_tableau_de_bord_encaissements_recents_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    tresorerie_tableau_de_bord_flux_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    tresorerie_tableau_de_bord_previsionnel_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    tresorerie_tableau_de_bord_solde_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    tresorerie_tableau_de_bord_solde_par_compte_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    tresorerie_virements_list: {
+        parameters: {
+            query?: {
+                /** @description A page number within the paginated result set. */
+                page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedVirementList"];
+                };
+            };
+        };
+    };
+    tresorerie_virements_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Virement"];
+                "application/x-www-form-urlencoded": components["schemas"]["Virement"];
+                "multipart/form-data": components["schemas"]["Virement"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Virement"];
+                };
+            };
+        };
+    };
+    tresorerie_virements_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Virement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Virement"];
+                };
+            };
+        };
+    };
+    tresorerie_virements_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Virement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Virement"];
+                "application/x-www-form-urlencoded": components["schemas"]["Virement"];
+                "multipart/form-data": components["schemas"]["Virement"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Virement"];
+                };
+            };
+        };
+    };
+    tresorerie_virements_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Virement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    tresorerie_virements_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Virement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedVirement"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedVirement"];
+                "multipart/form-data": components["schemas"]["PatchedVirement"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Virement"];
+                };
+            };
+        };
+    };
+    tresorerie_virements_annuler_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Virement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Virement"];
+                "application/x-www-form-urlencoded": components["schemas"]["Virement"];
+                "multipart/form-data": components["schemas"]["Virement"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Virement"];
+                };
+            };
+        };
+    };
+    tresorerie_virements_engager_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Virement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Virement"];
+                "application/x-www-form-urlencoded": components["schemas"]["Virement"];
+                "multipart/form-data": components["schemas"]["Virement"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Virement"];
+                };
+            };
+        };
+    };
+    tresorerie_virements_valider_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this Virement. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Virement"];
+                "application/x-www-form-urlencoded": components["schemas"]["Virement"];
+                "multipart/form-data": components["schemas"]["Virement"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Virement"];
                 };
             };
         };

@@ -11,6 +11,7 @@ backend/.env
 backend/.venv/
 backend/staticfiles/
 backend/logs/
+backend/media/
 *.egg-info/
 __pycache__/
 *.pyc

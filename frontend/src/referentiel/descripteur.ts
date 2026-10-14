@@ -3,7 +3,7 @@ import type { ZodTypeAny } from "zod";
 export type Champ = {
   nom: string;
   label: string;
-  type: "text" | "number" | "checkbox" | "select" | "fk";
+  type: "text" | "number" | "checkbox" | "select" | "fk" | "file";
   requis?: boolean;
   options?: { valeur: string; label: string }[];
   fkEndpoint?: string;

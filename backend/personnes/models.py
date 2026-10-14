@@ -108,16 +108,16 @@ class TypePiece(models.Model):
 
 
 class CompteurMatricule(models.Model):
-    pole = models.CharField(
-        max_length=5, primary_key=True, choices=Ecole.Pole.choices
-    )
+    # Compteur scope par ecole (via son sigle), depuis la suppression du Pole
+    # (docs/superpowers/specs/2026-10-14-suppression-pole-groupe-scolaire-design.md).
+    ecole_sigle = models.CharField(max_length=20, primary_key=True)
     valeur = models.PositiveIntegerField(default=0)
 
     class Meta:
         db_table = "compteur_matricule"
 
     def __str__(self):
-        return f"{self.pole}={self.valeur}"
+        return f"{self.ecole_sigle}={self.valeur}"
 
 
 class Inscription(Auditable):

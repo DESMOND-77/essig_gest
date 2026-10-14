@@ -119,10 +119,9 @@ JOIN categorie_mouvement cm ON cm.id = m.categorie_mouvement_id
 WHERE m.valide = 1
 GROUP BY m.ecole_id, m.annee_scolaire_id, YEAR(m.date_operation), MONTH(m.date_operation);
 
--- 6. Bilan consolide groupe
+-- 6. Bilan consolide global (toutes ecoles)
 CREATE OR REPLACE VIEW v_bilan_consolide AS
 SELECT
-  e.groupe_scolaire_id,
   b.annee_scolaire_id,
   b.annee,
   b.mois,
@@ -130,8 +129,7 @@ SELECT
   SUM(b.depenses) AS depenses,
   SUM(b.solde)    AS solde
 FROM v_bilan_mensuel b
-JOIN ecole e ON e.id = b.ecole_id
-GROUP BY e.groupe_scolaire_id, b.annee_scolaire_id, b.annee, b.mois;
+GROUP BY b.annee_scolaire_id, b.annee, b.mois;
 
 -- 7. Etat de scolarite imprimable (mensualites + soutenance + reste total)
 CREATE OR REPLACE VIEW v_etat_scolarite_etudiant AS

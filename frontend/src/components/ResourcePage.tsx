@@ -43,6 +43,13 @@ export function ResourcePage({ descripteur }: { descripteur: Descripteur }) {
         accessorFn: (l: Ligne) => (c.rendu ? c.rendu(l) : l[c.cle]),
         cell: (info) => {
           const v = info.getValue();
+          if (c.cle === "logo") {
+            return v ? (
+              <img src={String(v)} alt="" className="h-8 w-8 rounded object-cover" />
+            ) : (
+              <span className="text-gray-400">—</span>
+            );
+          }
           return v == null ? "" : String(v);
         },
       })),

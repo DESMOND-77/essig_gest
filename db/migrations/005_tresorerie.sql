@@ -4,7 +4,6 @@ SET NAMES utf8mb4;
 
 CREATE TABLE compte (
   id                 INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  groupe_scolaire_id INT UNSIGNED NOT NULL,
   code               VARCHAR(30) NOT NULL,
   libelle            VARCHAR(120) NOT NULL,
   type               ENUM('CAISSE','BANQUE','MOBILE_MONEY','VIRTUEL') NOT NULL,
@@ -13,8 +12,7 @@ CREATE TABLE compte (
   solde_initial      DECIMAL(12,0) NOT NULL DEFAULT 0,
   actif              TINYINT(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (id),
-  UNIQUE KEY unq_compte_code (code),
-  CONSTRAINT fk_compte_groupe FOREIGN KEY (groupe_scolaire_id) REFERENCES groupe_scolaire (id)
+  UNIQUE KEY unq_compte_code (code)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE categorie_mouvement (

@@ -9,7 +9,6 @@ pytestmark = pytest.mark.django_db
 
 def test_db_tables_sont_les_noms_cibles():
     attendus = {
-        models.GroupeScolaire: "groupe_scolaire",
         models.Ecole: "ecole",
         models.AnneeScolaire: "annee_scolaire",
         models.ModaliteFormation: "modalite_formation",
@@ -72,7 +71,7 @@ def test_tables_en_utf8mb4_unicode_ci():
             """
             SELECT COUNT(*) FROM information_schema.tables
             WHERE table_schema = DATABASE()
-              AND table_name IN ('groupe_scolaire','ecole','niveau','filiere','option_filiere',
+              AND table_name IN ('ecole','niveau','filiere','option_filiere',
                                  'classe','matiere','periode','session_examen','annee_scolaire','modalite_formation')
               AND table_collation <> 'utf8mb4_unicode_ci'
             """

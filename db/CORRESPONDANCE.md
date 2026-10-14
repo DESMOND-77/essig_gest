@@ -8,7 +8,7 @@ Voir `docs/superpowers/specs/2026-08-29-modele-donnees-gestion-groupe-scolaire-d
 | `mlamine.sql` | Devient | Remarque |
 |---|---|---|
 | `annee_scolaire` | `annee_scolaire` | `annee` → `libelle` ; FK par `id`, plus par chaîne |
-| `ecole` | `ecole` + `groupe_scolaire` | frais déplacés vers `type_frais` ; `annee_scolaire` retirée |
+| `ecole` | `ecole` (entité autonome, sans `groupe_scolaire` ni `pole` — cf. `docs/superpowers/specs/2026-10-14-suppression-pole-groupe-scolaire-design.md`) | frais déplacés vers `type_frais` ; `annee_scolaire` retirée |
 | `enseignant` | `enseignant` | ajout statut, spécialité, taux |
 | `etudiants` | `etudiant` + `inscription` | séparation identité / scolarité annuelle ; `numero_odre` → `inscription.numero_ordre` (rang d'inscription dans l'année, par école) ; placement (école/option/niveau/formation) → `classe` |
 | `filieres` | `filiere` | `id_niveau` **supprimé** (filière indépendante du niveau) |

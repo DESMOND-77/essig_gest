@@ -1,53 +1,70 @@
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator, MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import Q
+from django.db.models.signals import post_delete, post_save, pre_save
+from django.dispatch import receiver
+
+TAILLE_MAX_LOGO_OCTETS = 2 * 1024 * 1024  # 2 Mo
+EXTENSIONS_LOGO_AUTORISEES = ["png", "jpg", "jpeg", "webp"]
 
 
-class GroupeScolaire(models.Model):
-    # null=True sur ces CharField : le SQL de référence (db/migrations/001) déclare
-    # ces colonnes NULL, pas NOT NULL DEFAULT '' ; DJ001 est donc volontairement ignoré.
+def valider_taille_logo(fichier):
+    if fichier.size > TAILLE_MAX_LOGO_OCTETS:
+        raise ValidationError("Le logo ne doit pas dépasser 2 Mo.")
+
+
+class Ecole(models.Model):
+    # École autonome : pas de Groupe scolaire ni de Pôle (cf. décision
+    # docs/superpowers/specs/2026-10-14-suppression-pole-groupe-scolaire-design.md).
+    class Regime(models.TextChoices):
+        LMD = "LMD", "LMD"
+        CLASSIQUE = "CLASSIQUE", "Classique"
+
     nom = models.CharField(max_length=120)
     sigle = models.CharField(max_length=20, null=True, blank=True)  # noqa: DJ001
-    logo = models.CharField(max_length=255, null=True, blank=True)  # noqa: DJ001
+    regime = models.CharField(max_length=9, choices=Regime.choices)
+    logo = models.ImageField(
+        upload_to="ecoles/logos/",
+        null=True,
+        blank=True,
+        validators=[
+            FileExtensionValidator(allowed_extensions=EXTENSIONS_LOGO_AUTORISEES),
+            valider_taille_logo,
+        ],
+    )
     contacts = models.CharField(max_length=120, null=True, blank=True)  # noqa: DJ001
     email = models.CharField(max_length=120, null=True, blank=True)  # noqa: DJ001
     adresse = models.CharField(max_length=255, null=True, blank=True)  # noqa: DJ001
 
     class Meta:
-        db_table = "groupe_scolaire"
-
-    def __str__(self):
-        return self.nom
-
-
-class Ecole(models.Model):
-    class Pole(models.TextChoices):
-        ESSIG = "ESSIG", "ESSIG"
-        UPSS = "UPSS", "UPSS"
-        CFPA = "CFPA", "CFPA"
-        CICI = "CICI", "CICI"
-
-    class Regime(models.TextChoices):
-        LMD = "LMD", "LMD"
-        CLASSIQUE = "CLASSIQUE", "Classique"
-
-    groupe_scolaire = models.ForeignKey(
-        GroupeScolaire, on_delete=models.RESTRICT, related_name="ecoles"
-    )
-    nom = models.CharField(max_length=120)
-    sigle = models.CharField(max_length=20, null=True, blank=True)  # noqa: DJ001
-    pole = models.CharField(max_length=5, choices=Pole.choices)
-    regime = models.CharField(max_length=9, choices=Regime.choices)
-    logo = models.CharField(max_length=255, null=True, blank=True)  # noqa: DJ001
-    contacts = models.CharField(max_length=120, null=True, blank=True)  # noqa: DJ001
-    email = models.CharField(max_length=120, null=True, blank=True)  # noqa: DJ001
-
-    class Meta:
         db_table = "ecole"
-        indexes = [models.Index(fields=["groupe_scolaire"], name="idx_ecole_groupe")]
 
     def __str__(self):
         return self.nom
+
+
+@receiver(pre_save, sender=Ecole)
+def _supprimer_ancien_logo_si_remplace(sender, instance, **kwargs):
+    if not instance.pk:
+        return
+    ancien = sender.objects.filter(pk=instance.pk).values_list("logo", flat=True).first()
+    if ancien and ancien != instance.logo.name:
+        instance._ancien_logo_a_supprimer = ancien
+
+
+@receiver(post_save, sender=Ecole)
+def _supprimer_ancien_logo_apres_sauvegarde(sender, instance, **kwargs):
+    ancien = getattr(instance, "_ancien_logo_a_supprimer", None)
+    if ancien:
+        instance.logo.storage.delete(ancien)
+        del instance._ancien_logo_a_supprimer
+
+
+@receiver(post_delete, sender=Ecole)
+def _supprimer_logo_a_la_suppression(sender, instance, **kwargs):
+    if instance.logo:
+        instance.logo.storage.delete(instance.logo.name)
 
 
 class AnneeScolaire(models.Model):

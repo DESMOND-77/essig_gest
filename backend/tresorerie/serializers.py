@@ -7,24 +7,18 @@ from .models import (
 )
 from personnes.models import Inscription
 from scolarite.models import Echeance, FraisInscription
-from referentiel.models import GroupeScolaire, Ecole, AnneeScolaire
+from referentiel.models import Ecole, AnneeScolaire
 
 
-class CompteSerializer(AuditableSerializerMixin):
+class CompteSerializer(AuditableSerializerMixin, serializers.ModelSerializer):
     """Serializer pour le modèle Compte"""
 
-    groupe_scolaire = serializers.PrimaryKeyRelatedField(
-        queryset=GroupeScolaire.objects.all()
-    )
-    groupe_scolaire_nom = serializers.CharField(
-        source='groupe_scolaire.nom', read_only=True
-    )
     solde_actuel = serializers.SerializerMethodField()
 
     class Meta:
         model = Compte
         fields = [
-            'id', 'groupe_scolaire', 'groupe_scolaire_nom', 'code', 'libelle',
+            'id', 'code', 'libelle',
             'type', 'numero_bancaire', 'banque', 'solde_initial', 'solde_actuel',
             'actif', 'cree_par', 'cree_le', 'modifie_par', 'modifie_le'
         ]
@@ -35,7 +29,7 @@ class CompteSerializer(AuditableSerializerMixin):
         return float(calculer_solde_compte(obj.id))
 
 
-class CategorieMouvementSerializer(AuditableSerializerMixin):
+class CategorieMouvementSerializer(AuditableSerializerMixin, serializers.ModelSerializer):
     """Serializer pour le modèle CategorieMouvement"""
 
     class Meta:
@@ -44,7 +38,7 @@ class CategorieMouvementSerializer(AuditableSerializerMixin):
         read_only_fields = ['cree_par', 'cree_le', 'modifie_par', 'modifie_le']
 
 
-class VirementSerializer(AuditableSerializerMixin):
+class VirementSerializer(AuditableSerializerMixin, serializers.ModelSerializer):
     """Serializer pour le modèle Virement"""
 
     compte_source = serializers.PrimaryKeyRelatedField(queryset=Compte.objects.all())
@@ -66,10 +60,15 @@ class VirementSerializer(AuditableSerializerMixin):
             'montant', 'date', 'motif', 'statut', 'cree_par', 'cree_par_nom',
             'cree_le', 'valide_par', 'valide_par_nom', 'modifie_par', 'modifie_le'
         ]
-        read_only_fields = ['cree_par', 'cree_le', 'valide_par', 'modifie_par', 'modifie_le']
+        # `statut` est exclu : les transitions passent par les actions explicites
+        # `valider`/`annuler` (seules à pouvoir créer les mouvements de trésorerie associés),
+        # jamais par un statut arbitraire fourni par le client à la création/au PATCH.
+        read_only_fields = [
+            'statut', 'cree_par', 'cree_le', 'valide_par', 'modifie_par', 'modifie_le'
+        ]
 
 
-class MouvementSerializer(AuditableSerializerMixin):
+class MouvementSerializer(AuditableSerializerMixin, serializers.ModelSerializer):
     """Serializer pour le modèle Mouvement (lecture seule selon les spécifications)"""
 
     compte = serializers.PrimaryKeyRelatedField(queryset=Compte.objects.all())
@@ -110,7 +109,7 @@ class MouvementSerializer(AuditableSerializerMixin):
         ]
 
 
-class EncaissementSerializer(AuditableSerializerMixin):
+class EncaissementSerializer(AuditableSerializerMixin, serializers.ModelSerializer):
     """Serializer pour le modèle Encaissement"""
 
     inscription = serializers.PrimaryKeyRelatedField(queryset=Inscription.objects.all())
@@ -133,7 +132,12 @@ class EncaissementSerializer(AuditableSerializerMixin):
             'recu_numero', 'statut', 'cree_par', 'cree_par_nom', 'cree_le',
             'modifie_par', 'modifie_par_nom', 'modifie_le'
         ]
-        read_only_fields = ['cree_par', 'cree_par_nom', 'cree_le', 'modifie_par', 'modifie_par_nom', 'modifie_le']
+        # `recu_numero` est généré serveur (concurrency-safe, cf. encaissement_service) et
+        # `statut` ne transite que par les actions `valider`/`annuler`.
+        read_only_fields = [
+            'recu_numero', 'statut',
+            'cree_par', 'cree_par_nom', 'cree_le', 'modifie_par', 'modifie_par_nom', 'modifie_le'
+        ]
 
     def get_inscription_etudiant_nom(self, obj):
         if obj.inscription and obj.inscription.etudiant:
@@ -141,7 +145,7 @@ class EncaissementSerializer(AuditableSerializerMixin):
         return None
 
 
-class ImputationEncaissementSerializer(AuditableSerializerMixin):
+class ImputationEncaissementSerializer(AuditableSerializerMixin, serializers.ModelSerializer):
     """Serializer pour le modèle ImputationEncaissement"""
 
     encaissement = serializers.PrimaryKeyRelatedField(queryset=Encaissement.objects.all())
@@ -192,7 +196,7 @@ class ImputationEncaissementSerializer(AuditableSerializerMixin):
         return data
 
 
-class DepenseSerializer(AuditableSerializerMixin):
+class DepenseSerializer(AuditableSerializerMixin, serializers.ModelSerializer):
     """Serializer pour le modèle Depense"""
 
     categorie_mouvement = serializers.PrimaryKeyRelatedField(queryset=CategorieMouvement.objects.all())
@@ -226,7 +230,7 @@ class DepenseSerializer(AuditableSerializerMixin):
         read_only_fields = ['cree_par', 'cree_par_nom', 'cree_le', 'modifie_par', 'modifie_par_nom', 'modifie_le']
 
 
-class ArreteCaisseSerializer(AuditableSerializerMixin):
+class ArreteCaisseSerializer(AuditableSerializerMixin, serializers.ModelSerializer):
     """Serializer pour le modèle ArreteCaisse"""
 
     compte = serializers.PrimaryKeyRelatedField(queryset=Compte.objects.all())
@@ -245,10 +249,15 @@ class ArreteCaisseSerializer(AuditableSerializerMixin):
             'solde_physique', 'ecart', 'fait_par', 'fait_par_nom', 'valide_par', 'valide_par_nom',
             'cree_par', 'cree_par_nom', 'cree_le', 'modifie_par', 'modifie_par_nom', 'modifie_le'
         ]
-        read_only_fields = ['cree_par', 'cree_par_nom', 'cree_le', 'modifie_par', 'modifie_par_nom', 'modifie_le']
+        # `solde_theorique` est calculé serveur par `creer_arrete_caisse`
+        # (`calculer_solde_theorique_caisse`), jamais fourni par le client.
+        read_only_fields = [
+            'solde_theorique',
+            'cree_par', 'cree_par_nom', 'cree_le', 'modifie_par', 'modifie_par_nom', 'modifie_le'
+        ]
 
 
-class BilletageSerializer(AuditableSerializerMixin):
+class BilletageSerializer(AuditableSerializerMixin, serializers.ModelSerializer):
     """Serializer pour le modèle Billetage"""
 
     arrete_caisse = serializers.PrimaryKeyRelatedField(queryset=ArreteCaisse.objects.all())

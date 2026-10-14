@@ -53,10 +53,10 @@ export function createResourceHooks<T extends { id: number }>(endpoint: string) 
     useCreer() {
       const qc = useQueryClient();
       return useMutation({
-        mutationFn: (corps: Partial<T>) =>
+        mutationFn: (corps: Partial<T> | FormData) =>
           apiFetch(`/${endpoint}/`, {
             method: "POST",
-            body: JSON.stringify(corps),
+            body: corps instanceof FormData ? corps : JSON.stringify(corps),
           }).then(jsonOuLeve) as Promise<T>,
         onSuccess: () => qc.invalidateQueries({ queryKey: [endpoint, "liste"] }),
       });
@@ -64,10 +64,10 @@ export function createResourceHooks<T extends { id: number }>(endpoint: string) 
     useModifier() {
       const qc = useQueryClient();
       return useMutation({
-        mutationFn: ({ id, corps }: { id: number; corps: Partial<T> }) =>
+        mutationFn: ({ id, corps }: { id: number; corps: Partial<T> | FormData }) =>
           apiFetch(`/${endpoint}/${id}/`, {
             method: "PATCH",
-            body: JSON.stringify(corps),
+            body: corps instanceof FormData ? corps : JSON.stringify(corps),
           }).then(jsonOuLeve) as Promise<T>,
         onSuccess: (_d, { id }) => {
           qc.invalidateQueries({ queryKey: [endpoint, "liste"] });

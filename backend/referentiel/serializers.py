@@ -3,17 +3,7 @@ from rest_framework import serializers
 from . import models, services
 
 
-class GroupeScolaireSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.GroupeScolaire
-        fields = "__all__"
-
-
 class EcoleSerializer(serializers.ModelSerializer):
-    groupe_scolaire_libelle = serializers.CharField(
-        source="groupe_scolaire.__str__", read_only=True
-    )
-
     class Meta:
         model = models.Ecole
         fields = "__all__"

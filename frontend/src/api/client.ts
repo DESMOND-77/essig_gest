@@ -23,7 +23,9 @@ async function refreshOnce(): Promise<boolean> {
 async function raw(path: string, init: RequestInit = {}) {
   const headers = new Headers(init.headers);
   if (accessToken) headers.set("Authorization", `Bearer ${accessToken}`);
-  if (init.body && !headers.has("Content-Type")) headers.set("Content-Type", "application/json");
+  if (init.body && !(init.body instanceof FormData) && !headers.has("Content-Type")) {
+    headers.set("Content-Type", "application/json");
+  }
   return fetch(`${BASE}${path}`, { ...init, headers, credentials: "include" });
 }
 

@@ -1,6 +1,6 @@
 """Portage pytest de db/tests/test_001_referentiel.sql.
 
-Le harnais SQL vérifie : présence des 11 tables, moteur/collation (hors ORM),
+Le harnais SQL vérifie : présence des 10 tables, moteur/collation (hors ORM),
 4 FK sur `classe`, unicité (ecole, code) sur `niveau`, `credits_requis` nullable.
 """
 
@@ -13,7 +13,6 @@ from referentiel.tests import factories as f
 pytestmark = pytest.mark.django_db
 
 TABLES = {
-    "groupe_scolaire",
     "ecole",
     "annee_scolaire",
     "modalite_formation",
@@ -27,7 +26,7 @@ TABLES = {
 }
 
 
-def test_les_11_tables_existent():
+def test_les_10_tables_existent():
     existantes = set(connection.introspection.table_names())
     assert TABLES <= existantes
 

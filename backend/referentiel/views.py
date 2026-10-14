@@ -11,16 +11,8 @@ class _BaseReferentielViewSet(_BaseCrudViewSet):
     permission_classes = [permissions.PeutEcrireReferentiel]
 
 
-class GroupeScolaireViewSet(_BaseReferentielViewSet):
-    queryset = models.GroupeScolaire.objects.all()
-    serializer_class = serializers.GroupeScolaireSerializer
-    filterset_class = ref_filters.GroupeScolaireFilter
-    search_fields = ["nom", "sigle"]
-    ordering_fields = ["nom", "id"]
-
-
 class EcoleViewSet(_BaseReferentielViewSet):
-    queryset = models.Ecole.objects.select_related("groupe_scolaire")
+    queryset = models.Ecole.objects.all()
     serializer_class = serializers.EcoleSerializer
     filterset_class = ref_filters.EcoleFilter
     search_fields = ["nom", "sigle"]

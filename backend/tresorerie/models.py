@@ -1,6 +1,7 @@
 # backend/tresorerie/models.py
 from django.db import models
 from django.core.validators import MinValueValidator
+from django.core.exceptions import ValidationError
 from core.models import Auditable
 from personnes.models import Inscription
 from referentiel.models import AnneeScolaire, Ecole
@@ -8,7 +9,7 @@ from scolarite.models import Echeance, FraisInscription
 
 
 class Compte(Auditable):
-    """Compte bancaire ou de caisse du groupe scolaire"""
+    """Compte bancaire ou de caisse"""
 
     class Type(models.TextChoices):
         CAISSE = 'CAISSE', 'Caisse'
@@ -16,11 +17,6 @@ class Compte(Auditable):
         MOBILE_MONEY = 'MOBILE_MONEY', 'Mobile Money'
         VIRTUEL = 'VIRTUEL', 'Virtuel'
 
-    groupe_scolaire = models.ForeignKey(
-        'referentiel.GroupeScolaire',
-        on_delete=models.RESTRICT,
-        verbose_name="Groupe scolaire"
-    )
     code = models.CharField(
         max_length=30,
         unique=True,
@@ -63,9 +59,6 @@ class Compte(Auditable):
         db_table = 'compte'
         verbose_name = "Compte"
         verbose_name_plural = "Comptes"
-        indexes = [
-            models.Index(fields=['groupe_scolaire'], name='idx_compte_groupe_scolaire'),
-        ]
 
     def __str__(self):
         return f"{self.code} - {self.libelle}"
@@ -161,6 +154,41 @@ class Virement(Auditable):
             )
         ]
 
+    # Protected fields configuration
+    editable_statuses = [Statut.BROUILLON]
+    protected_fields = ['compte_source', 'compte_destination', 'montant', 'date', 'motif']
+    deletable_statuses = [Statut.BROUILLON]
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            try:
+                original = Virement.objects.get(pk=self.pk)
+            except Virement.DoesNotExist:
+                pass
+            else:
+                if original.statut not in self.editable_statuses:
+                    for field in self.protected_fields:
+                        original_value = getattr(original, field)
+                        current_value = getattr(self, field)
+                        if original_value != current_value:
+                            raise ValidationError(
+                                f"Le champ '{field}' ne peut pas être modifié pour un virement avec le statut '{original.statut}'."
+                            )
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        if self.pk:
+            try:
+                original = Virement.objects.get(pk=self.pk)
+            except Virement.DoesNotExist:
+                pass
+            else:
+                if original.statut not in self.deletable_statuses:
+                    raise ValidationError(
+                        f"Suppression interdite pour un virement avec le statut '{original.statut}'."
+                    )
+        super().delete(*args, **kwargs)
+
     def __str__(self):
         return f"Virement {self.id}: {self.compte_source.code} → {self.compte_destination.code} ({self.montant} FCFA)"
 
@@ -247,6 +275,39 @@ class Mouvement(Auditable):
             )
         ]
 
+    # Protection du grand livre (P0, audit du 2026-10-14) : `Mouvement` est le seul modèle
+    # financier du dépôt sans garde save()/delete(), contrairement à Depense/Encaissement/
+    # Virement/ArreteCaisse. Pas de champ `statut` ici — `valide` est le seul levier existant
+    # (cf. tresorerie.services.mouvement.valider_mouvement/invalider_mouvement, qui ne touchent
+    # que ce champ) ; il reste donc volontairement hors de `protected_fields`. La suppression
+    # n'est jamais autorisée : le mécanisme de correction prévu est l'invalidation
+    # (`invalider_mouvement`), pas la suppression physique d'une ligne du grand livre.
+    protected_fields = [
+        'compte', 'date_operation', 'sens', 'montant', 'categorie_mouvement',
+        'ecole', 'annee_scolaire', 'virement',
+    ]
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            try:
+                original = Mouvement.objects.get(pk=self.pk)
+            except Mouvement.DoesNotExist:
+                pass
+            else:
+                for field in self.protected_fields:
+                    if getattr(original, field) != getattr(self, field):
+                        raise ValidationError(
+                            f"Le champ '{field}' ne peut pas être modifié pour un mouvement "
+                            f"déjà enregistré dans le grand livre."
+                        )
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError(
+            "Suppression interdite pour un mouvement du grand livre. "
+            "Utiliser l'invalidation (invalider_mouvement) pour corriger une erreur."
+        )
+
     def __str__(self):
         return f"{self.date_operation} - {self.get_sens_display()} {self.montant} FCFA sur {self.compte.code}"
 
@@ -311,6 +372,41 @@ class Encaissement(Auditable):
         indexes = [
             models.Index(fields=['inscription'], name='idx_encaissement_inscription'),
         ]
+
+    # Protected fields configuration
+    editable_statuses = [Statut.EN_COURS]
+    protected_fields = ['inscription', 'date', 'montant_total', 'mode', 'compte', 'recu_numero']
+    deletable_statuses = [Statut.EN_COURS]
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            try:
+                original = Encaissement.objects.get(pk=self.pk)
+            except Encaissement.DoesNotExist:
+                pass
+            else:
+                if original.statut not in self.editable_statuses:
+                    for field in self.protected_fields:
+                        original_value = getattr(original, field)
+                        current_value = getattr(self, field)
+                        if original_value != current_value:
+                            raise ValidationError(
+                                f"Le champ '{field}' ne peut pas être modifié pour un encaissement avec le statut '{original.statut}'."
+                            )
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        if self.pk:
+            try:
+                original = Encaissement.objects.get(pk=self.pk)
+            except Encaissement.DoesNotExist:
+                pass
+            else:
+                if original.statut not in self.deletable_statuses:
+                    raise ValidationError(
+                        f"Suppression interdite pour un encaissement avec le statut '{original.statut}'."
+                    )
+        super().delete(*args, **kwargs)
 
     def __str__(self):
         return f"Encaissement {self.recu_numero} du {self.date} - {self.montant_total} FCFA"
@@ -478,6 +574,41 @@ class Depense(Auditable):
             )
         ]
 
+    # Protected fields configuration
+    editable_statuses = [Statut.ENGAGEE]
+    protected_fields = ['date', 'categorie_mouvement', 'beneficiaire', 'designation', 'montant', 'compte', 'ecole', 'annee_scolaire', 'piece_justificative']
+    deletable_statuses = [Statut.ENGAGEE]
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            try:
+                original = Depense.objects.get(pk=self.pk)
+            except Depense.DoesNotExist:
+                pass
+            else:
+                if original.statut not in self.editable_statuses:
+                    for field in self.protected_fields:
+                        original_value = getattr(original, field)
+                        current_value = getattr(self, field)
+                        if original_value != current_value:
+                            raise ValidationError(
+                                f"Le champ '{field}' ne peut pas être modifié pour une dépense avec le statut '{original.statut}'."
+                            )
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        if self.pk:
+            try:
+                original = Depense.objects.get(pk=self.pk)
+            except Depense.DoesNotExist:
+                pass
+            else:
+                if original.statut not in self.deletable_statuses:
+                    raise ValidationError(
+                        f"Suppression interdite pour une dépense avec le statut '{original.statut}'."
+                    )
+        super().delete(*args, **kwargs)
+
     def __str__(self):
         return f"Dépense {self.id}: {self.beneficiaire} - {self.designation} ({self.montant} FCFA)"
 
@@ -559,10 +690,42 @@ class ArreteCaisse(Auditable):
             )
         ]
 
+    # Protected fields configuration
+    editable_statuses = [Statut.EN_COURS]
+    protected_fields = ['compte', 'date', 'solde_theorique', 'solde_physique', 'fait_par', 'valide_par']
+    deletable_statuses = [Statut.EN_COURS]
+
     def save(self, *args, **kwargs):
+        if self.pk:
+            try:
+                original = ArreteCaisse.objects.get(pk=self.pk)
+            except ArreteCaisse.DoesNotExist:
+                pass
+            else:
+                if original.statut not in self.editable_statuses:
+                    for field in self.protected_fields:
+                        original_value = getattr(original, field)
+                        current_value = getattr(self, field)
+                        if original_value != current_value:
+                            raise ValidationError(
+                                f"Le champ '{field}' ne peut pas être modifié pour un arrêté de caisse avec le statut '{original.statut}'."
+                            )
         # Calculate ecart automatically
         self.ecart = self.solde_physique - self.solde_theorique
         super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        if self.pk:
+            try:
+                original = ArreteCaisse.objects.get(pk=self.pk)
+            except ArreteCaisse.DoesNotExist:
+                pass
+            else:
+                if original.statut not in self.deletable_statuses:
+                    raise ValidationError(
+                        f"Suppression interdite pour un arrêté de caisse avec le statut '{original.statut}'."
+                    )
+        super().delete(*args, **kwargs)
 
     def __str__(self):
         return f"Arrêté de caisse {self.compte.code} du {self.date} - Écart: {self.ecart} FCFA"

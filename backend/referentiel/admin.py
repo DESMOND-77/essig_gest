@@ -3,7 +3,6 @@ from django.contrib import admin
 from . import models
 
 for _m in (
-    models.GroupeScolaire,
     models.Ecole,
     models.AnneeScolaire,
     models.ModaliteFormation,

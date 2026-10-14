@@ -15,7 +15,7 @@ class CompteAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ('Informations principales', {
-            'fields': ('groupe_scolaire', 'code', 'libelle', 'type')
+            'fields': ('code', 'libelle', 'type')
         }),
         ('Informations bancaires', {
             'fields': ('numero_bancaire', 'banque')

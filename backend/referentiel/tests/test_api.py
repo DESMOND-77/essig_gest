@@ -48,13 +48,11 @@ def test_recherche_matiere():
 
 def test_direction_cree_ecole_et_ecrit_un_audit():
     c, _ = _client(Role.Code.DIRECTION)
-    g = f.GroupeScolaireFactory()
     resp = c.post(
         "/api/v1/referentiel/ecoles/",
         {
-            "groupe_scolaire": g.pk,
             "nom": "ESSIG",
-            "pole": "ESSIG",
+            "sigle": "ESSIG",
             "regime": "LMD",
         },
         format="json",
@@ -67,11 +65,10 @@ def test_direction_cree_ecole_et_ecrit_un_audit():
 
 def test_scolarite_cree_classe_mais_pas_ecole():
     c, _ = _client(Role.Code.SCOLARITE)
-    g = f.GroupeScolaireFactory()
     assert (
         c.post(
             "/api/v1/referentiel/ecoles/",
-            {"groupe_scolaire": g.pk, "nom": "x", "pole": "CFPA", "regime": "CLASSIQUE"},
+            {"nom": "x", "sigle": "CFPA", "regime": "CLASSIQUE"},
             format="json",
         ).status_code
         == 403
@@ -139,8 +136,7 @@ def test_annee_courante_bascule_via_api():
 def test_audit_suppression_seulement_si_succes():
     from comptes.models import JournalAudit
     c, _ = _client(Role.Code.DIRECTION)
-    g = f.GroupeScolaireFactory()
-    e = f.EcoleFactory(groupe_scolaire=g)
+    e = f.EcoleFactory()
     n = f.NiveauFactory(ecole=e)
     assert c.delete(f"/api/v1/referentiel/ecoles/{e.pk}/").status_code == 409
     assert not JournalAudit.objects.filter(action="SUPPRESSION", table_cible="ecole").exists()

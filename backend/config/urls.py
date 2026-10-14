@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
@@ -18,3 +20,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/", include((api_v1, "v1"))),
 ]
+
+if settings.DEBUG:
+    # En production, Caddy sert /media/ directement (cf. infra/Caddyfile) ; en
+    # dev, le serveur de développement Django doit le faire lui-même.
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -9,20 +9,16 @@ TRUNCATE TABLE filiere;
 TRUNCATE TABLE niveau;
 TRUNCATE TABLE annee_scolaire;
 TRUNCATE TABLE ecole;
-TRUNCATE TABLE groupe_scolaire;
 SET FOREIGN_KEY_CHECKS = 1;
 
-INSERT INTO groupe_scolaire (nom, sigle) VALUES ('Groupe Scolaire USIA', 'USIA');
-SET @g_groupe = LAST_INSERT_ID();
-
-INSERT INTO ecole (groupe_scolaire_id, nom, sigle, pole, regime) VALUES
-  (@g_groupe, 'Ecole Superieure des Sciences d''Informatique et de Gestion', 'ESSIG', 'ESSIG', 'LMD');
+INSERT INTO ecole (nom, sigle, regime) VALUES
+  ('Ecole Superieure des Sciences d''Informatique et de Gestion', 'ESSIG', 'LMD');
 SET @e_essig = LAST_INSERT_ID();
-INSERT INTO ecole (groupe_scolaire_id, nom, sigle, pole, regime) VALUES
-  (@g_groupe, 'Universite Polytechnique des Sciences de la Sante', 'UPSS', 'UPSS', 'LMD');
+INSERT INTO ecole (nom, sigle, regime) VALUES
+  ('Universite Polytechnique des Sciences de la Sante', 'UPSS', 'LMD');
 SET @e_upss = LAST_INSERT_ID();
-INSERT INTO ecole (groupe_scolaire_id, nom, sigle, pole, regime) VALUES
-  (@g_groupe, 'Centre de Formation Polytechnique Appliquee', 'CFPA', 'CFPA', 'CLASSIQUE');
+INSERT INTO ecole (nom, sigle, regime) VALUES
+  ('Centre de Formation Polytechnique Appliquee', 'CFPA', 'CLASSIQUE');
 SET @e_cfpa = LAST_INSERT_ID();
 
 INSERT INTO annee_scolaire (libelle, date_debut, date_fin, est_courante)
@@ -144,10 +140,10 @@ TRUNCATE TABLE virement;
 TRUNCATE TABLE compte;
 SET FOREIGN_KEY_CHECKS = 1;
 
-INSERT INTO compte (groupe_scolaire_id, code, libelle, type, solde_initial) VALUES
-  (@g_groupe, 'CAISSE', 'Caisse principale', 'CAISSE', 0),
-  (@g_groupe, 'BANQUE_A', 'Banque compte A', 'BANQUE', 0),
-  (@g_groupe, 'AIRTEL_MONEY', 'Airtel Money', 'MOBILE_MONEY', 0);
+INSERT INTO compte (code, libelle, type, solde_initial) VALUES
+  ('CAISSE', 'Caisse principale', 'CAISSE', 0),
+  ('BANQUE_A', 'Banque compte A', 'BANQUE', 0),
+  ('AIRTEL_MONEY', 'Airtel Money', 'MOBILE_MONEY', 0);
 SET @cpt_caisse = (SELECT id FROM compte WHERE code='CAISSE');
 SET @cpt_banque = (SELECT id FROM compte WHERE code='BANQUE_A');
 

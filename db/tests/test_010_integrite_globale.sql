@@ -13,15 +13,17 @@ CALL assert_equals('0', CAST((
     AND (engine <> 'InnoDB' OR table_collation <> 'utf8mb4_unicode_ci')
 ) AS CHAR), 'toutes les tables sont InnoDB + utf8mb4_unicode_ci');
 
--- (b) nombre total de tables de base attendu = 49
---     (migrations 001-007 : 11 + 4 + 6 + 5 + 9 + 6 + 8 = 49 CREATE TABLE ;
---      module 1 : 11, utilisateurs/audit : 4, personnes/inscriptions : 6,
+-- (b) nombre total de tables de base attendu = 48
+--     (migrations 001-007 : 10 + 4 + 6 + 5 + 9 + 6 + 8 = 48 CREATE TABLE ;
+--      module 1 : 10 (groupe_scolaire supprimee, cf.
+--      docs/superpowers/specs/2026-10-14-suppression-pole-groupe-scolaire-design.md),
+--      utilisateurs/audit : 4, personnes/inscriptions : 6,
 --      scolarite : 5, tresorerie : 9, RH/paie : 6, evaluations : 8).
-CALL assert_equals('49', CAST((
+CALL assert_equals('48', CAST((
   SELECT COUNT(*) FROM information_schema.tables
   WHERE table_schema = DATABASE() AND table_type = 'BASE TABLE'
     AND table_name NOT LIKE '\_test\_%'
-) AS CHAR), '49 tables de base');
+) AS CHAR), '48 tables de base');
 
 -- (c) chaque table transactionnelle listee porte bien une colonne cree_le.
 CALL assert_equals('0', CAST((

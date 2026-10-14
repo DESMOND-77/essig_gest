@@ -3,7 +3,7 @@ import type { Descripteur } from "../../referentiel/descripteur";
 
 export const compteDescripteur: Descripteur = {
   titre: "Comptes",
-  endpoint: "comptes",
+  endpoint: "tresorerie/comptes",
   roleEcriture: ["COMPTABLE", "DAF"],
   colonnes: [
     { cle: "code", entete: "Code" },
@@ -14,7 +14,6 @@ export const compteDescripteur: Descripteur = {
     { cle: "actif", entete: "Actif", rendu: (ligne) => (ligne.actif ? "Oui" : "Non") },
   ],
   champs: [
-    { nom: "groupe_scolaire", label: "Groupe scolaire", type: "fk", requis: true, fkEndpoint: "referentiel/groupes-scolaires", fkLabel: (o) => String(o.nom) },
     { nom: "code", label: "Code", type: "text", requis: true },
     { nom: "libelle", label: "Libellé", type: "text", requis: true },
     { nom: "type", label: "Type", type: "select", requis: true, options: [
@@ -28,7 +27,6 @@ export const compteDescripteur: Descripteur = {
     { nom: "actif", label: "Actif", type: "checkbox", requis: true },
   ],
   schema: z.object({
-    groupe_scolaire: z.number({ error: "Obligatoire" }),
     code: z.string().min(1, "Obligatoire").max(30),
     libelle: z.string().min(1, "Obligatoire").max(120),
     type: z.enum(["CAISSE", "BANQUE", "MOBILE_MONEY", "VIRTUEL"]),

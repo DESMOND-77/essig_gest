@@ -2,30 +2,16 @@
 -- Spec : docs/superpowers/specs/2026-08-29-modele-donnees-gestion-groupe-scolaire-design.md §6 module 1
 SET NAMES utf8mb4;
 
-CREATE TABLE groupe_scolaire (
-  id       INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  nom      VARCHAR(120) NOT NULL,
-  sigle    VARCHAR(20)  NULL,
-  logo     VARCHAR(255) NULL,
-  contacts VARCHAR(120) NULL,
-  email    VARCHAR(120) NULL,
-  adresse  VARCHAR(255) NULL,
-  PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 CREATE TABLE ecole (
   id                 INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  groupe_scolaire_id INT UNSIGNED NOT NULL,
   nom                VARCHAR(120) NOT NULL,
   sigle              VARCHAR(20)  NULL,
-  pole               ENUM('ESSIG','UPSS','CFPA','CICI') NOT NULL,
   regime             ENUM('LMD','CLASSIQUE') NOT NULL,
   logo               VARCHAR(255) NULL,
   contacts           VARCHAR(120) NULL,
   email              VARCHAR(120) NULL,
-  PRIMARY KEY (id),
-  KEY idx_ecole_groupe (groupe_scolaire_id),
-  CONSTRAINT fk_ecole_groupe FOREIGN KEY (groupe_scolaire_id) REFERENCES groupe_scolaire (id)
+  adresse            VARCHAR(255) NULL,
+  PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE annee_scolaire (

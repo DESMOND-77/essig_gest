@@ -24,7 +24,7 @@ beforeEach(() => {
   useAuthMock.mockReset().mockReturnValue({ utilisateur: { roles: [{ code: "LECTURE" }] } });
   apiFetchMock.mockReset().mockResolvedValue(
     pageRep([
-      { id: 1, nom: "ESSIG", sigle: "E", pole: "ESSIG", regime: "LMD", groupe_scolaire_libelle: "GSF" },
+      { id: 1, nom: "ESSIG", sigle: "E", regime: "LMD" },
     ]),
   );
 });
@@ -54,10 +54,10 @@ function monter(chemin: string) {
 }
 
 describe("routes référentiel", () => {
-  it("câble les 11 ressources sous le segment /referentiel", () => {
+  it("câble les 10 ressources sous le segment /referentiel", () => {
     expect(routesReferentiel).toHaveLength(1);
     expect(routesReferentiel[0].path).toBe("referentiel");
-    expect(routesReferentiel[0].children).toHaveLength(11);
+    expect(routesReferentiel[0].children).toHaveLength(10);
     const segments = routesReferentiel[0].children!.map((r) => r.path);
     expect(segments).toContain("ecoles");
     expect(segments).toContain("sessions-examen");

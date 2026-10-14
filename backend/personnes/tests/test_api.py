@@ -1,3 +1,5 @@
+from unittest import mock
+
 import pytest
 from rest_framework.test import APIClient
 
@@ -5,6 +7,7 @@ from comptes.models import JournalAudit, Role, UtilisateurRole
 from comptes.tests.factories import UtilisateurFactory
 from personnes import models
 from personnes.tests import factories as f
+from referentiel.tests.factories import EcoleFactory
 
 pytestmark = pytest.mark.django_db
 
@@ -22,6 +25,7 @@ def _client(role_code=None, superuser=False):
 
 
 def test_creation_etudiant_attribue_le_matricule_et_ecrit_un_audit():
+    EcoleFactory(sigle="ESSIG")
     c, _ = _client(Role.Code.SCOLARITE)
     resp = c.post(
         "/api/v1/personnes/etudiants/",
@@ -29,7 +33,7 @@ def test_creation_etudiant_attribue_le_matricule_et_ecrit_un_audit():
             "nom": "Gumapi clos",
             "prenoms": "desmond junior",
             "sexe": "F",
-            "pole": "ESSIG",
+            "ecole_sigle": "ESSIG",
         },
         format="json",
     )
@@ -43,12 +47,35 @@ def test_creation_etudiant_attribue_le_matricule_et_ecrit_un_audit():
     )
 
 
+def test_creation_etudiant_echec_tardif_annule_aussi_le_compteur_matricule():
+    """Régression : EtudiantViewSet.perform_create enveloppe maintenant la création dans
+    `transaction.atomic()`, par symétrie avec InscriptionViewSet. Sans ce verrou transactionnel,
+    un échec après `generer_matricule()` (qui incrémente CompteurMatricule) laissait le compteur
+    incrémenté ("brûlé") même si l'Etudiant n'était jamais inséré."""
+    EcoleFactory(sigle="ESSIG")
+    c, _ = _client(Role.Code.SCOLARITE)
+
+    with mock.patch.object(
+        models.Etudiant.objects, "create", side_effect=RuntimeError("échec simulé tardif")
+    ):
+        with pytest.raises(RuntimeError):
+            c.post(
+                "/api/v1/personnes/etudiants/",
+                {"nom": "Echec", "prenoms": "Tardif", "sexe": "M", "ecole_sigle": "ESSIG"},
+                format="json",
+            )
+
+    assert models.Etudiant.objects.count() == 0
+    assert models.CompteurMatricule.objects.filter(ecole_sigle="ESSIG").count() == 0
+
+
 def test_lecture_ouverte_ecriture_refusee_en_lecture_seule():
+    EcoleFactory(sigle="UPSS")
     c, _ = _client(Role.Code.LECTURE)
     assert c.get("/api/v1/personnes/etudiants/").status_code == 200
     resp = c.post(
         "/api/v1/personnes/etudiants/",
-        {"nom": "X", "prenoms": "Y", "sexe": "M", "pole": "UPSS"},
+        {"nom": "X", "prenoms": "Y", "sexe": "M", "ecole_sigle": "UPSS"},
         format="json",
     )
     assert resp.status_code == 403
@@ -59,25 +86,27 @@ def test_lecture_ouverte_ecriture_refusee_en_lecture_seule():
     [("DIRECTION", 201), ("SCOLARITE", 201), ("COMPTABLE", 403), ("DAF", 403)],
 )
 def test_ecriture_par_role(role, attendu):
+    EcoleFactory(sigle="ESSIG")
     c, _ = _client(role)
     resp = c.post(
         "/api/v1/personnes/etudiants/",
-        {"nom": "N", "prenoms": "P", "sexe": "M", "pole": "ESSIG"},
+        {"nom": "N", "prenoms": "P", "sexe": "M", "ecole_sigle": "ESSIG"},
         format="json",
     )
     assert resp.status_code == attendu
 
 
 def test_recherche_par_matricule_nom_prenoms():
+    EcoleFactory(sigle="ESSIG")
     c, _ = _client(Role.Code.SCOLARITE)
     c.post(
         "/api/v1/personnes/etudiants/",
-        {"nom": "Ndong", "prenoms": "Alice", "sexe": "F", "pole": "ESSIG"},
+        {"nom": "Ndong", "prenoms": "Alice", "sexe": "F", "ecole_sigle": "ESSIG"},
         format="json",
     )
     c.post(
         "/api/v1/personnes/etudiants/",
-        {"nom": "Obame", "prenoms": "Bob", "sexe": "M", "pole": "ESSIG"},
+        {"nom": "Obame", "prenoms": "Bob", "sexe": "M", "ecole_sigle": "ESSIG"},
         format="json",
     )
     resp = c.get("/api/v1/personnes/etudiants/?search=ndong")
@@ -238,6 +267,23 @@ def test_suppression_inscription_sans_enfant_204():
     c, _ = _client(Role.Code.DIRECTION)
     i = f.InscriptionFactory()
     assert c.delete(f"/api/v1/personnes/inscriptions/{i.pk}/").status_code == 204
+
+
+def test_reste_a_payer_inscription():
+    """Endpoint ajouté pour le frontend trésorerie (affichage informatif avant encaissement) :
+    GET /personnes/inscriptions/{id}/reste-a-payer/."""
+    from scolarite.tests import factories as sf
+
+    c, _ = _client(Role.Code.SCOLARITE)
+    i = f.InscriptionFactory()
+    sf.EcheanceFactory(inscription=i, numero=0, montant=100000, montant_paye=40000)
+
+    resp = c.get(f"/api/v1/personnes/inscriptions/{i.pk}/reste-a-payer/")
+    assert resp.status_code == 200, resp.data
+    assert resp.data["reste_a_payer"] == 60000
+
+    resp_inexistant = c.get("/api/v1/personnes/inscriptions/999999/reste-a-payer/")
+    assert resp_inexistant.status_code == 404
 
 
 @pytest.mark.parametrize(

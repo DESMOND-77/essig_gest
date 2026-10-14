@@ -1,4 +1,7 @@
+import threading
+
 import pytest
+from django.db import connection
 
 from referentiel import models, services
 from referentiel.tests import factories as f
@@ -43,4 +46,39 @@ def test_definir_annee_courante_bascule_les_autres():
     a2.refresh_from_db()
     assert a2.est_courante is True
     assert a1.est_courante is False
+    assert models.AnneeScolaire.objects.filter(est_courante=True).count() == 1
+
+
+@pytest.mark.django_db(transaction=True)
+def test_definir_annee_courante_sous_concurrence_garde_une_seule_annee_courante():
+    """Régression : sans verrou (select_for_update), deux bascules concurrentes parties d'un
+    état où aucune année n'est encore courante pouvaient toutes les deux committer et laisser
+    deux `AnneeScolaire.est_courante=True` simultanément (la contrainte DB est un no-op MySQL,
+    cf. models.AnneeScolaire). Avec le verrou, les deux transactions se sérialisent."""
+    a1 = f.AnneeScolaireFactory(est_courante=False)
+    a2 = f.AnneeScolaireFactory(est_courante=False)
+
+    barrier = threading.Barrier(2)
+    errors = []
+
+    def run(annee_id):
+        try:
+            barrier.wait(timeout=5)
+            annee = models.AnneeScolaire.objects.get(pk=annee_id)
+            services.definir_annee_courante(annee)
+        except Exception as exc:  # pragma: no cover - surfaced via `errors` assertion
+            errors.append(exc)
+        finally:
+            connection.close()
+
+    threads = [
+        threading.Thread(target=run, args=(a1.pk,)),
+        threading.Thread(target=run, args=(a2.pk,)),
+    ]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+
+    assert not errors, errors
     assert models.AnneeScolaire.objects.filter(est_courante=True).count() == 1

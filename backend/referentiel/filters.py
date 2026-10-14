@@ -3,16 +3,10 @@ import django_filters as df
 from . import models
 
 
-class GroupeScolaireFilter(df.FilterSet):
-    class Meta:
-        model = models.GroupeScolaire
-        fields = {"nom": ["icontains"]}
-
-
 class EcoleFilter(df.FilterSet):
     class Meta:
         model = models.Ecole
-        fields = {"groupe_scolaire": ["exact"], "pole": ["exact"], "regime": ["exact"]}
+        fields = {"regime": ["exact"], "nom": ["icontains"], "sigle": ["exact"]}
 
 
 class AnneeScolaireFilter(df.FilterSet):

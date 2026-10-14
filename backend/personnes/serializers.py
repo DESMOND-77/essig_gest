@@ -38,9 +38,10 @@ class EtudiantListSerializer(serializers.ModelSerializer):
 
 
 class EtudiantSerializer(serializers.ModelSerializer):
-    pole = serializers.ChoiceField(
-        choices=Ecole.Pole.choices, write_only=True, required=False
-    )
+    # Ecole (sigle) obligatoire à la création uniquement pour prefixer le matricule
+    # genere serveur ; l'ecole n'est pas un champ persiste sur Etudiant (identite
+    # independante de la scolarite annuelle, portee par Inscription).
+    ecole_sigle = serializers.CharField(write_only=True, required=False)
     affiliations = AffiliationSerializer(many=True, read_only=True)
     situation_bac = SituationBacSerializer(read_only=True)
 
@@ -51,22 +52,27 @@ class EtudiantSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # `pole` obligatoire à la création (self.instance is None), ignoré en MAJ.
-        self.fields["pole"].required = self.instance is None
+        # `ecole_sigle` obligatoire à la création (self.instance is None), ignoré en MAJ.
+        self.fields["ecole_sigle"].required = self.instance is None
+
+    def validate_ecole_sigle(self, value):
+        if not Ecole.objects.filter(sigle=value).exists():
+            raise serializers.ValidationError("Aucune école avec ce sigle.")
+        return value
 
     def create(self, validated_data):
-        pole = validated_data.pop("pole", None)
-        if not pole:
+        ecole_sigle = validated_data.pop("ecole_sigle", None)
+        if not ecole_sigle:
             raise serializers.ValidationError(
-                {"pole": "Le pôle est obligatoire à la création."}
+                {"ecole_sigle": "L'école est obligatoire à la création."}
             )
         validated_data["matricule"] = services.generer_matricule(
-            pole, validated_data["nom"], validated_data["prenoms"]
+            ecole_sigle, validated_data["nom"], validated_data["prenoms"]
         )
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
-        validated_data.pop("pole", None)
+        validated_data.pop("ecole_sigle", None)
         validated_data.pop("matricule", None)
         return super().update(instance, validated_data)
 
@@ -75,6 +81,13 @@ class PieceDossierSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.PieceDossier
         fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Empêche un PATCH de rattacher la pièce à une autre inscription après création
+        # (writable à la création, verrouillé ensuite, cf. InscriptionSerializer.classe).
+        if self.instance is not None:
+            self.fields["inscription"].read_only = True
 
 
 class InscriptionListSerializer(serializers.ModelSerializer):

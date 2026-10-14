@@ -1,7 +1,6 @@
 import { z } from "zod";
 import type { Descripteur } from "../../referentiel/descripteur";
 
-const POLES = ["ESSIG", "UPSS", "CFPA", "CICI"].map((v) => ({ valeur: v, label: v }));
 const SEXES = [
   { valeur: "M", label: "Masculin" },
   { valeur: "F", label: "Féminin" },
@@ -36,7 +35,7 @@ export const etudiantDescripteur: Descripteur = {
     },
   ],
   champs: [
-    { nom: "pole", label: "Pôle", type: "select", requis: true, creationSeule: true, options: POLES },
+    { nom: "ecole_sigle", label: "École (sigle)", type: "text", requis: true, creationSeule: true },
     { nom: "nom", label: "Nom", type: "text", requis: true },
     { nom: "prenoms", label: "Prénoms", type: "text", requis: true },
     { nom: "sexe", label: "Sexe", type: "select", requis: true, options: SEXES },
@@ -49,7 +48,7 @@ export const etudiantDescripteur: Descripteur = {
     { nom: "situation_matrimoniale", label: "Situation matrimoniale", type: "select", options: MATRIMONIAL },
   ],
   schema: z.object({
-    pole: z.enum(["ESSIG", "UPSS", "CFPA", "CICI"]).optional(),
+    ecole_sigle: z.string().min(1, "Obligatoire").max(20).optional(),
     nom: z.string().min(1, "Obligatoire").max(60),
     prenoms: z.string().min(1, "Obligatoire").max(120),
     sexe: z.enum(["M", "F"]),

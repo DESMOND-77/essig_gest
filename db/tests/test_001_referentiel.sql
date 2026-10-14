@@ -1,19 +1,19 @@
 -- Test 001 : structure et contraintes du référentiel académique.
 START TRANSACTION;
 
--- 11 tables créées par la migration 001
-CALL assert_equals('11', CAST((
+-- 10 tables créées par la migration 001
+CALL assert_equals('10', CAST((
   SELECT COUNT(*) FROM information_schema.tables
   WHERE table_schema = DATABASE()
-    AND table_name IN ('groupe_scolaire','ecole','annee_scolaire','modalite_formation','niveau',
+    AND table_name IN ('ecole','annee_scolaire','modalite_formation','niveau',
                        'filiere','option_filiere','classe','matiere','periode','session_examen')
-) AS CHAR), 'les 11 tables du referentiel existent');
+) AS CHAR), 'les 10 tables du referentiel existent');
 
 -- toutes en InnoDB / utf8mb4
 CALL assert_equals('0', CAST((
   SELECT COUNT(*) FROM information_schema.tables
   WHERE table_schema = DATABASE()
-    AND table_name IN ('groupe_scolaire','ecole','niveau','classe','matiere')
+    AND table_name IN ('ecole','niveau','classe','matiere')
     AND (engine <> 'InnoDB' OR table_collation <> 'utf8mb4_unicode_ci')
 ) AS CHAR), 'moteur InnoDB + collation utf8mb4_unicode_ci');
 
@@ -24,8 +24,7 @@ CALL assert_equals('4', CAST((
 ) AS CHAR), 'classe a 4 cles etrangeres');
 
 -- unicite (ecole_id, code) sur niveau : deux L1 dans la meme ecole doivent echouer
-INSERT INTO groupe_scolaire (nom) VALUES ('G tmp'); SET @gt = LAST_INSERT_ID();
-INSERT INTO ecole (groupe_scolaire_id, nom, pole, regime) VALUES (@gt, 'E tmp', 'ESSIG', 'LMD');
+INSERT INTO ecole (nom, regime) VALUES ('E tmp', 'LMD');
 SET @et = LAST_INSERT_ID();
 INSERT INTO niveau (ecole_id, code, libelle, ordre, credits_requis) VALUES (@et, 'L1', 'Licence 1', 1, 60);
 

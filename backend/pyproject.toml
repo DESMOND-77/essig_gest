@@ -23,6 +23,7 @@ dependencies = [
     "gunicorn>=23,<24",
     "django-storages>=1.14,<2",
     "dj-database-url>=2.3,<3",
+    "Pillow>=11,<13",
 ]
 
 [project.optional-dependencies]

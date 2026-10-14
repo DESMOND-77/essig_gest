@@ -25,11 +25,13 @@ def initiales(nom: str, prenoms: str) -> str:
 
 
 @transaction.atomic
-def generer_matricule(pole: str, nom: str, prenoms: str) -> str:
-    compteur, _ = CompteurMatricule.objects.select_for_update().get_or_create(pole=pole)
+def generer_matricule(ecole_sigle: str, nom: str, prenoms: str) -> str:
+    compteur, _ = CompteurMatricule.objects.select_for_update().get_or_create(
+        ecole_sigle=ecole_sigle
+    )
     compteur.valeur += 1
     compteur.save(update_fields=["valeur"])
-    return f"{pole}-FCV{initiales(nom, prenoms)}{compteur.valeur}"
+    return f"{ecole_sigle}-FCV{initiales(nom, prenoms)}{compteur.valeur}"
 
 
 @transaction.atomic

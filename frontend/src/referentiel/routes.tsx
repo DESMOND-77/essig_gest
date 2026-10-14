@@ -5,7 +5,6 @@ import { anneeScolaireDescripteur } from "./config/anneeScolaire";
 import { classeDescripteur } from "./config/classe";
 import { ecoleDescripteur } from "./config/ecole";
 import { filiereDescripteur } from "./config/filiere";
-import { groupeScolaireDescripteur } from "./config/groupeScolaire";
 import { matiereDescripteur } from "./config/matiere";
 import { modaliteFormationDescripteur } from "./config/modaliteFormation";
 import { niveauDescripteur } from "./config/niveau";
@@ -14,7 +13,6 @@ import { periodeDescripteur } from "./config/periode";
 import { sessionExamenDescripteur } from "./config/sessionExamen";
 
 const paires: readonly (readonly [string, Descripteur])[] = [
-  ["groupes-scolaires", groupeScolaireDescripteur],
   ["ecoles", ecoleDescripteur],
   ["annees-scolaires", anneeScolaireDescripteur],
   ["modalites-formation", modaliteFormationDescripteur],
