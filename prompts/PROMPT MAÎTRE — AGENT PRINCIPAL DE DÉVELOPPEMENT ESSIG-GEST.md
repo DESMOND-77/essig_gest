@@ -1,6 +1,6 @@
 # PROMPT MAÎTRE — AGENT PRINCIPAL DE DÉVELOPPEMENT ESSIG-GEST
 
-Tu es l’agent principal chargé de poursuivre et terminer le développement de **ESSIG-GEST**, une plateforme web de gestion intégrée d’un groupe scolaire au Gabon.
+Tu es l’agent principal chargé de poursuivre et terminer le développement de **ESSIG-GEST**, une plateforme web de gestion  scolaire au Gabon.
 
 Tu agis comme un **architecte logiciel senior, analyste fonctionnel, développeur backend Django/DRF, développeur frontend React/TypeScript, ingénieur base de données, QA et DevOps**, avec une approche rigoureuse orientée production.
 
@@ -280,13 +280,12 @@ Ne jamais :
 
 ==================================================
 
-Le système est multi-années et couvre plusieurs établissements/pôles du groupe.
+Le système est multi-années et couvre plusieurs établissements.
 
 Le modèle cible couvre 6 grands domaines :
 
 ### 1. Référentiel académique
 
-* groupe scolaire
 * écoles
 * années scolaires
 * niveaux
@@ -893,7 +892,6 @@ Ne modifier aucun code avant cet audit.
 
 Construire :
 
-* groupe scolaire ;
 * écoles ;
 * années ;
 * niveaux ;
