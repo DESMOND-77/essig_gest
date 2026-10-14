@@ -1,6 +1,5 @@
 # backend/tresorerie/permissions.py
 from rest_framework import permissions
-from comptes.models import Utilisateur
 
 
 class TresoreriePermission(permissions.BasePermission):
@@ -17,8 +16,12 @@ class TresoreriePermission(permissions.BasePermission):
         if not request.user or not request.user.is_authenticated:
             return False
 
-        # Obtenir le rôle de l'utilisateur
-        user_roles = request.user.groups.values_list('name', flat=True)
+        # Obtenir les rôles de l'utilisateur. Régression : ce fichier utilisait
+        # `request.user.groups` (groupes Django standard, jamais peuplés dans ce projet —
+        # les rôles sont assignés via `comptes.UtilisateurRole`, cf. rh_paie/referentiel/
+        # personnes/scolarite permissions.py), ce qui bloquait silencieusement TOUTE écriture
+        # et TOUTE validation sur l'ensemble du module trésorerie, pour tous les rôles.
+        user_roles = request.user.roles.values_list('role__code', flat=True)
 
         # Définir les rôles autorisés selon le type d'opération
         if request.method in permissions.SAFE_METHODS:  # GET, HEAD, OPTIONS
@@ -40,7 +43,7 @@ class TresorerieValidationPermission(permissions.BasePermission):
         if not request.user or not request.user.is_authenticated:
             return False
 
-        user_roles = request.user.groups.values_list('name', flat=True)
+        user_roles = request.user.roles.values_list('role__code', flat=True)
         # Validation autorisée pour DAF, DIRECTION, COMPTABLE
         autorises_validation = ['DAF', 'DIRECTION', 'COMPTABLE']
         return any(role in user_roles for role in autorises_validation)
@@ -55,33 +58,29 @@ class TresorerieLectureSeulePermission(permissions.BasePermission):
         if not request.user or not request.user.is_authenticated:
             return False
 
-        user_roles = request.user.groups.values_list('name', flat=True)
-        # Lecture seule autorisée pour tous les rôles authentifiés
-        return True  # Tous les utilisateurs authentifiés peuvent lire en base
+        # Lecture seule autorisée pour tous les utilisateurs authentifiés.
+        return True
 
 
 class IsCompteOwnerOrReadOnly(permissions.BasePermission):
     """
-    Permission personnalisée pour vérifier que l'utilisateur appartient
-    au même groupe scolaire que le compte.
+    Permission d'écriture sur les comptes de trésorerie.
+
+    Régression : cette classe comparait `request.user.groupe_scolaire_id` à
+    `obj.groupe_scolaire_id`, mais `comptes.Utilisateur` n'a pas de champ
+    `groupe_scolaire` (CLAUDE.md : « un seul groupe scolaire », notion non modélisée sur
+    l'utilisateur) — la comparaison valait toujours `None == <id>`, donc refusait
+    systématiquement l'écriture, pour tout le monde. Le projet étant mono-groupe-scolaire en v1
+    (multi-tenant explicitement hors périmètre, CLAUDE.md §9), l'autorisation d'écriture se
+    résume au contrôle par rôle, identique à `TresoreriePermission`.
     """
 
     def has_object_permission(self, request, view, obj):
-        # Lecture autorisée pour tous les rôles authentifiés
         if request.method in permissions.SAFE_METHODS:
-            user_roles = request.user.groups.values_list('name', flat=True)
+            user_roles = request.user.roles.values_list('role__code', flat=True)
             autorises_lecture = ['COMPTABLE', 'DAF', 'DIRECTION', 'SCOLARITE', 'LECTURE']
             return any(role in user_roles for role in autorises_lecture)
 
-        # Pour les opérations d'écriture, vérifier l'appartenance au groupe scolaire
-        if hasattr(obj, 'groupe_scolaire'):
-            user_groupscolaire = request.user.groupe_scolaire_id if hasattr(request.user, 'groupe_scolaire_id') else None
-            return user_groupscolaire == obj.groupe_scolaire_id
-
-        # Pour les objets liés à un compte, vérifier via le compte
-        if hasattr(obj, 'compte'):
-            user_groupscolaire = request.user.groupe_scolaire_id if hasattr(request.user, 'groupe_scolaire_id') else None
-            return user_groupscolaire == obj.compte.groupe_scolaire_id
-
-        # Par défaut, refuser l'écriture si on ne peut pas déterminer l'appartenance
-        return False
+        user_roles = request.user.roles.values_list('role__code', flat=True)
+        autorises_ecriture = ['COMPTABLE', 'DAF']
+        return any(role in user_roles for role in autorises_ecriture)

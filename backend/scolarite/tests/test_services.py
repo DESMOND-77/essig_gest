@@ -4,7 +4,7 @@ import decimal
 from django.test import TestCase
 from django.db import transaction
 from ..models import ModalitePaiement, TypeFrais, FraisInscription, Echeance, Bourse
-from referentiel.models import Niveau, AnneeScolaire, Ecole, Classe, GroupeScolaire, OptionFiliere, ModaliteFormation, Filiere
+from referentiel.models import Niveau, AnneeScolaire, Ecole, Classe, OptionFiliere, ModaliteFormation, Filiere
 from personnes.models import Etudiant, Inscription
 from ..services import (
     generer_echeancier_inscription,
@@ -17,11 +17,8 @@ from ..services import (
 class ScolariteServicesTest(TestCase):
     def setUp(self):
         # Setup referentiel data
-        groupe_scolaire = GroupeScolaire.objects.create(nom="Groupe Test")
         ecole = Ecole.objects.create(
             nom="Ecole Test",
-            groupe_scolaire=groupe_scolaire,
-            pole="ESSIG",
             regime="LMD"
         )
         self.niveau = Niveau.objects.create(
@@ -69,8 +66,6 @@ class ScolariteServicesTest(TestCase):
         # Create required related objects for Inscription
         self.ecole = Ecole.objects.create(
             nom="Ecole Test",
-            groupe_scolaire=GroupeScolaire.objects.create(nom="Groupe Test"),
-            pole="ESSIG",
             regime="LMD"
         )
 

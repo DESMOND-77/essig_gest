@@ -3,7 +3,7 @@ import type { Descripteur } from "../../referentiel/descripteur";
 
 export const billetageDescripteur: Descripteur = {
   titre: "Billetage",
-  endpoint: "billetage",
+  endpoint: "tresorerie/billetage",
   roleEcriture: ["COMPTABLE", "DAF"],
   colonnes: [
     { cle: "arrete_caisse_date", entete: "Date arrêté", rendu: (ligne) => ligne.arrete_caisse_date || "" },
@@ -12,7 +12,7 @@ export const billetageDescripteur: Descripteur = {
     { cle: "quantite", entete: "Quantité" },
   ],
   champs: [
-    { nom: "arrete_caisse", label: "Arrêté de caisse", type: "fk", requis: true, fkEndpoint: "arretes-caisse", fkLabel: (o) => `${o.compte.code} - ${o.date}` },
+    { nom: "arrete_caisse", label: "Arrêté de caisse", type: "fk", requis: true, fkEndpoint: "tresorerie/arretes-caisse", fkLabel: (o) => `${o.compte.code} - ${o.date}` },
     { nom: "denomination", label: "Dénomination (FCFA)", type: "number", requis: true, min: 1 },
     { nom: "quantite", label: "Quantité", type: "number", requis: true, min: 0 },
   ],

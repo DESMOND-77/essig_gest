@@ -9,3 +9,8 @@ from .depense import *
 from .arrete_caisse import *
 from .billetage import *
 from .dashboard import *
+from .services import tresorerie_service
+
+# Create a service object for easy importing (already done in services.py)
+# We re-export it here for convenience
+from .services import tresorerie_service

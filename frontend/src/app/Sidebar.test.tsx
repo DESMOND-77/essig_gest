@@ -11,7 +11,7 @@ const rendre = () =>
   );
 
 describe("Sidebar", () => {
-  it("affiche Référentiel, Personnes et Scolarité comme liens actifs", () => {
+  it("affiche Référentiel, Personnes, Scolarité et Trésorerie comme liens actifs", () => {
     rendre();
     expect(screen.getByRole("link", { name: /référentiel/i })).toHaveAttribute(
       "href",
@@ -25,11 +25,15 @@ describe("Sidebar", () => {
       "href",
       "/scolarite/modalites-paiement",
     );
+    expect(screen.getByRole("link", { name: /trésorerie/i })).toHaveAttribute(
+      "href",
+      "/tresorerie",
+    );
   });
 
-  it("désactive les 3 modules à venir", () => {
+  it("désactive les modules à venir (Paie, Résultats)", () => {
     rendre();
-    for (const nom of [/trésorerie/i, /paie/i, /résultats/i]) {
+    for (const nom of [/paie/i, /résultats/i]) {
       expect(screen.getByText(nom).closest("a")).toBeNull();
     }
   });

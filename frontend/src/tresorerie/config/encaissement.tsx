@@ -3,7 +3,7 @@ import type { Descripteur } from "../../referentiel/descripteur";
 
 export const encaissementDescripteur: Descripteur = {
   titre: "Encaissements",
-  endpoint: "encaissements",
+  endpoint: "tresorerie/encaissements",
   roleEcriture: ["COMPTABLE", "DAF"],
   colonnes: [
     { cle: "recu_numero", entete: "Numéro de reçu" },
@@ -24,7 +24,7 @@ export const encaissementDescripteur: Descripteur = {
       { valeur: "MOBILE_MONEY", label: "Mobile Money" },
       { valeur: "CHEQUE", label: "Chèque" },
     ] },
-    { nom: "compte", label: "Compte de crédit", type: "fk", requis: true, fkEndpoint: "comptes", fkLabel: (o) => `${o.code} - ${o.libelle}` },
+    { nom: "compte", label: "Compte de crédit", type: "fk", requis: true, fkEndpoint: "tresorerie/comptes", fkLabel: (o) => `${o.code} - ${o.libelle}` },
     { nom: "reference", label: "Référence de paiement", type: "text" },
   ],
   schema: z.object({

@@ -3,7 +3,7 @@ import type { Descripteur } from "../../referentiel/descripteur";
 
 export const virementDescripteur: Descripteur = {
   titre: "Virements",
-  endpoint: "virements",
+  endpoint: "tresorerie/virements",
   roleEcriture: ["COMPTABLE", "DAF"],
   colonnes: [
     { cle: "date", entete: "Date" },
@@ -13,8 +13,8 @@ export const virementDescripteur: Descripteur = {
     { cle: "statut", entete: "Statut" },
   ],
   champs: [
-    { nom: "compte_source", label: "Compte source", type: "fk", requis: true, fkEndpoint: "comptes", fkLabel: (o) => `${o.code} - ${o.libelle}` },
-    { nom: "compte_destination", label: "Compte destination", type: "fk", requis: true, fkEndpoint: "comptes", fkLabel: (o) => `${o.code} - ${o.libelle}` },
+    { nom: "compte_source", label: "Compte source", type: "fk", requis: true, fkEndpoint: "tresorerie/comptes", fkLabel: (o) => `${o.code} - ${o.libelle}` },
+    { nom: "compte_destination", label: "Compte destination", type: "fk", requis: true, fkEndpoint: "tresorerie/comptes", fkLabel: (o) => `${o.code} - ${o.libelle}` },
     { nom: "montant", label: "Montant (FCFA)", type: "number", requis: true, min: 1 },
     { nom: "date", label: "Date", type: "date", requis: true },
     { nom: "motif", label: "Motif", type: "text", requis: true },

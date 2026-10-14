@@ -1,7 +1,11 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import OpenApiTypes, extend_schema
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from core.viewsets import _BaseCrudViewSet
+from scolarite.services import calculer_reste_a_payer_inscription
 
 from . import filters as p_filters
 from . import models, permissions, serializers
@@ -24,6 +28,13 @@ class EtudiantViewSet(_BasePersonnesViewSet):
         if self.action == "list":
             return serializers.EtudiantListSerializer
         return serializers.EtudiantSerializer
+
+    def perform_create(self, serializer):
+        # Par symétrie avec InscriptionViewSet : si l'insertion échoue après l'incrément du
+        # compteur de matricule (generer_matricule), la transaction annule aussi l'incrément
+        # plutôt que de "brûler" un numéro de matricule.
+        with transaction.atomic():
+            super().perform_create(serializer)  # AuditLogMixin.perform_create
 
 
 class AffiliationViewSet(_BasePersonnesViewSet):
@@ -66,6 +77,21 @@ class InscriptionViewSet(_BasePersonnesViewSet):
     def perform_create(self, serializer):
         with transaction.atomic():
             super().perform_create(serializer)  # AuditLogMixin.perform_create
+
+    @extend_schema(responses=OpenApiTypes.OBJECT)
+    @action(detail=True, methods=["get"], url_path="reste-a-payer")
+    def reste_a_payer(self, request, pk=None):
+        """Reste à payer courant de l'inscription (échéances dues - montants déjà imputés).
+
+        Calcul informatif, exposé pour que le frontend puisse l'afficher avant un encaissement
+        (cf. scolarite.services.calculer_reste_a_payer_inscription) ; le backend reste seul
+        responsable du contrôle réel au moment de l'imputation.
+        """
+        try:
+            reste = calculer_reste_a_payer_inscription(pk)
+        except ObjectDoesNotExist:
+            return Response({"detail": "Inscription introuvable."}, status=404)
+        return Response({"reste_a_payer": reste})
 
 
 class PieceDossierViewSet(_BasePersonnesViewSet):

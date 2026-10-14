@@ -2,6 +2,7 @@
 from django.db import transaction
 from django.core.exceptions import ValidationError
 from ..models import Depense, Mouvement, Compte
+from .compte import generer_mouvement_debit
 import logging
 import types
 
@@ -69,7 +70,8 @@ def creer_depense(date, categorie_mouvement_id, beneficiaire, designation, monta
                 piece_reference=piece_justificative,
                 ecole_id=ecole_id,
                 annee_scolaire_id=annee_scolaire_id,
-                cree_par_id=cree_par_id
+                cree_par_id=cree_par_id,
+                date_operation=date
             )
 
             # Créer la dépense

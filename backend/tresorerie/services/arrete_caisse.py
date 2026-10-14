@@ -1,7 +1,7 @@
 # backend/tresorerie/services/arrete_caisse.py
 from django.db import transaction
 from django.core.exceptions import ValidationError
-from django.db.models import Sum
+from django.db.models import Sum, F, Q
 from ..models import ArreteCaisse, Billetage, Mouvement, Compte
 import logging
 import types
@@ -50,11 +50,11 @@ def calculer_solde_theorique_caisse(compte_id, date_arrete):
             mouvements_filter['date_operation__gt'] = date_debut_calcul
 
         if date_arrete:
-            movimentos_filter['date_operation__lte'] = date_arrete
+            mouvements_filter['date_operation__lte'] = date_arrete
 
         mouvements = Mouvement.objects.filter(**mouvements_filter).aggregate(
-            total_credits=Sum('montant', filter=models.Q(sens=Mouvement.Sens.CREDIT)),
-            total_debits=Sum('montant', filter=models.Q(sens=Mouvement.Sens.DEBIT))
+            total_credits=Sum('montant', filter=Q(sens=Mouvement.Sens.CREDIT)),
+            total_debits=Sum('montant', filter=Q(sens=Mouvement.Sens.DEBIT))
         )
 
         total_credits = mouvements['total_credits'] or 0
@@ -153,34 +153,35 @@ def valider_arrete_caisse(arrete_caisse_id, valide_par_id=None):
                        ou si le billetage est incohérent
     """
     try:
-        arrete_caisse = ArreteCaisse.objects.get(id=arrete_caisse_id)
+        with transaction.atomic():
+            arrete_caisse = ArreteCaisse.objects.select_for_update().get(id=arrete_caisse_id)
 
-        if arrete_caisse.statut != ArreteCaisse.Statut.EN_COURS:
-            raise ValidationError(
-                f"Seul un arrêté en cours peut être validé. "
-                f"Statut actuel: {arrete_caisse.statut}"
-            )
+            if arrete_caisse.statut != ArreteCaisse.Statut.EN_COURS:
+                raise ValidationError(
+                    f"Seul un arrêté en cours peut être validé. "
+                    f"Statut actuel: {arrete_caisse.statut}"
+                )
 
-        # Vérifier la cohérence du billetage : somme des billets doit égaler le solde physique
-        total_billetage = Billetage.objects.filter(
-            arrete_caisse_id=arrete_caisse_id
-        ).aggregate(total=Sum('montant'))['total'] or 0
+            # Vérifier la cohérence du billetage : somme des billets doit égaler le solde physique
+            total_billetage = Billetage.objects.filter(
+                arrete_caisse_id=arrete_caisse_id
+            ).aggregate(total=Sum('montant'))['total'] or 0
 
-        if total_billetage != arrete_caisse.solde_physique:
-            raise ValidationError(
-                f"Le billetage est incohérent: "
-                f"somme des billets={total_billetage} FCFA, "
-                f"solde physique={arrete_caisse.solde_physique} FCFA"
-            )
+            if total_billetage != arrete_caisse.solde_physique:
+                raise ValidationError(
+                    f"Le billetage est incohérent: "
+                    f"somme des billets={total_billetage} FCFA, "
+                    f"solde physique={arrete_caisse.solde_physique} FCFA"
+                )
 
-        # Marquer comme validé
-        arrete_caisse.statut = ArreteCaisse.Statut.VALIDE
-        if valide_par_id:
-            arrete_caisse.valide_par_id = valide_par_id
-        arrete_caisse.save(update_fields=['statut', 'valide_par'])
+            # Marquer comme validé
+            arrete_caisse.statut = ArreteCaisse.Statut.VALIDE
+            if valide_par_id:
+                arrete_caisse.valide_par_id = valide_par_id
+            arrete_caisse.save(update_fields=['statut', 'valide_par'])
 
-        logger.info(f"Arrêté de caisse {arrete_caisse_id} validé")
-        return arrete_caisse
+            logger.info(f"Arrêté de caisse {arrete_caisse_id} validé")
+            return arrete_caisse
 
     except ArreteCaisse.DoesNotExist:
         raise ValidationError(f"Arrêté de caisse avec l'ID {arrete_caisse_id} introuvable")

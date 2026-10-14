@@ -22,8 +22,11 @@ class TypeFraisViewSet(_BaseScolariteViewSet):
 
 class FraisInscriptionViewSet(_BaseScolariteViewSet):
     permission_classes = [permissions.PeutEcrireFraisEleve]
+    # `FraisInscription` n'a ni `inscription` ni `type_frais` (seulement `niveau` et
+    # `annee_scolaire`, cf. models.py) : select_related sur ces deux noms faisait planter
+    # tout GET (liste/détail) en FieldError.
     queryset = models.FraisInscription.objects.select_related(
-        "inscription", "type_frais", "cree_par", "modifie_par"
+        "niveau", "annee_scolaire", "cree_par", "modifie_par"
     )
     serializer_class = serializers.FraisInscriptionSerializer
     filterset_class = s_filters.FraisInscriptionFilter
@@ -58,4 +61,6 @@ class EcheanceViewSet(_BaseScolariteViewSet):
     )
     serializer_class = serializers.EcheanceSerializer
     filterset_class = s_filters.EcheanceFilter
-    ordering_fields = ["numero", "date_prevue", "id"]
+    # Le champ réel est `date_echeance` (models.py) ; `date_prevue` n'existe pas et faisait
+    # planter `?ordering=date_prevue` en FieldError.
+    ordering_fields = ["numero", "date_echeance", "id"]

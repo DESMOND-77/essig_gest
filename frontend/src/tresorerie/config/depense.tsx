@@ -3,7 +3,7 @@ import type { Descripteur } from "../../referentiel/descripteur";
 
 export const depenseDescripteur = {
   titre: "Dépenses",
-  endpoint: "depenses",
+  endpoint: "tresorerie/depenses",
   roleEcriture: ["COMPTABLE", "DAF"],
   colonnes: [
     { cle: "date", entete: "Date" },
@@ -18,11 +18,11 @@ export const depenseDescripteur = {
   ],
   champs: [
     { nom: "date", label: "Date", type: "date", requis: true, aide: "AAAA-MM-JJ" },
-    { nom: "categorie_mouvement", label: "Catégorie de mouvement", type: "fk", requis: true, fkEndpoint: "categories-mouvement?sens=SORTIE", fkLabel: (o) => `${o.code} - ${o.libelle}` },
+    { nom: "categorie_mouvement", label: "Catégorie de mouvement", type: "fk", requis: true, fkEndpoint: "tresorerie/categories-mouvement?sens=SORTIE", fkLabel: (o) => `${o.code} - ${o.libelle}` },
     { nom: "beneficiaire", label: "Bénéficiaire", type: "text", requis: true },
     { nom: "designation", label: "Désignation", type: "text", requis: true },
     { nom: "montant", label: "Montant (FCFA)", type: "number", requis: true, min: 1 },
-    { nom: "compte", label: "Compte de débit", type: "fk", requis: true, fkEndpoint: "comptes", fkLabel: (o) => `${o.code} - ${o.libelle}` },
+    { nom: "compte", label: "Compte de débit", type: "fk", requis: true, fkEndpoint: "tresorerie/comptes", fkLabel: (o) => `${o.code} - ${o.libelle}` },
     { nom: "ecole", label: "École", type: "fk", fkEndpoint: "referentiel/ecoles", fkLabel: (o) => o.nom },
     { nom: "annee_scolaire", label: "Année scolaire", type: "fk", requis: true, fkEndpoint: "referentiel/annees-scolaires", fkLabel: (o) => o.libelle },
     { nom: "piece_justificative", label: "Pièce justificative", type: "text" },

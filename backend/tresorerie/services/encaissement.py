@@ -1,8 +1,9 @@
 # backend/tresorerie/services/encaissement.py
 from django.db import transaction
 from django.core.exceptions import ValidationError
-from django.db.models import Sum
+from django.db.models import F, Sum
 from ..models import Encaissement, Mouvement, ImputationEncaissement, Compte
+from .compte import generer_mouvement_credit, generer_mouvement_debit
 from scolarite.models import Echeance, FraisInscription
 from scolarite.services import calculer_reste_a_payer_inscription
 import logging
@@ -290,12 +291,13 @@ def imputer_encaissement(encaissement_id, imputations, cree_par_id=None):
         raise
 
 
-def annuler_encaissement(encaissement_id):
+def annuler_encaissement(encaissement_id, annule_par_id=None):
     """
     Annule un encaissement en créant un mouvement inverse et en supprimant les imputations.
 
     Args:
         encaissement_id (int): ID de l'encaissement à annuler
+        annule_par_id (int, optionnel): ID de l'utilisateur à l'origine de l'annulation
 
     Returns:
         Encaissement: L'encaissement annulé
@@ -314,13 +316,13 @@ def annuler_encaissement(encaissement_id):
             # mais en créant un mouvement inverse pour maintenir l'intégrité du grand livre
             if encaissement.mouvement:
                 # Créer un mouvement inverse (débit si c'était un crédit, et vice-versa)
-                sens_inverse = (
-                    Mouvement.Sens.DEBIT
+                generer_mouvement_inverse = (
+                    generer_mouvement_debit
                     if encaissement.mouvement.sens == Mouvement.Sens.CREDIT
-                    else Mouvement.Sens.CREDIT
+                    else generer_mouvement_credit
                 )
 
-                generer_mouvement_debit(
+                generer_mouvement_inverse(
                     compte_id=encaissement.mouvement.compte_id,
                     montant=encaissement.mouvement.montant,
                     categorie_mouvement_id=encaissement.mouvement.categorie_mouvement_id,
@@ -328,7 +330,7 @@ def annuler_encaissement(encaissement_id):
                     piece_reference=f"ANN-{encaissement.recu_numero}",
                     ecole_id=encaissement.mouvement.ecole_id,
                     annee_scolaire_id=encaissement.mouvement.annee_scolaire_id,
-                    cree_par_id=None  # À remplir par l'appelant
+                    cree_par_id=annule_par_id
                 )
 
             # Marquer l'encaissement comme annulé

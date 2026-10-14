@@ -3,7 +3,7 @@ import type { Descripteur } from "../../referentiel/descripteur";
 
 export const categorieMouvementDescripteur: Descripteur = {
   titre: "Catégories de mouvement",
-  endpoint: "categories-mouvement",
+  endpoint: "tresorerie/categories-mouvement",
   roleEcriture: ["COMPTABLE", "DAF"],
   colonnes: [
     { cle: "code", entete: "Code" },

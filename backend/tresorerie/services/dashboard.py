@@ -196,11 +196,11 @@ def get_ecarts_caisse_importants(limite_montant=1000):
                 'date': arrete.date.isoformat(),
                 'compte_code': arrete.compte.code,
                 'compte_libelle': arrete.compte.libelle,
-                'solde_theorique': float(arretes.solde_theorique),
-                'solde_physique': float(arretes.solde_physique),
-                'ecart': float(arretes.ecart),
-                'fait_par_nom': f"{arretes.fait_par.get_full_name() if arretes.fait_par else 'Inconnu'}",
-                'valide_par_nom': f"{arretes.valide_par.get_full_name() if arretes.valide_par else 'Inconnu'}"
+                'solde_theorique': float(arrete.solde_theorique),
+                'solde_physique': float(arrete.solde_physique),
+                'ecart': float(arrete.ecart),
+                'fait_par_nom': f"{arrete.fait_par.get_full_name() if arrete.fait_par else 'Inconnu'}",
+                'valide_par_nom': f"{arrete.valide_par.get_full_name() if arrete.valide_par else 'Inconnu'}"
             })
 
         return result

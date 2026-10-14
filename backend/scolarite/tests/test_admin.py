@@ -3,17 +3,14 @@ from django.test import TestCase
 from django.contrib.admin.sites import AdminSite
 from ..models import ModalitePaiement, TypeFrais, FraisInscription, Echeance, Bourse
 from ..admin import ModalitePaiementAdmin, TypeFraisAdmin, FraisInscriptionAdmin, EcheanceAdmin, BourseAdmin
-from referentiel.models import Niveau, AnneeScolaire, Ecole, GroupeScolaire
+from referentiel.models import Niveau, AnneeScolaire, Ecole
 from personnes.models import Etudiant
 
 class ScolariteAdminTest(TestCase):
     def setUp(self):
         # Create prerequisite objects
-        groupe_scolaire = GroupeScolaire.objects.create(nom="Groupe Scolaire de Test")
         ecole = Ecole.objects.create(
             nom="École de Test",
-            groupe_scolaire=groupe_scolaire,
-            pole="ESSIG",
             regime="LMD"
         )
         self.niveau = Niveau.objects.create(

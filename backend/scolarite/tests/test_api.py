@@ -97,6 +97,49 @@ def test_rbac_frais_inscription(role, attendu):
         assert resp.data["cree_par"] is not None
 
 
+def test_frais_inscription_liste_et_detail_ne_plantent_pas():
+    """Régression : `FraisInscriptionViewSet.queryset` faisait un `select_related` sur
+    `inscription`/`type_frais`, deux champs qui n'existent pas sur `FraisInscription`
+    (seulement `niveau`/`annee_scolaire`) -> FieldError sur tout GET liste/détail."""
+    c, _ = _client("DIRECTION")
+    n, a = rf.NiveauFactory(), rf.AnneeScolaireFactory()
+    frais = sf.FraisInscriptionFactory(niveau=n, annee_scolaire=a)
+
+    liste = c.get("/api/v1/scolarite/frais-inscription/")
+    assert liste.status_code == 200, liste.data
+
+    detail = c.get(f"/api/v1/scolarite/frais-inscription/{frais.pk}/")
+    assert detail.status_code == 200, detail.data
+
+
+def test_echeance_tri_par_date_echeance_fonctionne_reellement():
+    """Régression : `ordering_fields` référençait `date_prevue`, absent du modèle `Echeance`
+    (champ réel : `date_echeance`). `?ordering=date_prevue` levait `FieldError` (500) dès que le
+    queryset était évalué ; vérifié empiriquement. `date_echeance` n'étant pas dans l'ancienne
+    liste blanche `ordering_fields`, un tri demandé sur ce champ réel était silencieusement
+    ignoré (DRF `OrderingFilter` ignore les champs hors whitelist sans erreur) : il ne suffit
+    donc pas de vérifier un code 200, il faut vérifier que le tri est réellement appliqué."""
+    c, _ = _client("DIRECTION")
+    sf.EcheanceFactory(numero=1, date_echeance="2025-12-01")
+    sf.EcheanceFactory(numero=2, date_echeance="2025-10-01")
+    sf.EcheanceFactory(numero=3, date_echeance="2025-11-01")
+
+    resp = c.get("/api/v1/scolarite/echeances/?ordering=date_echeance")
+    assert resp.status_code == 200, resp.data
+    dates = [row["date_echeance"] for row in resp.data["results"]]
+    assert dates == sorted(dates)
+
+    resp_desc = c.get("/api/v1/scolarite/echeances/?ordering=-date_echeance")
+    assert resp_desc.status_code == 200, resp_desc.data
+    dates_desc = [row["date_echeance"] for row in resp_desc.data["results"]]
+    assert dates_desc == sorted(dates_desc, reverse=True)
+
+    # Le nom de champ fautif ne doit plus être exploitable (plus dans la whitelist) : la
+    # requête ne doit pas planter, elle retombe simplement sur l'ordre par défaut.
+    resp_champ_fautif = c.get("/api/v1/scolarite/echeances/?ordering=date_prevue")
+    assert resp_champ_fautif.status_code == 200, resp_champ_fautif.data
+
+
 def test_rbac_bourse_daf():
     c, _ = _client("DAF")
     etudiant = pf.EtudiantFactory()

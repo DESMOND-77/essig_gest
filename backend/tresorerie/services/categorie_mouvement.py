@@ -7,7 +7,7 @@ import types
 logger = logging.getLogger(__name__)
 
 
-def créer_categorie_mouvement(code, libelle, sens, cree_par_id=None):
+def creer_categorie_mouvement(code, libelle, sens, cree_par_id=None):
     """
     Crée une nouvelle catégorie de mouvement.
 
@@ -78,6 +78,6 @@ def mettre_a_jour_categorie_mouvement(categorie_id, code=None, libelle=None, sen
 
 
 categorie_mouvement_service = types.SimpleNamespace(
-    créer_categorie_mouvement=créer_categorie_mouvement,
+    creer_categorie_mouvement=creer_categorie_mouvement,
     mettre_a_jour_categorie_mouvement=mettre_a_jour_categorie_mouvement
 )

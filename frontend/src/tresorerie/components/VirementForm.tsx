@@ -8,8 +8,9 @@ import { virementDescripteur } from "../config/virement";
 import { Chip } from "../../components/Chip";
 import {
   creerVirement,
+  engagerVirement,
   validerVirement,
-  executerVirement,
+  annulerVirement,
   obtenirVirement,
   listerComptes
 } from "../../lib/tresorerie";
@@ -119,50 +120,42 @@ export const VirementForm = () => {
     return errors;
   };
 
-  // Determine user roles
+  // Permission d'écriture indicative côté UI uniquement ; le backend revérifie tout
+  // (TresoreriePermission pour engager, TresorerieValidationPermission pour valider/annuler).
   const roles = utilisateur?.roles ?? [];
-  const peutEngager = roles.includes("COMPTABLE") || roles.includes("DAF");
-  const peutValider = peutEngager; // Adjust based on actual permissions if needed
-  const peutExecuter = peutEngager; // Adjust based on actual permissions if needed
-  const peutAnnuler = peutEngager; // Adjust based on actual permissions if needed
+  const peutEcrire = roles.includes("COMPTABLE") || roles.includes("DAF");
 
-  // Determine allowed actions based on virement status
+  // Flux maker-checker à 3 étapes : BROUILLON -> (engager) -> EN_ATTENTE_VALIDATION ->
+  // (valider, crée les mouvements) -> VALIDE. `annuler` est possible depuis n'importe quel
+  // statut sauf ANNULE lui-même.
   const statut = virementDetail?.statut;
-  const peutValiderVirement = peutValider && statut === "BROUILLON"; // Example: can validate only from brouillon
-  const peutExecuterVirement = peutExecuter && statut === "VALIDE"; // Example: can execute only after validation
-  const peutAnnulerVirement = peutAnnuler && (statut === "BROUILLON" || statut === "VALIDE"); // Example: can cancel in certain states
+  const peutEngagerVirement = peutEcrire && statut === "BROUILLON";
+  const peutValiderVirement = peutEcrire && statut === "EN_ATTENTE_VALIDATION";
+  const peutAnnulerVirement = peutEcrire && statut !== undefined && statut !== "ANNULE";
 
-  const handleValider = async () => {
-    if (!window.confirm("Confirmez-vous la validation de ce virement ?")) {
-      return;
-    }
+  const handleEngager = async () => {
     if (!virementId) return;
     try {
-      await validerVirement(virementId);
-      // Refetch detail to get updated status
-      const updatedData = await obtenirVirement(virementId);
+      const updatedData = await engagerVirement(virementId);
       setVirementDetail(updatedData);
-      toast("Virement validé");
+      toast("Virement engagé, en attente de validation");
     } catch (error) {
-      toast("Erreur lors de la validation", "erreur");
+      toast("Erreur lors de l'engagement", "erreur");
       console.error(error);
     }
   };
 
-  const handleExecuter = async () => {
-    if (!window.confirm("Confirmez-vous l'exécution de ce virement ?")) {
+  const handleValider = async () => {
+    if (!window.confirm("Confirmez-vous la validation de ce virement ? Les mouvements comptables seront créés.")) {
       return;
     }
     if (!virementId) return;
     try {
-      await executerVirement(virementId);
-      // Refetch detail to get updated status
-      const updatedData = await obtenirVirement(virementId);
+      const updatedData = await validerVirement(virementId);
       setVirementDetail(updatedData);
-      toast("Virement exécuté");
-      // TODO: Invalidate related data (comptes, mouvements, tableau de bord) if needed
+      toast("Virement validé");
     } catch (error) {
-      toast("Erreur lors de l'exécution", "erreur");
+      toast("Erreur lors de la validation", "erreur");
       console.error(error);
     }
   };
@@ -173,10 +166,9 @@ export const VirementForm = () => {
     }
     if (!virementId) return;
     try {
-      // Assuming there is an annulerVirement function; we don't have it yet.
-      // For now, we'll just delete or set status to annulé via a backend endpoint.
-      // We'll skip implementation as it's not in the plan explicitly.
-      toast("Annulation non implémentée", "erreur");
+      const updatedData = await annulerVirement(virementId);
+      setVirementDetail(updatedData);
+      toast("Virement annulé");
     } catch (error) {
       toast("Erreur lors de l'annulation", "erreur");
       console.error(error);
@@ -247,11 +239,6 @@ export const VirementForm = () => {
             <span className="text-xs text-red-600">{formState.errors.compte_destination?.message}</span>
           )}
         </div>
-
-        {/* Validation to ensure accounts are different (schema refine) */}
-        {errors.compte_destination && typeof errors.compte_destination === "object" && "message" in errors.compte_destination && (
-          <span className="text-xs text-red-600">{errors.compte_destination.message}</span>
-        )}
 
         <div className="space-y-2">
           <label className="text-sm font-medium" htmlFor="montant">
@@ -356,27 +343,27 @@ export const VirementForm = () => {
             </div>
           </div>
 
-          {/* Actions: Valider, Exécuter, Annuler */}
-          {peutEngager && (
+          {/* Actions : Engager (maker), Valider (checker, poste les mouvements), Annuler */}
+          {peutEcrire && (
             <div className="flex justify-end gap-2 pt-4">
+              {peutEngagerVirement && (
+                <button
+                  type="button"
+                  onClick={handleEngager}
+                  disabled={loadingDetail || formState.isSubmitting}
+                  className="rounded border px-3 py-1 text-sm text-blue-600 hover:bg-blue-50"
+                >
+                  Engager
+                </button>
+              )}
               {peutValiderVirement && (
                 <button
                   type="button"
                   onClick={handleValider}
                   disabled={loadingDetail || formState.isSubmitting}
-                  className="rounded border px-3 py-1 text-sm text-blue-600 hover:bg-blue-50"
-                >
-                  Valider
-                </button>
-              )}
-              {peutExecuterVirement && (
-                <button
-                  type="button"
-                  onClick={handleExecuter}
-                  disabled={loadingDetail || formState.isSubmitting}
                   className="rounded bg-gray-800 px-3 py-1 text-sm text-white"
                 >
-                  Exécuter
+                  Valider
                 </button>
               )}
               {peutAnnulerVirement && (

@@ -1,7 +1,8 @@
 # backend/tresorerie/services/compte.py
 from django.db import transaction
-from django.db.models import Sum, F
+from django.db.models import Sum, F, Q
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 from ..models import Compte, Mouvement
 import logging
 import types
@@ -27,12 +28,12 @@ def calculer_solde_compte(compte_id):
             compte_id=compte_id,
             valide=True
         ).aggregate(
-            total_credits=Sum('montant', filter=models.Q(sens=Mouvement.Sens.CREDIT)),
-            total_debits=Sum('montant', filter=models.Q(sens=Mouvement.Sens.DEBIT))
+            total_credits=Sum('montant', filter=Q(sens=Mouvement.Sens.CREDIT)),
+            total_debits=Sum('montant', filter=Q(sens=Mouvement.Sens.DEBIT))
         )
 
-        total_credits = movements['total_credits'] or 0
-        total_debits = movements['total_debits'] or 0
+        total_credits = mouvements['total_credits'] or 0
+        total_debits = mouvements['total_debits'] or 0
 
         solde = compte.solde_initial + total_credits - total_debits
         return solde
@@ -43,7 +44,7 @@ def calculer_solde_compte(compte_id):
 
 def generer_mouvement_credit(compte_id, montant, categorie_mouvement_id, libelle,
                            piece_reference=None, ecole_id=None, annee_scolaire_id=None,
-                           virement_id=None, cree_par_id=None):
+                           virement_id=None, cree_par_id=None, date_operation=None):
     """
     Génère un mouvement de crédit sur un compte.
 
@@ -57,6 +58,7 @@ def generer_mouvement_credit(compte_id, montant, categorie_mouvement_id, libelle
         annee_scolaire_id (int): ID de l'année scolaire
         virement_id (int, optionnel): ID du virement associé
         cree_par_id (int, optionnel): ID de l'utilisateur créateur
+        date_operation (date, optionnel): Date d'opération du mouvement (défaut : aujourd'hui)
 
     Returns:
         Mouvement: Le mouvement créé
@@ -71,6 +73,7 @@ def generer_mouvement_credit(compte_id, montant, categorie_mouvement_id, libelle
         with transaction.atomic():
             mouvement = Mouvement.objects.create(
                 compte_id=compte_id,
+                date_operation=date_operation or timezone.now().date(),
                 sens=Mouvement.Sens.CREDIT,
                 montant=montant,
                 categorie_mouvement_id=categorie_mouvement_id,
@@ -96,7 +99,7 @@ def generer_mouvement_credit(compte_id, montant, categorie_mouvement_id, libelle
 
 def generer_mouvement_debit(compte_id, montant, categorie_mouvement_id, libelle,
                           piece_reference=None, ecole_id=None, annee_scolaire_id=None,
-                          virement_id=None, cree_par_id=None):
+                          virement_id=None, cree_par_id=None, date_operation=None):
     """
     Génère un mouvement de débit sur un compte.
 
@@ -110,6 +113,7 @@ def generer_mouvement_debit(compte_id, montant, categorie_mouvement_id, libelle,
         annee_scolaire_id (int): ID de l'année scolaire
         virement_id (int, optionnel): ID du virement associé
         cree_par_id (int, optionnel): ID de l'utilisateur créateur
+        date_operation (date, optionnel): Date d'opération du mouvement (défaut : aujourd'hui)
 
     Returns:
         Mouvement: Le mouvement créé
@@ -132,6 +136,7 @@ def generer_mouvement_debit(compte_id, montant, categorie_mouvement_id, libelle,
 
             mouvement = Mouvement.objects.create(
                 compte_id=compte_id,
+                date_operation=date_operation or timezone.now().date(),
                 sens=Mouvement.Sens.DEBIT,
                 montant=montant,
                 categorie_mouvement_id=categorie_mouvement_id,
@@ -181,10 +186,32 @@ def desactiver_compte(compte_id):
         raise ValidationError(f"Compte avec l'ID {compte_id} introuvable")
 
 
+def mettre_a_jour_solde(compte_id, nouveau_solde):
+    """
+    Met à jour le solde d'un compte.
+
+    Args:
+        compte_id (int): ID du compte à mettre à jour
+        nouveau_solde (Decimal): Nouveau solde du compte
+
+    Returns:
+        Compte: Le compte mis à jour
+    """
+    try:
+        compte = Compte.objects.get(id=compte_id)
+        compte.solde = nouveau_solde
+        compte.save(update_fields=['solde'])
+        logger.info(f"Solde du compte {compte.code} mis à jour: {nouveau_solde} FCFA")
+        return compte
+    except Compte.DoesNotExist:
+        raise ValidationError(f"Compte avec l'ID {compte_id} introuvable")
+
+
 compte_service = types.SimpleNamespace(
     calculer_solde_compte=calculer_solde_compte,
     generer_mouvement_credit=generer_mouvement_credit,
     generer_mouvement_debit=generer_mouvement_debit,
     activer_compte=activer_compte,
-    desactiver_compte=desactiver_compte
+    desactiver_compte=desactiver_compte,
+    mettre_a_jour_solde=mettre_a_jour_solde
 )

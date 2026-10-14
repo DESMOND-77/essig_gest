@@ -3,7 +3,7 @@ import type { Descripteur } from "../../referentiel/descripteur";
 
 export const imputationEncaissementDescripteur: Descripteur = {
   titre: "Imputations d'encaissement",
-  endpoint: "imputations-encaissement",
+  endpoint: "tresorerie/imputations-encaissement",
   roleEcriture: [], // Lecture seule
   colonnes: [
     { cle: "encaissement_recu_numero", entete: "Encaissement", rendu: (ligne) => ligne.encaissement_recu_numero || "" },

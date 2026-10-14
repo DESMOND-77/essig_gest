@@ -11,7 +11,7 @@ from tresorerie.models import (
 )
 from personnes.models import Inscription, Etudiant
 from scolarite.models import Echeance, FraisInscription
-from referentiel.models import GroupeScolaire, Ecole, AnneeScolaire, Niveau
+from referentiel.models import Ecole, AnneeScolaire, Niveau
 
 User = get_user_model()
 
@@ -23,26 +23,19 @@ class TresorerieServicesTestCase(TestCase):
         """Set up test data"""
         # Créer un utilisateur de test
         self.user = User.objects.create_user(
-            username='testuser',
+            login='testuser',
             password='testpass123',
             email='test@example.com'
-        )
-
-        # Créer un groupe scolaire de test
-        self.groupe_scolaire = GroupeScolaire.objects.create(
-            nom='Groupe Scolaire Test',
-            sigle='GST'
         )
 
         # Créer une école de test
         self.ecole = Ecole.objects.create(
             nom='École Test',
             sigle='ET',
-            groupe_scolaire=self.groupe_scolaire
         )
 
         # Créer une année scolaire de test
-        self.annee_scolaire = AnneeScolaire.create(
+        self.annee_scolaire = AnneeScolaire.objects.create(
             libelle='2025-2026',
             date_debut='2025-09-01',
             date_fin='2026-08-31',
@@ -57,6 +50,39 @@ class TresorerieServicesTestCase(TestCase):
             ecole=self.ecole
         )
 
+        # Créer une filière de test
+        from referentiel.models import Filiere
+        self.filiere = Filiere.objects.create(
+            nom='Générale',
+            sigle='GEN',
+            ecole=self.ecole
+        )
+
+        # Créer une option de filière de test
+        from referentiel.models import OptionFiliere
+        self.option_filiere = OptionFiliere.objects.create(
+            filiere=self.filiere,
+            nom='Option Générale',
+            sigle='OPTGEN'
+        )
+
+        # Créer une modalité de formation de test
+        from referentiel.models import ModaliteFormation
+        self.modalite_formation = ModaliteFormation.objects.create(
+            code='FI',
+            libelle='Formation initiale'
+        )
+
+        # Créer une classe de test
+        from referentiel.models import Classe
+        self.classe = Classe.objects.create(
+            annee_scolaire=self.annee_scolaire,
+            niveau=self.niveau,
+            option_filiere=self.option_filiere,
+            modalite_formation=self.modalite_formation,
+            libelle_auto='6EME GEN 1'
+        )
+
         # Créer un étudiant de test
         self.etudiant = Etudiant.objects.create(
             matricule='TEST001',
@@ -66,9 +92,52 @@ class TresorerieServicesTestCase(TestCase):
             date_naissance='2010-01-01'
         )
 
+        # Créer un enseignant de test
+        from rh_paie.models import Enseignant
+        self.enseignant = Enseignant.objects.create(
+            nom='DUPONT',
+            prenom='Marie',
+            email='marie.dupont@example.com'
+        )
+
+        # Date de paiement de test
+        from datetime import date
+        self.date_paiement = date(2025, 9, 25)
+
+        # Créer un compte de test pour le paiement
+        self.compte = Compte.objects.create(
+            code='PAYEADM001',
+            libelle='Compte de Paiement Administration Test',
+            type=Compte.Type.BANQUE,
+            solde_initial=1500000,  # 1,500,000 FCFA
+            actif=True,
+            cree_par=self.user
+        )
+
+        # Créer une catégorie de mouvement pour les salaires
+        self.categorie_salaire = CategorieMouvement.objects.create(
+            code='SALAIRE',
+            libelle='Paiement de salaire',
+            sens=CategorieMouvement.Sens.SORTIE,  # Débit pour payer un salaire
+            cree_par=self.user
+        )
+
+        # Créer un personnel administratif de test
+        from rh_paie.models import PersonnelAdministratif
+        self.personnel = PersonnelAdministratif.objects.create(
+            nom='DURAND',
+            prenom='Jean',
+            poste='Comptable',
+            ecole=self.ecole,
+            email='jean.durand@example.com',
+            salaire_base=400000,
+            actif=True
+        )
+
         # Créer une inscription de test
         self.inscription = Inscription.objects.create(
             etudiant=self.etudiant,
+            classe=self.classe,
             ecole=self.ecole,
             annee_scolaire=self.annee_scolaire,
             numero_ordre=1,
@@ -96,7 +165,6 @@ class TresorerieServicesTestCase(TestCase):
     def test_compte_service_creer_solde(self):
         """Test du service de calcul de solde de compte"""
         compte = Compte.objects.create(
-            groupe_scolaire=self.groupe_scolaire,
             code='SOLDE001',
             libelle='Compte Solde Test',
             type=Compte.Type.BANQUE,
@@ -175,7 +243,6 @@ class TresorerieServicesTestCase(TestCase):
         """Test du service d'exécution de virement"""
         # Créer deux comptes avec suffisamment de fonds
         compte_source = Compte.objects.create(
-            groupe_scolaire=self.groupe_scolaire,
             code='VIR_SOURCE',
             libelle='Compte Source Virement',
             type=Compte.Type.BANQUE,
@@ -185,7 +252,6 @@ class TresorerieServicesTestCase(TestCase):
         )
 
         compte_destination = Compte.objects.create(
-            groupe_scolaire=self.groupe_scolaire,
             code='VIR_DEST',
             libelle='Compte Destination Virement',
             type=Compte.Type.BANQUE,
@@ -241,7 +307,6 @@ class TresorerieServicesTestCase(TestCase):
     def test_encaissement_service_creer_encaissement(self):
         """Test du service de création d'encaissement"""
         compte = Compte.objects.create(
-            groupe_scolaire=self.groupe_scolaire,
             code='ENC_SERV',
             libelle='Compte Encaissement Service',
             type=Compte.Type.BANQUE,
@@ -274,7 +339,6 @@ class TresorerieServicesTestCase(TestCase):
     def test_depense_service_creer_depense(self):
         """Test du service de création de dépense"""
         compte = Compte.objects.create(
-            groupe_scolaire=self.groupe_scolaire,
             code='DEP_SERV',
             libelle='Compte Dépense Service',
             type=Compte.Type.BANQUE,
@@ -318,7 +382,6 @@ class TresorerieServicesTestCase(TestCase):
     def test_arrete_caisse_service_creer_arrete(self):
         """Test du service de création d'arrêté de caisse"""
         compte_caisse = Compte.objects.create(
-            groupe_scolaire=self.groupe_scolaire,
             code='ARC_SERV',
             libelle='Compte Arrêté Service',
             type=Compte.Type.CAISSE,
@@ -367,7 +430,6 @@ class TresorerieServicesTestCase(TestCase):
         """Test du service de dashboard pour obtenir les soldes par type de compte"""
         # Créer quelques comptes de différents types
         compte_banque = Compte.objects.create(
-            groupe_scolaire=self.groupe_scolaire,
             code='DASH_BANQ',
             libelle='Compte Banque Dashboard',
             type=Compte.Type.BANQUE,
@@ -377,7 +439,6 @@ class TresorerieServicesTestCase(TestCase):
         )
 
         compte_caisse = Compte.objects.create(
-            groupe_scolaire=self.groupe_scolaire,
             code='DASH_CAIS',
             libelle='Compte Caisse Dashboard',
             type=Compte.Type.CAISSE,
@@ -420,3 +481,702 @@ class TresorerieServicesTestCase(TestCase):
         # Caisse devrait avoir environ 100000 (seulement le solde initial)
         self.assertGreaterEqual(solde_banque, 500000)
         self.assertGreaterEqual(solde_caisse, 100000)
+
+    def test_effectuer_paiement_salaire_administration_valide(self):
+        """Test 1: Paiement réussi d'un salaire administratif validé"""
+        # Créer un salaire administratif en brouillon
+        from rh_paie.models import SalaireAdministration, PersonnelAdministratif
+        salaire = SalaireAdministration.objects.create(
+            personnel_administratif=self.personnel,
+            annee_scolaire=self.annee_scolaire,
+            mois='SEPT',
+            date_paiement=self.date_paiement,
+            montant_du=400000,  # 400,000 FCFA
+            montant_paye=0,     # Rien payé encore
+            compte=self.compte,
+            statut='BROUILLON',
+            cree_par=self.user
+        )
+
+        # Valider le salaire d'abord (nécessaire avant paiement)
+        salaire.statut = 'VALIDÉ'
+        salaire.save()
+
+        # Effectuer le paiement via le service de trésorerie
+        from tresorerie.services import tresorerie_service
+        result = tresorerie_service.effectuer_paiement_salaire(
+            compte_debiteur_id=self.compte.id,
+            salaire_id=salaire.id,
+            type_salaire='administration',
+            montant=400000,  # Montant complet
+            categorie_mouvement_id=self.categorie_salaire.id,
+            libelle=f"Paiement salaire {self.personnel.nom} {self.personnel.prenom} - {salaire.get_mois_display()} {salaire.annee_scolaire}",
+            ecole_id=self.ecole.id,
+            annee_scolaire_id=self.annee_scolaire.id,
+            cree_par_id=self.user.id
+        )
+
+        # Vérifier le résultat
+        self.assertIsNotNone(result)
+        self.assertIn('mouvement', result)
+        self.assertIn('salaire', result)
+        self.assertIn('message', result)
+
+        # Vérifier que le mouvement a été créé correctement
+        mouvement = result['mouvement']
+        self.assertIsInstance(mouvement, Mouvement)
+        self.assertEqual(mouvement.montant, 400000)
+        self.assertEqual(mouvement.sens, Mouvement.Sens.DEBIT)
+        self.assertEqual(mouvement.compte, self.compte)
+        self.assertEqual(mouvement.categorie_mouvement, self.categorie_salaire)
+        self.assertEqual(mouvement.ecole_id, self.ecole.id)
+        self.assertEqual(mouvement.annee_scolaire_id, self.annee_scolaire.id)
+
+        # Vérifier que le salaire a été mis à jour
+        salaire_rafraichi = SalaireAdministration.objects.get(id=salaire.id)
+        self.assertEqual(salaire_rafraichi.statut, 'PAYÉ')
+        self.assertEqual(salaire_rafraichi.mouvement, mouvement.id)
+        self.assertEqual(salaire_rafraichi.montant_paye, 400000)  # Maintenant entièrement payé
+
+        # Vérifier le message de retour
+        self.assertIn("effectué avec succès", result['message'])
+
+    def test_effectuer_paiement_salaire_enseignant_valide(self):
+        """Test: Paiement réussi d'un salaire enseignant validé"""
+        # Créer un salaire enseignant en brouillon (sans affectation obligatoire)
+        from rh_paie.models import SalaireEnseignant
+        salaire = SalaireEnseignant.objects.create(
+            enseignant=self.enseignant,
+            annee_scolaire=self.annee_scolaire,
+            mois='SEPT',
+            date_paiement=self.date_paiement,
+            montant=360000,  # 360,000 FCFA
+            compte=self.compte,
+            statut='BROUILLON',
+            cree_par=self.user
+        )
+
+        # Valider le salaire d'abord (nécessaire avant paiement)
+        salaire.statut = 'VALIDÉ'
+        salaire.save()
+
+        # Effectuer le paiement via le service de trésorerie
+        from tresorerie.services import tresorerie_service
+        result = tresorerie_service.effectuer_paiement_salaire(
+            compte_debiteur_id=self.compte.id,
+            salaire_id=salaire.id,
+            type_salaire='enseignant',
+            montant=360000,  # Montant complet
+            categorie_mouvement_id=self.categorie_salaire.id,
+            libelle=f"Paiement salaire {self.enseignant.nom} {self.enseignant.prenom} - {salaire.get_mois_display()} {salaire.annee_scolaire}",
+            ecole_id=self.ecole.id,
+            annee_scolaire_id=self.annee_scolaire.id,
+            cree_par_id=self.user.id
+        )
+
+        # Vérifier le résultat
+        self.assertIsNotNone(result)
+        self.assertIn('mouvement', result)
+        self.assertIn('salaire', result)
+        self.assertIn('message', result)
+
+        # Vérifier que le mouvement a été créé correctement
+        mouvement = result['mouvement']
+        self.assertIsInstance(mouvement, Mouvement)
+        self.assertEqual(mouvement.montant, 360000)
+        self.assertEqual(mouvement.sens, Mouvement.Sens.DEBIT)
+        self.assertEqual(mouvement.compte, self.compte)
+        self.assertEqual(mouvement.categorie_mouvement, self.categorie_salaire)
+
+        # Vérifier que le salaire a été mis à jour
+        salaire_rafraichi = SalaireEnseignant.objects.get(id=salaire.id)
+        self.assertEqual(salaire_rafraichi.statut, 'PAYÉ')
+        self.assertEqual(salaire_rafraichi.mouvement, mouvement.id)
+
+        # Vérifier le message de retour
+        self.assertIn("effectué avec succès", result['message'])
+
+    def test_effectuer_paiement_salaire_non_valide_refuse(self):
+        """Test 2: Refus de paiement pour salaire non validé"""
+        # Créer un salaire administratif en brouillon (non validé)
+        from rh_paie.models import SalaireAdministration
+        salaire = SalaireAdministration.objects.create(
+            personnel_administratif=self.personnel,
+            annee_scolaire=self.annee_scolaire,
+            mois='SEPT',
+            date_paiement=self.date_paiement,
+            montant_du=400000,
+            montant_paye=0,
+            compte=self.compte,
+            statut='BROUILLON',  # Toujours en brouillon
+            cree_par=self.user
+        )
+
+        # Tenter de payer le salaire sans validation préalable
+        from tresorerie.services import tresorerie_service
+        from django.core.exceptions import ValidationError
+        with self.assertRaises(ValidationError) as context:
+            tresorerie_service.effectuer_paiement_salaire(
+                compte_debiteur_id=self.compte.id,
+                salaire_id=salaire.id,
+                type_salaire='administration',
+                montant=400000,
+                categorie_mouvement_id=self.categorie_salaire.id,
+                libelle="Test paiement salaire non validé",
+                ecole_id=self.ecole.id,
+                annee_scolaire_id=self.annee_scolaire.id,
+                cree_par_id=self.user.id
+            )
+
+        # Vérifier que l'erreur concerne le statut du salaire
+        error_message = str(context.exception)
+        self.assertIn("validé", error_message.lower())
+        self.assertIn("statut", error_message.lower())
+
+    def test_effectuer_paiement_salaire_montant_nul_negatif_refuse(self):
+        """Test 3: Refus pour montant nul ou négatif"""
+        # Créer et valider un salaire administratif
+        from rh_paie.models import SalaireAdministration
+        salaire = SalaireAdministration.objects.create(
+            personnel_administratif=self.personnel,
+            annee_scolaire=self.annee_scolaire,
+            mois='SEPT',
+            date_paiement=self.date_paiement,
+            montant_du=400000,
+            montant_paye=0,
+            compte=self.compte,
+            statut='VALIDÉ',  # Déjà validé
+            cree_par=self.user
+        )
+
+        from tresorerie.services import tresorerie_service
+        from django.core.exceptions import ValidationError
+
+        # Test avec montant nul
+        with self.assertRaises(ValidationError) as context:
+            tresorerie_service.effectuer_paiement_salaire(
+                compte_debiteur_id=self.compte.id,
+                salaire_id=salaire.id,
+                type_salaire='administration',
+                montant=0,  # Montant nul
+                categorie_mouvement_id=self.categorie_salaire.id,
+                libelle="Test paiement montant nul",
+                ecole_id=self.ecole.id,
+                annee_scolaire_id=self.annee_scolaire.id,
+                cree_par_id=self.user.id
+            )
+        self.assertIn("strictement positif", str(context.exception))
+
+        # Test avec montant négatif
+        with self.assertRaises(ValidationError) as context:
+            tresorerie_service.effectuer_paiement_salaire(
+                compte_debiteur_id=self.compte.id,
+                salaire_id=salaire.id,
+                type_salaire='administration',
+                montant=-10000,  # Montant négatif
+                categorie_mouvement_id=self.categorie_salaire.id,
+                libelle="Test paiement montant négatif",
+                ecole_id=self.ecole.id,
+                annee_scolaire_id=self.annee_scolaire.id,
+                cree_par_id=self.user.id
+            )
+        self.assertIn("strictement positif", str(context.exception))
+
+    def test_effectuer_paiement_salaire_montant_incompatible_refuse(self):
+        """Test 3 (suite): Refus pour montant incompatible avec le salaire"""
+        # Créer et valider un salaire administratif avec paiement partiel
+        from rh_paie.models import SalaireAdministration
+        salaire = SalaireAdministration.objects.create(
+            personnel_administratif=self.personnel,
+            annee_scolaire=self.annee_scolaire,
+            mois='SEPT',
+            date_paiement=self.date_paiement,
+            montant_du=400000,  # Total dû
+            montant_paye=100000,  # Déjà payé: 100,000 FCFA
+            compte=self.compte,
+            statut='VALIDÉ',  # Déjà validé
+            cree_par=self.user
+        )
+
+        from tresorerie.services import tresorerie_service
+        from django.core.exceptions import ValidationError
+
+        # Test avec montant inférieur au restant à payer
+        with self.assertRaises(ValidationError) as context:
+            tresorerie_service.effectuer_paiement_salaire(
+                compte_debiteur_id=self.compte.id,
+                salaire_id=salaire.id,
+                type_salaire='administration',
+                montant=200000,  # Moins que les 300,000 restant à payer
+                categorie_mouvement_id=self.categorie_salaire.id,
+                libelle="Test paiement montant insuffisant",
+                ecole_id=self.ecole.id,
+                annee_scolaire_id=self.annee_scolaire.id,
+                cree_par_id=self.user.id
+            )
+        self.assertIn("doit correspondre au montant restant à payer", str(context.exception))
+
+        # Test avec montant supérieur au restant à payer
+        with self.assertRaises(ValidationError) as context:
+            tresorerie_service.effectuer_paiement_salaire(
+                compte_debiteur_id=self.compte.id,
+                salaire_id=salaire.id,
+                type_salaire='administration',
+                montant=400000,  # Plus que les 300,000 restant à payer
+                categorie_mouvement_id=self.categorie_salaire.id,
+                libelle="Test paiement montant excessif",
+                ecole_id=self.ecole.id,
+                annee_scolaire_id=self.annee_scolaire.id,
+                cree_par_id=self.user.id
+            )
+        self.assertIn("doit correspondre au montant restant à payer", str(context.exception))
+
+        # Test pour salaire enseignant avec montant incompatible
+        from rh_paie.models import Enseignant, SalaireEnseignant
+        from referentiel.models import Matiere as RefMatiere
+
+        # Créer un salaire enseignant en brouillon (sans affectation obligatoire)
+        salaire_enseignant = SalaireEnseignant.objects.create(
+            enseignant=self.enseignant,
+            annee_scolaire=self.annee_scolaire,
+            mois='SEPT',
+            date_paiement=self.date_paiement,
+            montant=300000,  # Montant fixe pour enseignant
+            compte=self.compte,
+            statut='BROUILLON',
+            cree_par=self.user
+        )
+
+        # Valider le salaire d'abord
+        salaire_enseignant.statut = 'VALIDÉ'
+        salaire_enseignant.save()
+
+        # Test avec montant différent du salaire enseignant
+        with self.assertRaises(ValidationError) as context:
+            tresorerie_service.effectuer_paiement_salaire(
+                compte_debiteur_id=self.compte.id,
+                salaire_id=salaire_enseignant.id,
+                type_salaire='enseignant',
+                montant=250000,  # Différent des 300,000 prévus
+                categorie_mouvement_id=self.categorie_salaire.id,
+                libelle="Test paiement montant incompatible enseignant",
+                ecole_id=self.ecole.id,
+                annee_scolaire_id=self.annee_scolaire.id,
+                cree_par_id=self.user.id
+            )
+        self.assertIn("doit correspondre au montant du salaire", str(context.exception))
+
+    def test_effectuer_paiement_salaire_compte_invalide_refuse(self):
+        """Test 4: Refus pour compte invalide ou inexistant"""
+        # Créer et valider un salaire administratif
+        from rh_paie.models import SalaireAdministration
+        salaire = SalaireAdministration.objects.create(
+            personnel_administratif=self.personnel,
+            annee_scolaire=self.annee_scolaire,
+            mois='SEPT',
+            date_paiement=self.date_paiement,
+            montant_du=400000,
+            montant_paye=0,
+            compte=self.compte,
+            statut='VALIDÉ',
+            cree_par=self.user
+        )
+
+        from tresorerie.services import tresorerie_service
+        from django.core.exceptions import ValidationError
+
+        # Test avec compte inexistant
+        with self.assertRaises(ValidationError) as context:
+            tresorerie_service.effectuer_paiement_salaire(
+                compte_debiteur_id=99999,  # ID inexistant
+                salaire_id=salaire.id,
+                type_salaire='administration',
+                montant=400000,
+                categorie_mouvement_id=self.categorie_salaire.id,
+                libelle="Test paiement compte inexistant",
+                ecole_id=self.ecole.id,
+                annee_scolaire_id=self.annee_scolaire.id,
+                cree_par_id=self.user.id
+            )
+        self.assertIn("introuvable", str(context.exception))
+
+    def test_effectuer_paiement_salaire_double_paiement_refuse(self):
+        """Test 5: Refus pour double paiement (idempotence)"""
+        # Créer et valider un salaire administratif
+        from rh_paie.models import SalaireAdministration
+        salaire = SalaireAdministration.objects.create(
+            personnel_administratif=self.personnel,
+            annee_scolaire=self.annee_scolaire,
+            mois='SEPT',
+            date_paiement=self.date_paiement,
+            montant_du=400000,
+            montant_paye=0,
+            compte=self.compte,
+            statut='VALIDÉ',
+            cree_par=self.user
+        )
+
+        from tresorerie.services import tresorerie_service
+
+        # Effectuer le premier paiement
+        result1 = tresorerie_service.effectuer_paiement_salaire(
+            compte_debiteur_id=self.compte.id,
+            salaire_id=salaire.id,
+            type_salaire='administration',
+            montant=400000,
+            categorie_mouvement_id=self.categorie_salaire.id,
+            libelle="Premier paiement",
+            ecole_id=self.ecole.id,
+            annee_scolaire_id=self.annee_scolaire.id,
+            cree_par_id=self.user.id
+        )
+
+        # Vérifier que le premier paiement a réussi
+        self.assertIsNotNone(result1)
+        mouvement_id_1 = result1['mouvement'].id
+
+        # Tenter un deuxième paiement pour le même salaire (devrait retourner le même mouvement grâce à l'idempotence)
+        result2 = tresorerie_service.effectuer_paiement_salaire(
+            compte_debiteur_id=self.compte.id,
+            salaire_id=salaire.id,
+            type_salaire='administration',
+            montant=400000,
+            categorie_mouvement_id=self.categorie_salaire.id,
+            libelle="Deuxième paiement",
+            ecole_id=self.ecole.id,
+            annee_scolaire_id=self.annee_scolaire.id,
+            cree_par_id=self.user.id
+        )
+
+        # Vérifier que le deuxième paiement retourne le même mouvement (idempotence)
+        self.assertIsNotNone(result2)
+        mouvement_id_2 = result2['mouvement'].id
+        self.assertEqual(mouvement_id_1, mouvement_id_2)
+
+        # Vérifier qu'il n'y a toujours qu'un seul mouvement associé au salaire
+        salaire_rafraichi = SalaireAdministration.objects.get(id=salaire.id)
+        self.assertEqual(salaire_rafraichi.mouvement, mouvement_id_1)
+
+        # Vérifier le message d'idempotence
+        self.assertIn("idempotence", result2['message'].lower())
+
+    def test_effectuer_paiement_salaire_verification_lien_mouvement(self):
+        """Test 6: Vérification du lien entre salaire et mouvement de trésorerie"""
+        # Créer et valider un salaire administratif
+        from rh_paie.models import SalaireAdministration
+        salaire = SalaireAdministration.objects.create(
+            personnel_administratif=self.personnel,
+            annee_scolaire=self.annee_scolaire,
+            mois='SEPT',
+            date_paiement=self.date_paiement,
+            montant_du=400000,
+            montant_paye=0,
+            compte=self.compte,
+            statut='VALIDÉ',
+            cree_par=self.user
+        )
+
+        from tresorerie.services import tresorerie_service
+
+        # Effectuer le paiement
+        result = tresorerie_service.effectuer_paiement_salaire(
+            compte_debiteur_id=self.compte.id,
+            salaire_id=salaire.id,
+            type_salaire='administration',
+            montant=400000,
+            categorie_mouvement_id=self.categorie_salaire.id,
+            libelle="Test lien salaire-mouvement",
+            ecole_id=self.ecole.id,
+            annee_scolaire_id=self.annee_scolaire.id,
+            cree_par_id=self.user.id
+        )
+
+        # Vérifier que le mouvement a été créé
+        mouvement = result['mouvement']
+        self.assertIsInstance(mouvement, Mouvement)
+
+        # Vérifier que le salaire référence bien le mouvement
+        salaire_rafraichi = SalaireAdministration.objects.get(id=salaire.id)
+        self.assertEqual(salaire_rafraichi.mouvement, mouvement.id)
+
+        # Vérifier que le mouvement référence bien le compte et la catégorie corrects
+        self.assertEqual(mouvement.compte, self.compte)
+        self.assertEqual(mouvement.categorie_mouvement, self.categorie_salaire)
+        self.assertEqual(mouvement.montant, 400000)
+        self.assertEqual(mouvement.sens, Mouvement.Sens.DEBIT)
+
+        # Vérifier que les champs liés à la scolarité sont correctement propagés
+        self.assertEqual(mouvement.ecole_id, self.ecole.id)
+        self.assertEqual(mouvement.annee_scolaire_id, self.annee_scolaire.id)
+
+    def test_effectuer_paiement_salaire_absence_mouvement_orphelin_echec(self):
+        """Test 7: Absence de mouvement orphelin en cas d'échec"""
+        from tresorerie.services import tresorerie_service
+        from django.core.exceptions import ValidationError
+
+        # Compter les mouvements avant les tests
+        mouvement_count_initial = Mouvement.objects.count()
+
+        # Test d'échec avec compte inexistant (devrait lever une exception sans créer de mouvement)
+        try:
+            tresorerie_service.effectuer_paiement_salaire(
+                compte_debiteur_id=99999,  # ID inexistant
+                salaire_id=99999,         # ID inexistant aussi pour être sûr
+                type_salaire='administration',
+                montant=400000,
+                categorie_mouvement_id=self.categorie_salaire.id,
+                libelle="Test échec compte inexistant",
+                ecole_id=self.ecole.id,
+                annee_scolaire_id=self.annee_scolaire.id,
+                cree_par_id=self.user.id
+            )
+        except ValidationError:
+            pass  # Exception attendue
+
+        # Vérifier qu'aucun mouvement supplémentaire n'a été créé
+        mouvement_count_apres_echec = Mouvement.objects.count()
+        self.assertEqual(mouvement_count_initial, mouvement_count_apres_echec,
+                         "Aucun mouvement orphelin ne devrait être créé en cas d'échec")
+
+        # Test d'échec avec salaire non validé
+        from rh_paie.models import SalaireAdministration
+        salaire_brouillon = SalaireAdministration.objects.create(
+            personnel_administratif=self.personnel,
+            annee_scolaire=self.annee_scolaire,
+            mois='SEPT',
+            date_paiement=self.date_paiement,
+            montant_du=400000,
+            montant_paye=0,
+            compte=self.compte,
+            statut='BROUILLON',  # Non validé
+            cree_par=self.user
+        )
+
+        # Compter les mouvements avant ce test
+        mouvement_count_avant_test2 = Mouvement.objects.count()
+
+        try:
+            tresorerie_service.effectuer_paiement_salaire(
+                compte_debiteur_id=self.compte.id,
+                salaire_id=salaire_brouillon.id,
+                type_salaire='administration',
+                montant=400000,
+                categorie_mouvement_id=self.categorie_salaire.id,
+                libelle="Test échec salaire non validé",
+                ecole_id=self.ecole.id,
+                annee_scolaire_id=self.annee_scolaire.id,
+                cree_par_id=self.user.id
+            )
+        except ValidationError:
+            pass  # Exception attendue
+
+        # Vérifier qu'aucun mouvement supplémentaire n'a été créé
+        mouvement_count_apres_test2 = Mouvement.objects.count()
+        self.assertEqual(mouvement_count_avant_test2, mouvement_count_apres_test2,
+                         "Aucun mouvement orphelin ne devrait être créé en cas d'échec")
+
+    def test_effectuer_paiement_salaire_comportement_requetes_repetition_concurrent(self):
+        """Test 8: Comportement sous requêtes répétées/concurrentes"""
+        from rh_paie.models import SalaireAdministration
+        from tresorerie.services import tresorerie_service
+
+        # Créer et valider un salaire administratif
+        salaire = SalaireAdministration.objects.create(
+            personnel_administratif=self.personnel,
+            annee_scolaire=self.annee_scolaire,
+            mois='SEPT',
+            date_paiement=self.date_paiement,
+            montant_du=400000,
+            montant_paye=0,
+            compte=self.compte,
+            statut='VALIDÉ',
+            cree_par=self.user
+        )
+
+        # Effectuer le premier paiement
+        result1 = tresorerie_service.effectuer_paiement_salaire(
+            compte_debiteur_id=self.compte.id,
+            salaire_id=salaire.id,
+            type_salaire='administration',
+            montant=400000,
+            categorie_mouvement_id=self.categorie_salaire.id,
+            libelle="Paiement initial",
+            ecole_id=self.ecole.id,
+            annee_scolaire_id=self.annee_scolaire.id,
+            cree_par_id=self.user.id
+        )
+
+        mouvement_id_1 = result1['mouvement'].id
+
+        # Effectuer plusieurs paiements répétés (devraient tous retourner le même mouvement grâce à l'idempotence)
+        for i in range(2, 6):  # 2ème à 5ème tentative
+            result_i = tresorerie_service.effectuer_paiement_salaire(
+                compte_debiteur_id=self.compte.id,
+                salaire_id=salaire.id,
+                type_salaire='administration',
+                montant=400000,
+                categorie_mouvement_id=self.categorie_salaire.id,
+                libelle=f"Paiement répété #{i}",
+                ecole_id=self.ecole.id,
+                annee_scolaire_id=self.annee_scolaire.id,
+                cree_par_id=self.user.id
+            )
+
+            # Chaque appel devrait retourner le même mouvement
+            self.assertEqual(result_i['mouvement'].id, mouvement_id_1,
+                             f"Le paiement répété #{i} devrait retourner le même mouvement")
+
+        # Vérifier qu'il n'y a toujours qu'un seul mouvement associé au salaire
+        salaire_rafraichi = SalaireAdministration.objects.get(id=salaire.id)
+        self.assertEqual(salaire_rafraichi.mouvement, mouvement_id_1)
+
+        # Vérifier qu'il n'y a qu'un seul mouvement au total pour ce salaire (pas de doublons)
+        mouvements_associes = Mouvement.objects.filter(id=salaire_rafraichi.mouvement)
+        self.assertEqual(mouvements_associes.count(), 1)
+
+    def test_effectuer_paiement_salaire_verification_permissions_audit(self):
+        """Test 9: Vérification des permissions et de l'audit"""
+        from rh_paie.models import SalaireAdministration
+        from tresorerie.services import tresorerie_service
+        from django.contrib.auth import get_user_model
+
+        User = get_user_model()
+
+        # Créer un deuxième utilisateur pour tester les champs d'audit
+        user2 = User.objects.create_user(
+            login='audituser',
+            password='auditpass123',
+            email='audit@example.com'
+        )
+
+        # Créer et valider un salaire administratif
+        salaire = SalaireAdministration.objects.create(
+            personnel_administratif=self.personnel,
+            annee_scolaire=self.annee_scolaire,
+            mois='SEPT',
+            date_paiement=self.date_paiement,
+            montant_du=400000,
+            montant_paye=0,
+            compte=self.compte,
+            statut='VALIDÉ',
+            cree_par=self.user  # Créé par le premier utilisateur
+        )
+
+        # Effectuer le paiement avec le deuxième utilisateur
+        result = tresorerie_service.effectuer_paiement_salaire(
+            compte_debiteur_id=self.compte.id,
+            salaire_id=salaire.id,
+            type_salaire='administration',
+            montant=400000,
+            categorie_mouvement_id=self.categorie_salaire.id,
+            libelle="Test audit et permissions",
+            ecole_id=self.ecole.id,
+            annee_scolaire_id=self.annee_scolaire.id,
+            cree_par_id=user2.id  # Paiement effectué par le deuxième utilisateur
+        )
+
+        # Vérifier que le paiement a réussi
+        self.assertIsNotNone(result)
+        mouvement = result['mouvement']
+
+        # Vérifier que le mouvement a été créé par le bon utilisateur (audit)
+        self.assertEqual(mouvement.cree_par_id, user2.id)
+
+        # Vérifier que les champs de timestamp sont présents sur le mouvement
+        self.assertIsNotNone(mouvement.cree_le)
+        # Note: Lors de l'appel direct au service (pas via l'API), les champs d'audit du salaire
+        # (modifie_par, modifie_le) ne sont pas remplis car ils le sont uniquement par
+        # le AuditableSerializerMixin dans les sérialiseurs, pas par save() direct
+
+    def test_effectuer_paiement_salaire_coherence_solde_compte(self):
+        """Test 10: Cohérence des soldes de compte par rapport à la fonctionnalité trésorerie"""
+        from rh_paie.models import SalaireAdministration
+        from tresorerie.services import tresorerie_service, compte_service
+
+        # Créer un compte avec un solde initial connu
+        solde_initial = 1000000  # 1,000,000 FCFA
+        compte_test = Compte.objects.create(
+            code='SOLDE_TEST',
+            libelle='Compte Test Solde',
+            type=Compte.Type.BANQUE,
+            solde_initial=solde_initial,
+            actif=True,
+            cree_par=self.user
+        )
+
+        # Créer une catégorie de mouvement pour les salaires
+        categorie_salaire_test = CategorieMouvement.objects.create(
+            code='SALAIRE_TEST',
+            libelle='Paiement de salaire test',
+            sens=CategorieMouvement.Sens.SORTIE,
+            cree_par=self.user
+        )
+
+        # Créer et valider un salaire administratif
+        salaire = SalaireAdministration.objects.create(
+            personnel_administratif=self.personnel,
+            annee_scolaire=self.annee_scolaire,
+            mois='SEPT',
+            date_paiement=self.date_paiement,
+            montant_du=250000,  # 250,000 FCFA à payer
+            montant_paye=0,
+            compte=compte_test,  # Le salaire pointe vers ce compte
+            statut='VALIDÉ',
+            cree_par=self.user
+        )
+
+        # Vérifier le solde initial du compte
+        solde_avant_paiement = compte_service.calculer_solde_compte(compte_test.id)
+        self.assertEqual(solde_avant_paiement, solde_initial)
+
+        # Effectuer le paiement
+        result = tresorerie_service.effectuer_paiement_salaire(
+            compte_debiteur_id=compte_test.id,
+            salaire_id=salaire.id,
+            type_salaire='administration',
+            montant=250000,
+            categorie_mouvement_id=categorie_salaire_test.id,
+            libelle="Test cohérence solde",
+            ecole_id=self.ecole.id,
+            annee_scolaire_id=self.annee_scolaire.id,
+            cree_par_id=self.user.id
+        )
+
+        # Vérifier que le paiement a réussi
+        self.assertIsNotNone(result)
+        mouvement = result['mouvement']
+
+        # Vérifier le solde après le paiement
+        solde_apres_paiement = compte_service.calculer_solde_compte(compte_test.id)
+        solde_expected = solde_initial - 250000  # Solde initial moins le paiement
+        self.assertEqual(solde_apres_paiement, solde_expected)
+
+        # Vérifier que le mouvement de débit a été correctement enregistré
+        self.assertEqual(mouvement.montant, 250000)
+        self.assertEqual(mouvement.sens, Mouvement.Sens.DEBIT)
+        self.assertEqual(mouvement.compte, compte_test)
+
+        # Test supplémentaire: créer un crédit sur le même compte et vérifier le solde final
+        categorie_credit = CategorieMouvement.objects.create(
+            code='CREDIT_TEST',
+            libelle='Crédit de test',
+            sens=CategorieMouvement.Sens.ENTREE,
+            cree_par=self.user
+        )
+
+        Mouvement.objects.create(
+            compte=compte_test,
+            date_operation=self.date_paiement,
+            sens=Mouvement.Sens.CREDIT,
+            montant=50000,  # Crédit de 50,000 FCFA
+            categorie_mouvement=categorie_credit,
+            libelle='Crédit de test',
+            ecole_id=self.ecole.id,
+            annee_scolaire_id=self.annee_scolaire.id,
+            cree_par=self.user
+        )
+
+        # Le solde devrait maintenant être: initial - débit + crédit
+        solde_final_expected = solde_initial - 250000 + 50000  # 800,000 FCFA
+        solde_apres_credit = compte_service.calculer_solde_compte(compte_test.id)
+        self.assertEqual(solde_apres_credit, solde_final_expected)

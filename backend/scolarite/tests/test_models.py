@@ -1,17 +1,14 @@
 # backend/scolarite/tests/test_models.py
 from django.test import TestCase
 from ..models import ModalitePaiement, TypeFrais, FraisInscription, Echeance, Bourse
-from referentiel.models import Niveau, AnneeScolaire, Ecole, GroupeScolaire
+from referentiel.models import Niveau, AnneeScolaire, Ecole
 from personnes.models import Etudiant
 
 class ScolariteModelsTest(TestCase):
     def setUp(self):
         # Create an Ecole first since Niveau.ecole is required
-        groupe_scolaire = GroupeScolaire.objects.create(nom="Groupe Scolaire de Test")
         ecole = Ecole.objects.create(
             nom="École de Test",
-            groupe_scolaire=groupe_scolaire,
-            pole="ESSIG",
             regime="LMD"
         )
         self.niveau = Niveau.objects.create(

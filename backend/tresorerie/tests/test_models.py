@@ -8,7 +8,7 @@ from tresorerie.models import (
 )
 from personnes.models import Inscription, Etudiant
 from scolarite.models import Echeance, FraisInscription
-from referentiel.models import GroupeScolaire, Ecole, AnneeScolaire, Niveau
+from referentiel.models import Ecole, AnneeScolaire, Niveau
 
 User = get_user_model()
 
@@ -20,22 +20,15 @@ class TresorerieModelsTestCase(TestCase):
         """Set up test data"""
         # Créer un utilisateur de test
         self.user = User.objects.create_user(
-            username='testuser',
+            login='testuser',
             password='testpass123',
             email='test@example.com'
-        )
-
-        # Créer un groupe scolaire de test
-        self.groupe_scolaire = GroupeScolaire.objects.create(
-            nom='Groupe Scolaire Test',
-            sigle='GST'
         )
 
         # Créer une école de test
         self.ecole = Ecole.objects.create(
             nom='École Test',
             sigle='ET',
-            groupe_scolaire=self.groupe_scolaire
         )
 
         # Créer une année scolaire de test
@@ -93,7 +86,6 @@ class TresorerieModelsTestCase(TestCase):
     def test_compte_creation(self):
         """Test de création d'un compte"""
         compte = Compte.objects.create(
-            groupe_scolaire=self.groupe_scolaire,
             code='TEST001',
             libelle='Compte de Test',
             type=Compte.Type.BANQUE,
@@ -133,7 +125,6 @@ class TresorerieModelsTestCase(TestCase):
         """Test de création d'un virement"""
         # Créer deux comptes
         compte_source = Compte.objects.create(
-            groupe_scolaire=self.groupe_scolaire,
             code='SOURCE001',
             libelle='Compte Source',
             type=Compte.Type.BANQUE,
@@ -143,7 +134,6 @@ class TresorerieModelsTestCase(TestCase):
         )
 
         compte_destination = Compte.objects.create(
-            groupe_scolaire=self.groupe_scolaire,
             code='DEST001',
             libelle='Compte Destination',
             type=Compte.Type.BANQUE,
@@ -170,7 +160,6 @@ class TresorerieModelsTestCase(TestCase):
     def test_mouvement_creation(self):
         """Test de création d'un mouvement"""
         compte = Compte.objects.create(
-            groupe_scolaire=self.groupe_scolaire,
             code='MOUV001',
             libelle='Compte Mouvement',
             type=Compte.Type.BANQUE,
@@ -206,7 +195,6 @@ class TresorerieModelsTestCase(TestCase):
     def test_encaissement_creation(self):
         """Test de création d'un encaissement"""
         compte = Compte.objects.create(
-            groupe_scolaire=self.groupe_scolaire,
             code='ENC001',
             libelle='Compte Encaissement',
             type=Compte.Type.BANQUE,
@@ -235,7 +223,6 @@ class TresorerieModelsTestCase(TestCase):
     def test_imputation_encaissement_creation(self):
         """Test de création d'une imputation d'encaissement"""
         compte = Compte.objects.create(
-            groupe_scolaire=self.groupe_scolaire,
             code='IMP001',
             libelle='Compte Imputation',
             type=Compte.Type.BANQUE,
@@ -285,7 +272,6 @@ class TresorerieModelsTestCase(TestCase):
     def test_depense_creation(self):
         """Test de création d'une dépense"""
         compte = Compte.objects.create(
-            groupe_scolaire=self.groupe_scolaire,
             code='DEP001',
             libelle='Compte Dépense',
             type=Compte.Type.BANQUE,
@@ -321,7 +307,6 @@ class TresorerieModelsTestCase(TestCase):
     def test_arrete_caisse_creation(self):
         """Test de création d'un arrêté de caisse"""
         compte_caisse = Compte.objects.create(
-            groupe_scolaire=self.groupe_scolaire,
             code='CAISSE001',
             libelle='Compte Caisse',
             type=Compte.Type.CAISSE,
@@ -369,7 +354,6 @@ class TresorerieModelsTestCase(TestCase):
     def test_billetage_creation(self):
         """Test de création d'une ligne de billetage"""
         compte_caisse = Compte.objects.create(
-            groupe_scolaire=self.groupe_scolaire,
             code='BIL001',
             libelle='Compte Billetage',
             type=Compte.Type.CAISSE,

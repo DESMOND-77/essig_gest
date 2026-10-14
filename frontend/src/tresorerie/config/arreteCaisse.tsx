@@ -3,7 +3,7 @@ import type { Descripteur } from "../../referentiel/descripteur";
 
 export const arreteCaisseDescripteur: Descripteur = {
   titre: "Arrêtés de caisse",
-  endpoint: "arretes-caisse",
+  endpoint: "tresorerie/arretes-caisse",
   roleEcriture: ["COMPTABLE", "DAF"],
   colonnes: [
     { cle: "compte_code", entete: "Compte", rendu: (ligne) => ligne.compte_code || "" },
@@ -16,7 +16,7 @@ export const arreteCaisseDescripteur: Descripteur = {
     { cle: "valide_par_nom", entete: "Validé par", rendu: (ligne) => ligne.valide_par_nom || "" },
   ],
   champs: [
-    { nom: "compte", label: "Compte de caisse", type: "fk", requis: true, fkEndpoint: "comptes", fkLabel: (o) => `${o.code} - ${o.libelle}` },
+    { nom: "compte", label: "Compte de caisse", type: "fk", requis: true, fkEndpoint: "tresorerie/comptes", fkLabel: (o) => `${o.code} - ${o.libelle}` },
     { nom: "date", label: "Date", type: "date", requis: true },
     { nom: "solde_physique", label: "Solde physique (FCFA)", type: "number", requis: true, min: 0 },
     { nom: "observations", label: "Observations", type: "text" },

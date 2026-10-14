@@ -14,6 +14,12 @@ def libelle_classe(*, niveau, option_filiere, modalite_formation, annee_scolaire
 
 @transaction.atomic
 def definir_annee_courante(annee: AnneeScolaire) -> None:
+    # Verrouiller toutes les lignes avant la bascule : la contrainte d'unicité partielle sur
+    # `est_courante` est un no-op sur MySQL (cf. models.AnneeScolaire), donc sans ce verrou deux
+    # bascules concurrentes parties d'un état où aucune année n'est encore courante peuvent
+    # toutes les deux committer et laisser deux années marquées courantes simultanément.
+    list(AnneeScolaire.objects.select_for_update())
+
     AnneeScolaire.objects.filter(est_courante=True).exclude(pk=annee.pk).update(
         est_courante=False
     )

@@ -2,7 +2,11 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError as DRFValidationError
+from drf_spectacular.utils import extend_schema
+from drf_spectacular.types import OpenApiTypes
 from django.shortcuts import get_object_or_404
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import transaction
 from .models import (
     Compte, CategorieMouvement, Virement, Mouvement, Encaissement,
@@ -78,25 +82,47 @@ class VirementViewSet(viewsets.ModelViewSet):
         return queryset.order_by('-date')
 
     def perform_create(self, serializer):
-        # L'utilisateur qui crée le virement
-        sauvegarde = serializer.save(cree_par=self.request.user)
-        # Si validé immédiatement, définir l'utilisateur qui valide
-        if self.request.data.get('statut') == Virement.Statut.VALIDE:
-            sauvegarde.valide_par = self.request.user
-            sauvegarde.save()
+        # Toujours créé en BROUILLON (statut en lecture seule côté serializer) : le virement
+        # suit ensuite le flux `engager` (soumission, EN_ATTENTE_VALIDATION) puis `valider`
+        # (création des deux mouvements, VALIDE).
+        serializer.save(cree_par=self.request.user)
 
-    @action(detail=True, methods=['post'], permission_classes=[TresorerieValidationPermission])
-    def valider(self, request, pk=None):
-        """Valider un virement en brouillon"""
+    @action(detail=True, methods=['post'])
+    def engager(self, request, pk=None):
+        """Soumettre un virement brouillon pour validation (maker)"""
         virement = self.get_object()
         if virement.statut != Virement.Statut.BROUILLON:
             return Response(
-                {'error': 'Seul un virement en brouillon peut être validé'},
+                {'error': 'Seul un virement en brouillon peut être engagé'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         try:
-            virement_service.valider_virement(
+            virement = virement_service.engager_virement(
+                virement_id=virement.id,
+                engage_par_id=request.user.id
+            )
+            serializer = self.get_serializer(virement)
+            return Response(serializer.data)
+        except Exception as e:
+            logger.error(f"Erreur lors de l'engagement du virement {virement.id}: {str(e)}")
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    @action(detail=True, methods=['post'], permission_classes=[TresorerieValidationPermission])
+    def valider(self, request, pk=None):
+        """Valider un virement en attente de validation (checker) : crée les mouvements"""
+        virement = self.get_object()
+        if virement.statut != Virement.Statut.EN_ATTENTE_VALIDATION:
+            return Response(
+                {'error': 'Seul un virement en attente de validation peut être validé'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            virement = virement_service.valider_virement(
                 virement_id=virement.id,
                 valide_par_id=request.user.id
             )
@@ -120,7 +146,10 @@ class VirementViewSet(viewsets.ModelViewSet):
             )
 
         try:
-            virement_service.annuler_virement(virement_id=virement.id)
+            virement = virement_service.annuler_virement(
+                virement_id=virement.id,
+                annule_par_id=request.user.id
+            )
             serializer = self.get_serializer(virement)
             return Response(serializer.data)
         except Exception as e:
@@ -217,8 +246,21 @@ class EncaissementViewSet(viewsets.ModelViewSet):
         return queryset.order_by('-date', '-id')
 
     def perform_create(self, serializer):
-        # L'utilisateur qui crée l'encaissement
-        sauvegarde = serializer.save(cree_par=self.request.user)
+        # `recu_numero` et `mouvement` ne peuvent pas venir du serializer (lecture seule) :
+        # `creer_encaissement` les génère lui-même et poste le mouvement CREDIT associé.
+        validated = serializer.validated_data
+        try:
+            encaissement = encaissement_service.creer_encaissement(
+                inscription_id=validated['inscription'].id,
+                montant_total=validated['montant_total'],
+                mode=validated['mode'],
+                compte_id=validated['compte'].id,
+                date=validated.get('date'),
+                cree_par_id=self.request.user.id
+            )
+        except DjangoValidationError as e:
+            raise DRFValidationError(e.messages) from e
+        serializer.instance = encaissement
 
     @action(detail=True, methods=['post'], permission_classes=[TresorerieValidationPermission])
     def valider(self, request, pk=None):
@@ -250,8 +292,9 @@ class EncaissementViewSet(viewsets.ModelViewSet):
         """Annuler un encaissement"""
         encaissement = self.get_object()
         try:
-            encaissement_service.annuler_encaissement(
-                encaissement_id=encaissement.id
+            encaissement = encaissement_service.annuler_encaissement(
+                encaissement_id=encaissement.id,
+                annule_par_id=request.user.id
             )
             serializer = self.get_serializer(encaissement)
             return Response(serializer.data)
@@ -362,8 +405,26 @@ class DepenseViewSet(viewsets.ModelViewSet):
         return queryset.order_by('-date', '-id')
 
     def perform_create(self, serializer):
-        # L'utilisateur qui crée la dépense
-        sauvegarde = serializer.save(cree_par=self.request.user)
+        # `mouvement` n'est même pas exposé par le serializer (requis en base, OneToOne) :
+        # sans passer par `creer_depense`, un save() brut lève toujours IntegrityError.
+        validated = serializer.validated_data
+        try:
+            depense = depense_service.creer_depense(
+                date=validated['date'],
+                categorie_mouvement_id=validated['categorie_mouvement'].id,
+                beneficiaire=validated['beneficiaire'],
+                designation=validated['designation'],
+                montant=validated['montant'],
+                compte_id=validated['compte'].id,
+                ecole_id=validated['ecole'].id if validated.get('ecole') else None,
+                annee_scolaire_id=validated['annee_scolaire'].id,
+                piece_justificative=validated.get('piece_justificative'),
+                engage_par_id=validated['engage_par'].id if validated.get('engage_par') else None,
+                cree_par_id=self.request.user.id
+            )
+        except DjangoValidationError as e:
+            raise DRFValidationError(e.messages) from e
+        serializer.instance = depense
 
     @action(detail=True, methods=['post'], permission_classes=[TresorerieValidationPermission])
     def valider(self, request, pk=None):
@@ -445,9 +506,39 @@ class ArreteCaisseViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(date__lte=date_fin)
         return queryset.order_by('-date', '-id')
 
+    @extend_schema(responses=OpenApiTypes.OBJECT)
+    @action(detail=False, methods=['get'], url_path='solde-theorique')
+    def solde_theorique(self, request):
+        """Prévisualisation du solde théorique d'une caisse à une date, avant création de
+        l'arrêté (le même calcul que `creer_arrete_caisse` exécute lui-même à la création)."""
+        compte_id = request.query_params.get('compte_id')
+        date_arrete = request.query_params.get('date')
+        if not compte_id or not date_arrete:
+            return Response(
+                {'error': "Paramètres 'compte_id' et 'date' requis"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            solde = arrete_caisse_service.calculer_solde_theorique_caisse(compte_id, date_arrete)
+        except DjangoValidationError as e:
+            raise DRFValidationError(e.messages) from e
+        return Response({'solde_theorique': solde})
+
     def perform_create(self, serializer):
-        # L'utilisateur qui crée l'arrêté de caisse
-        sauvegarde = serializer.save(cree_par=self.request.user)
+        # `creer_arrete_caisse` calcule `solde_theorique`/`ecart` et refuse les doublons
+        # compte+date — un save() brut les laissait tous les deux non vérifiés.
+        validated = serializer.validated_data
+        try:
+            arrete_caisse = arrete_caisse_service.creer_arrete_caisse(
+                compte_id=validated['compte'].id,
+                date=validated['date'],
+                solde_physique=validated['solde_physique'],
+                fait_par_id=validated['fait_par'].id if validated.get('fait_par') else None,
+                cree_par_id=self.request.user.id
+            )
+        except DjangoValidationError as e:
+            raise DRFValidationError(e.messages) from e
+        serializer.instance = arrete_caisse
 
     @action(detail=True, methods=['post'], permission_classes=[TresorerieValidationPermission])
     def valider(self, request, pk=None):
@@ -552,6 +643,7 @@ class TableauDeBordViewSet(viewsets.ViewSet):
     """ViewSet pour les endpoints du tableau de bord trésorerie"""
     permission_classes = [TresoreriePermission]
 
+    @extend_schema(responses=OpenApiTypes.OBJECT)
     @action(detail=False, methods=['get'])
     def solde(self, request):
         """Get global balance by account type"""
@@ -565,6 +657,7 @@ class TableauDeBordViewSet(viewsets.ViewSet):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+    @extend_schema(responses=OpenApiTypes.OBJECT)
     @action(detail=False, methods=['get'])
     def solde_par_compte(self, request):
         """Get balance for each account"""
@@ -588,6 +681,7 @@ class TableauDeBordViewSet(viewsets.ViewSet):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+    @extend_schema(responses=OpenApiTypes.OBJECT)
     @action(detail=False, methods=['get'])
     def flux(self, request):
         """Get incoming/outgoing flows for a period"""
@@ -602,6 +696,7 @@ class TableauDeBordViewSet(viewsets.ViewSet):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+    @extend_schema(responses=OpenApiTypes.OBJECT)
     @action(detail=False, methods=['get'])
     def encaissements_recents(self, request):
         """Get recent encaissements"""
@@ -616,6 +711,7 @@ class TableauDeBordViewSet(viewsets.ViewSet):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+    @extend_schema(responses=OpenApiTypes.OBJECT)
     @action(detail=False, methods=['get'])
     def depenses_recentes(self, request):
         """Get recent expenses"""
@@ -630,6 +726,7 @@ class TableauDeBordViewSet(viewsets.ViewSet):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+    @extend_schema(responses=OpenApiTypes.OBJECT)
     @action(detail=False, methods=['get'])
     def ecarts_caisse(self, request):
         """Get important cash discrepancies"""
@@ -644,6 +741,7 @@ class TableauDeBordViewSet(viewsets.ViewSet):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+    @extend_schema(responses=OpenApiTypes.OBJECT)
     @action(detail=False, methods=['get'])
     def previsionnel(self, request):
         """Get treasury forecast"""
