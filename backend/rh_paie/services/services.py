@@ -1,0 +1,12 @@
+# backend/rh_paie/services/services.py
+# Export des services pour un import facile dans les views
+
+from .enseignant_service import EnseignantService as enseignant_service
+from .personnel_administratif_service import PersonnelAdministratifService as personnel_administratif_service
+from .affectation_enseignement_service import AffectationEnseignementService as affectation_enseignement_service
+from .salaire_enseignant_service import SalaireEnseignantService as salaire_enseignant_service
+from .salaire_administration_service import SalaireAdministrationService as salaire_administration_service
+from .avance_personnel_service import AvancePersonnelService as avance_personnel_service
+
+# Import des services de trésorerie pour les paiements
+from tresorerie.services import tresorerie_service

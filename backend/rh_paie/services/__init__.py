@@ -1,0 +1,10 @@
+# backend/rh_paie/services/__init__.py
+from .enseignant_service import EnseignantService
+from .personnel_administratif_service import PersonnelAdministratifService
+from .affectation_enseignement_service import AffectationEnseignementService
+from .salaire_enseignant_service import SalaireEnseignantService
+from .salaire_administration_service import SalaireAdministrationService
+from .avance_personnel_service import AvancePersonnelService
+
+# For backward compatibility
+from .services import *
