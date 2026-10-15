@@ -68,6 +68,166 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/evaluations/evaluations/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["evaluations_evaluations_list"];
+        put?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        post: operations["evaluations_evaluations_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/evaluations/evaluations/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["evaluations_evaluations_retrieve"];
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        put: operations["evaluations_evaluations_update"];
+        post?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        delete: operations["evaluations_evaluations_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        patch: operations["evaluations_evaluations_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/evaluations/notes/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["evaluations_notes_list"];
+        put?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        post: operations["evaluations_notes_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/evaluations/notes/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["evaluations_notes_retrieve"];
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        put: operations["evaluations_notes_update"];
+        post?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        delete: operations["evaluations_notes_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        patch: operations["evaluations_notes_partial_update"];
+        trace?: never;
+    };
     "/api/v1/healthz/": {
         parameters: {
             query?: never;
@@ -585,6 +745,245 @@ export interface paths {
          *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         patch: operations["personnes_types_piece_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/rapports/arrete-caisse/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description v_arrete_caisse : théorique/physique/écart/billetage.
+         *
+         *     Pour un arrêté déjà créé : renvoie ses valeurs enregistrées + le total du
+         *     billetage. `tresorerie.ArreteCaisseViewSet.solde_theorique` existe déjà pour la
+         *     prévisualisation AVANT création (réutilisé tel quel côté frontend, pas dupliqué
+         *     ici) — ce rapport sert la consultation APRÈS création.
+         */
+        get: operations["rapports_arrete_caisse_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rapports/bilan-consolide/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description v_bilan_consolide : v_bilan_mensuel consolidé toutes écoles confondues. */
+        get: operations["rapports_bilan_consolide_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rapports/bilan-mensuel/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description v_bilan_mensuel : entrées/dépenses/solde par (école, année, mois). */
+        get: operations["rapports_bilan_mensuel_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rapports/bulletin-periode/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description v_bulletin_periode : moyenne pondérée par (inscription, période). */
+        get: operations["rapports_bulletin_periode_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rapports/echeancier/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description v_echeancier : échéancier détaillé avec reste et retard. */
+        get: operations["rapports_echeancier_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rapports/etat-scolarite-etudiant/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description v_etat_scolarite_etudiant : état imprimable (scolarité + frais + reste total). */
+        get: operations["rapports_etat_scolarite_etudiant_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rapports/masse-salariale/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description v_masse_salariale : masse salariale enseignants + administration.
+         *
+         *     Limite connue : `SalaireEnseignant.mouvement` est un `BigIntegerField` brut (pas
+         *     une vraie FK, cf. commentaire dans rh_paie/models.py), et `Compte` ne porte pas
+         *     de FK `ecole` (retirée avec GroupeScolaire sans remplacement, cf. l'audit du
+         *     2026-10-14). La vue SQL de référence regroupe par école via ce chaînage
+         *     mouvement -> ecole, impossible à répliquer fidèlement en l'état : les salaires
+         *     enseignants sont donc agrégés sans `ecole_id` (seulement par année/mois) ; seuls
+         *     les salaires administration, dont `PersonnelAdministratif.ecole` est une vraie
+         *     FK, sont ventilés par école.
+         */
+        get: operations["rapports_masse_salariale_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rapports/paie-enseignant/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description v_paie_enseignant : dû vs payé par enseignant/année. */
+        get: operations["rapports_paie_enseignant_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rapports/resultat-annuel/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description v_resultat_annuel : ré-expose resultat_annuel. */
+        get: operations["rapports_resultat_annuel_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rapports/resultat-matiere/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description v_resultat_matiere : ré-expose resultat_matiere + régime lisible. */
+        get: operations["rapports_resultat_matiere_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rapports/situation-frais/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description v_situation_frais : reste à payer par (inscription, frais annexe). */
+        get: operations["rapports_situation_frais_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rapports/situation-scolarite/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description v_situation_scolarite : reste à payer de scolarité par inscription. */
+        get: operations["rapports_situation_scolarite_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/rapports/solde-compte/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description v_solde_compte : solde initial + crédits validés - débits validés. */
+        get: operations["rapports_solde_compte_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/v1/referentiel/annees-scolaires/": {
@@ -1385,6 +1784,283 @@ export interface paths {
          *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
          */
         patch: operations["referentiel_sessions_examen_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/resultats/deliberations/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["resultats_deliberations_list"];
+        put?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        post: operations["resultats_deliberations_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/resultats/deliberations/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["resultats_deliberations_retrieve"];
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        put: operations["resultats_deliberations_update"];
+        post?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        delete: operations["resultats_deliberations_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        patch: operations["resultats_deliberations_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/resultats/deliberations/{id}/valider/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * @description Déclenche le calcul figé : résultats de matière (si la délibération porte
+         *     une période) puis, si `inscription_id`/`annee_scolaire_id` sont fournis dans
+         *     le corps, le calcul de la période et/ou de l'année pour cette inscription.
+         */
+        post: operations["resultats_deliberations_valider_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/resultats/dettes-credit/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["resultats_dettes_credit_list"];
+        put?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        post: operations["resultats_dettes_credit_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/resultats/dettes-credit/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        get: operations["resultats_dettes_credit_retrieve"];
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        put: operations["resultats_dettes_credit_update"];
+        post?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        delete: operations["resultats_dettes_credit_destroy"];
+        options?: never;
+        head?: never;
+        /**
+         * @description Base CRUD partagée par les modules métier.
+         *
+         *     MRO : `SuppressionProtegeeMixin` (traduit RESTRICT/PROTECT en 409, enveloppe
+         *     `super().perform_destroy`) → `AuditLogMixin` (journalise create/update/destroy)
+         *     → `ModelViewSet`. Les sous-classes fixent `permission_classes`, `queryset`,
+         *     `serializer_class`, `filterset_class`, `search_fields`, `ordering_fields`.
+         */
+        patch: operations["resultats_dettes_credit_partial_update"];
+        trace?: never;
+    };
+    "/api/v1/resultats/resultats-annuels/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["resultats_resultats_annuels_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/resultats/resultats-annuels/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["resultats_resultats_annuels_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/resultats/resultats-matiere/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["resultats_resultats_matiere_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/resultats/resultats-matiere/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["resultats_resultats_matiere_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/resultats/resultats-periode/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["resultats_resultats_periode_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/resultats/resultats-periode/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["resultats_resultats_periode_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/v1/rh-paie/affectations-enseignement/": {
@@ -3189,6 +3865,45 @@ export interface components {
          * @enum {string}
          */
         CompteTypeEnum: "CAISSE" | "BANQUE" | "MOBILE_MONEY" | "VIRTUEL";
+        /**
+         * @description * `ADMIS` - Admis
+         *     * `ADMIS_CONDITIONNEL` - Admis conditionnel
+         *     * `REDOUBLE` - Redouble
+         *     * `EXCLU` - Exclu
+         *     * `AJOURNE` - Ajourné
+         * @enum {string}
+         */
+        DecisionEnum: "ADMIS" | "ADMIS_CONDITIONNEL" | "REDOUBLE" | "EXCLU" | "AJOURNE";
+        /**
+         * @description À combiner avec `ModelSerializer` sur un modèle héritant de `core.models.Auditable`.
+         *
+         *     Pose `cree_par` à la création et `modifie_par` à la mise à jour depuis
+         *     `context["request"].user`. Le serializer concret doit déclarer
+         *     `cree_par`, `modifie_par`, `cree_le`, `modifie_le` en `read_only`.
+         */
+        Deliberation: {
+            readonly id: number;
+            /** Format: date-time */
+            readonly cree_le: string;
+            /** Format: date-time */
+            readonly modifie_le: string;
+            /** Format: date */
+            date: string;
+            president_jury: string;
+            readonly statut: components["schemas"]["DeliberationStatutEnum"];
+            readonly cree_par: number | null;
+            readonly modifie_par: number | null;
+            classe: number;
+            session_examen: number;
+            periode?: number | null;
+            readonly validee_par: number | null;
+        };
+        /**
+         * @description * `BROUILLON` - Brouillon
+         *     * `VALIDEE` - Validée
+         * @enum {string}
+         */
+        DeliberationStatutEnum: "BROUILLON" | "VALIDEE";
         /** @description Serializer pour le modèle Depense */
         Depense: {
             readonly id: number;
@@ -3229,6 +3944,28 @@ export interface components {
             readonly modifie_par_nom: string;
             /** Format: date-time */
             readonly modifie_le: string;
+        };
+        /**
+         * @description À combiner avec `ModelSerializer` sur un modèle héritant de `core.models.Auditable`.
+         *
+         *     Pose `cree_par` à la création et `modifie_par` à la mise à jour depuis
+         *     `context["request"].user`. Le serializer concret doit déclarer
+         *     `cree_par`, `modifie_par`, `cree_le`, `modifie_le` en `read_only`.
+         */
+        DetteCredit: {
+            readonly id: number;
+            /** Format: date-time */
+            readonly cree_le: string;
+            /** Format: date-time */
+            readonly modifie_le: string;
+            credits: number;
+            soldee?: boolean;
+            readonly cree_par: number | null;
+            readonly modifie_par: number | null;
+            inscription_origine: number;
+            matiere: number;
+            annee_origine: number;
+            inscription_solde?: number | null;
         };
         /**
          * @description À combiner avec `ModelSerializer` sur un modèle héritant de `core.models.Auditable`.
@@ -3278,6 +4015,7 @@ export interface components {
             nom: string;
             sigle?: string | null;
             regime: components["schemas"]["RegimeEnum"];
+            /** Format: uri */
             logo?: string | null;
             contacts?: string | null;
             email?: string | null;
@@ -3391,6 +4129,42 @@ export interface components {
             photo?: string | null;
             situation_matrimoniale?: (components["schemas"]["SituationMatrimonialeEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
         };
+        /**
+         * @description À combiner avec `ModelSerializer` sur un modèle héritant de `core.models.Auditable`.
+         *
+         *     Pose `cree_par` à la création et `modifie_par` à la mise à jour depuis
+         *     `context["request"].user`. Le serializer concret doit déclarer
+         *     `cree_par`, `modifie_par`, `cree_le`, `modifie_le` en `read_only`.
+         */
+        Evaluation: {
+            readonly id: number;
+            /** Format: date-time */
+            readonly cree_le: string;
+            /** Format: date-time */
+            readonly modifie_le: string;
+            type: components["schemas"]["EvaluationTypeEnum"];
+            /**
+             * Format: decimal
+             * @description % de la note matière pour cette évaluation
+             */
+            ponderation: string;
+            bareme?: number;
+            /** Format: date */
+            date?: string | null;
+            readonly cree_par: number | null;
+            readonly modifie_par: number | null;
+            matiere: number;
+            classe: number;
+            session_examen: number;
+        };
+        /**
+         * @description * `CC` - Contrôle continu
+         *     * `EXAMEN` - Examen
+         *     * `TP` - Travaux pratiques
+         *     * `PROJET` - Projet
+         * @enum {string}
+         */
+        EvaluationTypeEnum: "CC" | "EXAMEN" | "TP" | "PROJET";
         Filiere: {
             readonly id: number;
             readonly ecole_libelle: string;
@@ -3533,14 +4307,6 @@ export interface components {
             niveau: number;
             option_filiere: number;
         };
-        /**
-         * @description * `TB` - Très bien
-         *     * `B` - Bien
-         *     * `AB` - Assez bien
-         *     * `P` - Passable
-         * @enum {string}
-         */
-        MentionEnum: "TB" | "B" | "AB" | "P";
         ModaliteFormation: {
             readonly id: number;
             code: components["schemas"]["CodeEnum"];
@@ -3657,6 +4423,27 @@ export interface components {
             a_soutenance?: boolean;
             a_examen_national?: boolean;
             ecole: number;
+        };
+        /**
+         * @description À combiner avec `ModelSerializer` sur un modèle héritant de `core.models.Auditable`.
+         *
+         *     Pose `cree_par` à la création et `modifie_par` à la mise à jour depuis
+         *     `context["request"].user`. Le serializer concret doit déclarer
+         *     `cree_par`, `modifie_par`, `cree_le`, `modifie_le` en `read_only`.
+         */
+        NoteEvaluation: {
+            readonly id: number;
+            /** Format: date-time */
+            readonly cree_le: string;
+            /** Format: date-time */
+            readonly modifie_le: string;
+            /** Format: decimal */
+            valeur?: string | null;
+            absent?: boolean;
+            readonly cree_par: number | null;
+            readonly modifie_par: number | null;
+            evaluation: number;
+            inscription: number;
         };
         /** @enum {unknown} */
         NullEnum: null;
@@ -3817,6 +4604,21 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["Compte"][];
         };
+        PaginatedDeliberationList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Deliberation"][];
+        };
         PaginatedDepenseList: {
             /** @example 123 */
             count: number;
@@ -3831,6 +4633,21 @@ export interface components {
              */
             previous?: string | null;
             results: components["schemas"]["Depense"][];
+        };
+        PaginatedDetteCreditList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["DetteCredit"][];
         };
         PaginatedEcheanceList: {
             /** @example 123 */
@@ -3906,6 +4723,21 @@ export interface components {
              */
             previous?: string | null;
             results: components["schemas"]["EtudiantList"][];
+        };
+        PaginatedEvaluationList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Evaluation"][];
         };
         PaginatedFiliereList: {
             /** @example 123 */
@@ -4042,6 +4874,21 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["Niveau"][];
         };
+        PaginatedNoteEvaluationList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["NoteEvaluation"][];
+        };
         PaginatedOptionFiliereList: {
             /** @example 123 */
             count: number;
@@ -4101,6 +4948,51 @@ export interface components {
              */
             previous?: string | null;
             results: components["schemas"]["PieceDossier"][];
+        };
+        PaginatedResultatAnnuelList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["ResultatAnnuel"][];
+        };
+        PaginatedResultatMatiereList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["ResultatMatiere"][];
+        };
+        PaginatedResultatPeriodeList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["ResultatPeriode"][];
         };
         PaginatedSalaireAdministrationList: {
             /** @example 123 */
@@ -4424,6 +5316,30 @@ export interface components {
             /** Format: date-time */
             readonly modifie_le?: string;
         };
+        /**
+         * @description À combiner avec `ModelSerializer` sur un modèle héritant de `core.models.Auditable`.
+         *
+         *     Pose `cree_par` à la création et `modifie_par` à la mise à jour depuis
+         *     `context["request"].user`. Le serializer concret doit déclarer
+         *     `cree_par`, `modifie_par`, `cree_le`, `modifie_le` en `read_only`.
+         */
+        PatchedDeliberation: {
+            readonly id?: number;
+            /** Format: date-time */
+            readonly cree_le?: string;
+            /** Format: date-time */
+            readonly modifie_le?: string;
+            /** Format: date */
+            date?: string;
+            president_jury?: string;
+            readonly statut?: components["schemas"]["DeliberationStatutEnum"];
+            readonly cree_par?: number | null;
+            readonly modifie_par?: number | null;
+            classe?: number;
+            session_examen?: number;
+            periode?: number | null;
+            readonly validee_par?: number | null;
+        };
         /** @description Serializer pour le modèle Depense */
         PatchedDepense: {
             readonly id?: number;
@@ -4472,6 +5388,28 @@ export interface components {
          *     `context["request"].user`. Le serializer concret doit déclarer
          *     `cree_par`, `modifie_par`, `cree_le`, `modifie_le` en `read_only`.
          */
+        PatchedDetteCredit: {
+            readonly id?: number;
+            /** Format: date-time */
+            readonly cree_le?: string;
+            /** Format: date-time */
+            readonly modifie_le?: string;
+            credits?: number;
+            soldee?: boolean;
+            readonly cree_par?: number | null;
+            readonly modifie_par?: number | null;
+            inscription_origine?: number;
+            matiere?: number;
+            annee_origine?: number;
+            inscription_solde?: number | null;
+        };
+        /**
+         * @description À combiner avec `ModelSerializer` sur un modèle héritant de `core.models.Auditable`.
+         *
+         *     Pose `cree_par` à la création et `modifie_par` à la mise à jour depuis
+         *     `context["request"].user`. Le serializer concret doit déclarer
+         *     `cree_par`, `modifie_par`, `cree_le`, `modifie_le` en `read_only`.
+         */
         PatchedEcheance: {
             readonly id?: number;
             /** Format: date-time */
@@ -4504,6 +5442,7 @@ export interface components {
             nom?: string;
             sigle?: string | null;
             regime?: components["schemas"]["RegimeEnum"];
+            /** Format: uri */
             logo?: string | null;
             contacts?: string | null;
             email?: string | null;
@@ -4578,6 +5517,34 @@ export interface components {
             adresse?: string | null;
             photo?: string | null;
             situation_matrimoniale?: (components["schemas"]["SituationMatrimonialeEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
+        };
+        /**
+         * @description À combiner avec `ModelSerializer` sur un modèle héritant de `core.models.Auditable`.
+         *
+         *     Pose `cree_par` à la création et `modifie_par` à la mise à jour depuis
+         *     `context["request"].user`. Le serializer concret doit déclarer
+         *     `cree_par`, `modifie_par`, `cree_le`, `modifie_le` en `read_only`.
+         */
+        PatchedEvaluation: {
+            readonly id?: number;
+            /** Format: date-time */
+            readonly cree_le?: string;
+            /** Format: date-time */
+            readonly modifie_le?: string;
+            type?: components["schemas"]["EvaluationTypeEnum"];
+            /**
+             * Format: decimal
+             * @description % de la note matière pour cette évaluation
+             */
+            ponderation?: string;
+            bareme?: number;
+            /** Format: date */
+            date?: string | null;
+            readonly cree_par?: number | null;
+            readonly modifie_par?: number | null;
+            matiere?: number;
+            classe?: number;
+            session_examen?: number;
         };
         PatchedFiliere: {
             readonly id?: number;
@@ -4696,6 +5663,27 @@ export interface components {
             a_soutenance?: boolean;
             a_examen_national?: boolean;
             ecole?: number;
+        };
+        /**
+         * @description À combiner avec `ModelSerializer` sur un modèle héritant de `core.models.Auditable`.
+         *
+         *     Pose `cree_par` à la création et `modifie_par` à la mise à jour depuis
+         *     `context["request"].user`. Le serializer concret doit déclarer
+         *     `cree_par`, `modifie_par`, `cree_le`, `modifie_le` en `read_only`.
+         */
+        PatchedNoteEvaluation: {
+            readonly id?: number;
+            /** Format: date-time */
+            readonly cree_le?: string;
+            /** Format: date-time */
+            readonly modifie_le?: string;
+            /** Format: decimal */
+            valeur?: string | null;
+            absent?: boolean;
+            readonly cree_par?: number | null;
+            readonly modifie_par?: number | null;
+            evaluation?: number;
+            inscription?: number;
         };
         PatchedOptionFiliere: {
             readonly id?: number;
@@ -4823,7 +5811,7 @@ export interface components {
             a_le_bac?: boolean;
             annee_obtention?: number | null;
             serie?: string | null;
-            mention?: (components["schemas"]["MentionEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
+            mention?: (components["schemas"]["SituationBacMentionEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
             etablissement?: string | null;
             ville?: string | null;
             etudiant?: number;
@@ -4929,6 +5917,73 @@ export interface components {
          * @enum {string}
          */
         RegimeEnum: "LMD" | "CLASSIQUE";
+        ResultatAnnuel: {
+            readonly id: number;
+            /** Format: date-time */
+            readonly cree_le: string;
+            /** Format: date-time */
+            readonly modifie_le: string;
+            regime: components["schemas"]["RegimeEnum"];
+            /** Format: decimal */
+            moyenne_annuelle: string;
+            credits_acquis?: number | null;
+            credits_requis?: number | null;
+            dette_credits?: number | null;
+            decision: components["schemas"]["DecisionEnum"];
+            mention?: (components["schemas"]["ResultatAnnuelMentionEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
+            /** Format: date-time */
+            deliberee_le?: string | null;
+            readonly cree_par: number | null;
+            readonly modifie_par: number | null;
+            inscription: number;
+            annee_scolaire: number;
+            deliberee_par?: number | null;
+        };
+        /**
+         * @description * `PASSABLE` - Passable
+         *     * `AB` - Assez bien
+         *     * `B` - Bien
+         *     * `TB` - Très bien
+         * @enum {string}
+         */
+        ResultatAnnuelMentionEnum: "PASSABLE" | "AB" | "B" | "TB";
+        ResultatMatiere: {
+            readonly id: number;
+            /** Format: date-time */
+            readonly cree_le: string;
+            /** Format: date-time */
+            readonly modifie_le: string;
+            /** Format: decimal */
+            note_normale?: string | null;
+            /** Format: decimal */
+            note_rattrapage?: string | null;
+            /** Format: decimal */
+            note_retenue: string;
+            credits?: number | null;
+            validee: boolean;
+            credits_acquis?: number | null;
+            readonly cree_par: number | null;
+            readonly modifie_par: number | null;
+            inscription: number;
+            matiere: number;
+            periode: number;
+            deliberation?: number | null;
+        };
+        ResultatPeriode: {
+            readonly id: number;
+            /** Format: date-time */
+            readonly cree_le: string;
+            /** Format: date-time */
+            readonly modifie_le: string;
+            /** Format: decimal */
+            moyenne_ponderee: string;
+            credits_acquis?: number | null;
+            rang?: number | null;
+            readonly cree_par: number | null;
+            readonly modifie_par: number | null;
+            inscription: number;
+            periode: number;
+        };
         RoleAffecte: {
             code: string;
             ecole_id: number | null;
@@ -5036,11 +6091,19 @@ export interface components {
             a_le_bac?: boolean;
             annee_obtention?: number | null;
             serie?: string | null;
-            mention?: (components["schemas"]["MentionEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
+            mention?: (components["schemas"]["SituationBacMentionEnum"] | components["schemas"]["BlankEnum"] | components["schemas"]["NullEnum"]) | null;
             etablissement?: string | null;
             ville?: string | null;
             etudiant: number;
         };
+        /**
+         * @description * `TB` - Très bien
+         *     * `B` - Bien
+         *     * `AB` - Assez bien
+         *     * `P` - Passable
+         * @enum {string}
+         */
+        SituationBacMentionEnum: "TB" | "B" | "AB" | "P";
         /**
          * @description * `CELIBATAIRE` - Célibataire
          *     * `MARIE` - Marié(e)
@@ -5223,6 +6286,318 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    evaluations_evaluations_list: {
+        parameters: {
+            query?: {
+                classe?: number;
+                matiere?: number;
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+                session_examen?: number;
+                /**
+                 * @description * `CC` - Contrôle continu
+                 *     * `EXAMEN` - Examen
+                 *     * `TP` - Travaux pratiques
+                 *     * `PROJET` - Projet
+                 */
+                type?: "CC" | "EXAMEN" | "PROJET" | "TP";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedEvaluationList"];
+                };
+            };
+        };
+    };
+    evaluations_evaluations_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Evaluation"];
+                "application/x-www-form-urlencoded": components["schemas"]["Evaluation"];
+                "multipart/form-data": components["schemas"]["Evaluation"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Evaluation"];
+                };
+            };
+        };
+    };
+    evaluations_evaluations_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this evaluation. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Evaluation"];
+                };
+            };
+        };
+    };
+    evaluations_evaluations_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this evaluation. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Evaluation"];
+                "application/x-www-form-urlencoded": components["schemas"]["Evaluation"];
+                "multipart/form-data": components["schemas"]["Evaluation"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Evaluation"];
+                };
+            };
+        };
+    };
+    evaluations_evaluations_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this evaluation. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    evaluations_evaluations_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this evaluation. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedEvaluation"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedEvaluation"];
+                "multipart/form-data": components["schemas"]["PatchedEvaluation"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Evaluation"];
+                };
+            };
+        };
+    };
+    evaluations_notes_list: {
+        parameters: {
+            query?: {
+                evaluation?: number;
+                inscription?: number;
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedNoteEvaluationList"];
+                };
+            };
+        };
+    };
+    evaluations_notes_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NoteEvaluation"];
+                "application/x-www-form-urlencoded": components["schemas"]["NoteEvaluation"];
+                "multipart/form-data": components["schemas"]["NoteEvaluation"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NoteEvaluation"];
+                };
+            };
+        };
+    };
+    evaluations_notes_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this note evaluation. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NoteEvaluation"];
+                };
+            };
+        };
+    };
+    evaluations_notes_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this note evaluation. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NoteEvaluation"];
+                "application/x-www-form-urlencoded": components["schemas"]["NoteEvaluation"];
+                "multipart/form-data": components["schemas"]["NoteEvaluation"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NoteEvaluation"];
+                };
+            };
+        };
+    };
+    evaluations_notes_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this note evaluation. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    evaluations_notes_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this note evaluation. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedNoteEvaluation"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedNoteEvaluation"];
+                "multipart/form-data": components["schemas"]["PatchedNoteEvaluation"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NoteEvaluation"];
+                };
             };
         };
     };
@@ -6228,6 +7603,308 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["TypePiece"];
+                };
+            };
+        };
+    };
+    rapports_arrete_caisse_retrieve: {
+        parameters: {
+            query: {
+                compte_id: number;
+                date?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    rapports_bilan_consolide_retrieve: {
+        parameters: {
+            query?: {
+                annee_scolaire_id?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    rapports_bilan_mensuel_retrieve: {
+        parameters: {
+            query?: {
+                annee_scolaire_id?: number;
+                ecole_id?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    rapports_bulletin_periode_retrieve: {
+        parameters: {
+            query?: {
+                inscription_id?: number;
+                periode_id?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    rapports_echeancier_retrieve: {
+        parameters: {
+            query?: {
+                inscription_id?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    rapports_etat_scolarite_etudiant_retrieve: {
+        parameters: {
+            query?: {
+                inscription_id?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    rapports_masse_salariale_retrieve: {
+        parameters: {
+            query?: {
+                annee_scolaire_id?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    rapports_paie_enseignant_retrieve: {
+        parameters: {
+            query?: {
+                enseignant_id?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    rapports_resultat_annuel_retrieve: {
+        parameters: {
+            query?: {
+                annee_scolaire_id?: number;
+                inscription_id?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    rapports_resultat_matiere_retrieve: {
+        parameters: {
+            query?: {
+                inscription_id?: number;
+                periode_id?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    rapports_situation_frais_retrieve: {
+        parameters: {
+            query?: {
+                inscription_id?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    rapports_situation_scolarite_retrieve: {
+        parameters: {
+            query?: {
+                inscription_id?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    rapports_solde_compte_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
         };
@@ -7768,6 +9445,492 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SessionExamen"];
+                };
+            };
+        };
+    };
+    resultats_deliberations_list: {
+        parameters: {
+            query?: {
+                classe?: number;
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                periode?: number;
+                /** @description A search term. */
+                search?: string;
+                session_examen?: number;
+                /**
+                 * @description * `BROUILLON` - Brouillon
+                 *     * `VALIDEE` - Validée
+                 */
+                statut?: "BROUILLON" | "VALIDEE";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedDeliberationList"];
+                };
+            };
+        };
+    };
+    resultats_deliberations_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Deliberation"];
+                "application/x-www-form-urlencoded": components["schemas"]["Deliberation"];
+                "multipart/form-data": components["schemas"]["Deliberation"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Deliberation"];
+                };
+            };
+        };
+    };
+    resultats_deliberations_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this deliberation. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Deliberation"];
+                };
+            };
+        };
+    };
+    resultats_deliberations_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this deliberation. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Deliberation"];
+                "application/x-www-form-urlencoded": components["schemas"]["Deliberation"];
+                "multipart/form-data": components["schemas"]["Deliberation"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Deliberation"];
+                };
+            };
+        };
+    };
+    resultats_deliberations_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this deliberation. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    resultats_deliberations_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this deliberation. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedDeliberation"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedDeliberation"];
+                "multipart/form-data": components["schemas"]["PatchedDeliberation"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Deliberation"];
+                };
+            };
+        };
+    };
+    resultats_deliberations_valider_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this deliberation. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Deliberation"];
+                "application/x-www-form-urlencoded": components["schemas"]["Deliberation"];
+                "multipart/form-data": components["schemas"]["Deliberation"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Deliberation"];
+                };
+            };
+        };
+    };
+    resultats_dettes_credit_list: {
+        parameters: {
+            query?: {
+                inscription_origine?: number;
+                matiere?: number;
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+                soldee?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedDetteCreditList"];
+                };
+            };
+        };
+    };
+    resultats_dettes_credit_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DetteCredit"];
+                "application/x-www-form-urlencoded": components["schemas"]["DetteCredit"];
+                "multipart/form-data": components["schemas"]["DetteCredit"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DetteCredit"];
+                };
+            };
+        };
+    };
+    resultats_dettes_credit_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this dette credit. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DetteCredit"];
+                };
+            };
+        };
+    };
+    resultats_dettes_credit_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this dette credit. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DetteCredit"];
+                "application/x-www-form-urlencoded": components["schemas"]["DetteCredit"];
+                "multipart/form-data": components["schemas"]["DetteCredit"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DetteCredit"];
+                };
+            };
+        };
+    };
+    resultats_dettes_credit_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this dette credit. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    resultats_dettes_credit_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this dette credit. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedDetteCredit"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedDetteCredit"];
+                "multipart/form-data": components["schemas"]["PatchedDetteCredit"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DetteCredit"];
+                };
+            };
+        };
+    };
+    resultats_resultats_annuels_list: {
+        parameters: {
+            query?: {
+                annee_scolaire?: number;
+                /**
+                 * @description * `ADMIS` - Admis
+                 *     * `ADMIS_CONDITIONNEL` - Admis conditionnel
+                 *     * `REDOUBLE` - Redouble
+                 *     * `EXCLU` - Exclu
+                 *     * `AJOURNE` - Ajourné
+                 */
+                decision?: "ADMIS" | "ADMIS_CONDITIONNEL" | "AJOURNE" | "EXCLU" | "REDOUBLE";
+                inscription?: number;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedResultatAnnuelList"];
+                };
+            };
+        };
+    };
+    resultats_resultats_annuels_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this resultat annuel. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResultatAnnuel"];
+                };
+            };
+        };
+    };
+    resultats_resultats_matiere_list: {
+        parameters: {
+            query?: {
+                inscription?: number;
+                matiere?: number;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                periode?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedResultatMatiereList"];
+                };
+            };
+        };
+    };
+    resultats_resultats_matiere_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this resultat matiere. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResultatMatiere"];
+                };
+            };
+        };
+    };
+    resultats_resultats_periode_list: {
+        parameters: {
+            query?: {
+                inscription?: number;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                periode?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedResultatPeriodeList"];
+                };
+            };
+        };
+    };
+    resultats_resultats_periode_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this resultat periode. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResultatPeriode"];
                 };
             };
         };

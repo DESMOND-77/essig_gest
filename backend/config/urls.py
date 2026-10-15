@@ -12,6 +12,9 @@ api_v1 = [
     path("scolarite/", include("scolarite.urls")),
     path("rh-paie/", include("rh_paie.urls")),
     path("tresorerie/", include("tresorerie.urls")),
+    path("evaluations/", include("evaluations.urls")),
+    path("resultats/", include("resultats.urls")),
+    path("rapports/", include("rapports.urls")),
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
     path("docs/", SpectacularSwaggerView.as_view(url_name="v1:schema"), name="docs"),
 ]

@@ -16,7 +16,12 @@ class AnneeScolaireFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.AnneeScolaire
 
-    libelle = factory.Sequence(lambda n: f"20{20 + n}-20{21 + n}")
+    # `libelle` est un VARCHAR(9) : "20{20+n}-20{21+n}" dépasse 9 caractères dès que
+    # n >= 80 (ex. "20135-20136"), ce qui ne se voyait pas avant que la suite dépasse
+    # ~80 inscriptions de ce fixture dans un même run pytest (`factory.Sequence` est un
+    # compteur global au process). Encodage fixe à 9 caractères, unique jusqu'à 10**7
+    # appels — largement suffisant pour une suite de tests.
+    libelle = factory.Sequence(lambda n: f"AN{n:07d}")
     date_debut = "2025-10-01"
     date_fin = "2026-08-31"
     est_courante = False

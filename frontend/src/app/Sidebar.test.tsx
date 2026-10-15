@@ -29,11 +29,19 @@ describe("Sidebar", () => {
       "href",
       "/tresorerie",
     );
+    expect(screen.getByRole("link", { name: /évaluations/i })).toHaveAttribute(
+      "href",
+      "/evaluations/evaluations",
+    );
+    expect(screen.getByRole("link", { name: /résultats/i })).toHaveAttribute(
+      "href",
+      "/resultats/resultats-annuels",
+    );
   });
 
-  it("désactive les modules à venir (Paie, Résultats)", () => {
+  it("désactive les modules à venir (Paie)", () => {
     rendre();
-    for (const nom of [/paie/i, /résultats/i]) {
+    for (const nom of [/paie/i]) {
       expect(screen.getByText(nom).closest("a")).toBeNull();
     }
   });

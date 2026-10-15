@@ -1,8 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 import { AppShell } from "./app/AppShell";
 import { LoginPage } from "./auth/LoginPage";
+import { routesEvaluations } from "./evaluations/routes";
 import { routesPersonnes } from "./personnes/routes";
 import { routesReferentiel } from "./referentiel/routes";
+import { routesResultats } from "./resultats/routes";
 import { routesScolarite } from "./scolarite/routes";
 import { routesTresorerie } from "./tresorerie/routes";
 
@@ -17,6 +19,8 @@ export const router = createBrowserRouter([
       ...routesPersonnes,
       ...routesScolarite,
       ...routesTresorerie,
+      ...routesEvaluations,
+      ...routesResultats,
     ],
   },
 ]);

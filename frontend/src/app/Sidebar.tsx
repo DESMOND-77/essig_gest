@@ -7,8 +7,9 @@ export const NAV_MODULES: Module[] = [
   { cle: "personnes", libelle: "Personnes", chemin: "/personnes/etudiants", disponible: true },
   { cle: "scolarite", libelle: "Scolarité", chemin: "/scolarite/modalites-paiement", disponible: true },
   { cle: "tresorerie", libelle: "Trésorerie", chemin: "/tresorerie", disponible: true },
+  { cle: "evaluations", libelle: "Évaluations", chemin: "/evaluations/evaluations", disponible: true },
+  { cle: "resultats", libelle: "Résultats", chemin: "/resultats/resultats-annuels", disponible: true },
   { cle: "paie", libelle: "Paie", chemin: "/paie", disponible: false },
-  { cle: "resultats", libelle: "Résultats", chemin: "/resultats", disponible: false },
 ];
 
 export function Sidebar() {
