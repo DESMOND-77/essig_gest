@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { z } from "zod";
@@ -81,5 +82,20 @@ describe("ResourcePage", () => {
 
     await screen.findByText("Lycée A");
     expect(screen.getByRole("button", { name: "Créer" })).toBeInTheDocument();
+  });
+
+  it("ouvre le formulaire de création dans une fenêtre modale", async () => {
+    useAuthMock.mockReturnValue({ utilisateur: { roles: [{ code: "DIRECTION" }] } });
+    render(<ResourcePage descripteur={descripteur} />, { wrapper });
+
+    await screen.findByText("Lycée A");
+    expect(screen.queryByRole("dialog")).toBeNull();
+
+    await userEvent.click(screen.getByRole("button", { name: "Créer" }));
+
+    const dialogue = await screen.findByRole("dialog");
+    expect(dialogue).toBeInTheDocument();
+    expect(screen.getByText("Créer — Écoles")).toBeInTheDocument();
+    expect(screen.getByLabelText(/nom/i)).toBeInTheDocument();
   });
 });

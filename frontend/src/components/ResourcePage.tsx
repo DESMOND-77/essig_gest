@@ -8,6 +8,7 @@ import { useMemo, useState } from "react";
 import { useAuth } from "../auth/AuthContext";
 import { DataState } from "./DataState";
 import { ConfirmDialog } from "./ConfirmDialog";
+import { Modal } from "./Modal";
 import { Chip } from "./Chip";
 import { ResourceForm } from "./ResourceForm";
 import { useToast } from "./ToastProvider";
@@ -205,21 +206,23 @@ export function ResourcePage({ descripteur }: { descripteur: Descripteur }) {
         </button>
       </div>
 
-      {(creation || edition) && (
-        <div className="rounded border p-4">
-          <h2 className="mb-3 font-medium">
-            {edition ? "Modifier" : "Créer"} — {descripteur.titre}
-          </h2>
-          <ResourceForm
-            descripteur={descripteur}
-            valeurs={edition ?? undefined}
-            onFerme={() => {
-              setCreation(false);
-              setEdition(null);
-            }}
-          />
-        </div>
-      )}
+      <Modal
+        ouvert={creation || !!edition}
+        titre={`${edition ? "Modifier" : "Créer"} — ${descripteur.titre}`}
+        onFermer={() => {
+          setCreation(false);
+          setEdition(null);
+        }}
+      >
+        <ResourceForm
+          descripteur={descripteur}
+          valeurs={edition ?? undefined}
+          onFerme={() => {
+            setCreation(false);
+            setEdition(null);
+          }}
+        />
+      </Modal>
 
       <ConfirmDialog
         ouvert={!!aSupprimer}
