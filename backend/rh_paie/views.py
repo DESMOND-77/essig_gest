@@ -41,6 +41,8 @@ class EnseignantViewSet(_BaseRhPaieViewSet):
     """ViewSet pour gérer les enseignants"""
     queryset = Enseignant.objects.all()
     serializer_class = EnseignantSerializer
+    search_fields = ["nom", "prenom", "email", "specialite"]
+    filterset_fields = ["statut", "actif"]
 
     def get_queryset(self):
         queryset = Enseignant.objects.all()
@@ -110,6 +112,8 @@ class PersonnelAdministratifViewSet(_BaseRhPaieViewSet):
     """ViewSet pour gérer le personnel administratif"""
     queryset = PersonnelAdministratif.objects.all()
     serializer_class = PersonnelAdministratifSerializer
+    search_fields = ["nom", "prenom", "poste", "email"]
+    filterset_fields = ["ecole", "actif"]
 
     def get_queryset(self):
         queryset = PersonnelAdministratif.objects.all()
@@ -179,6 +183,7 @@ class AffectationEnseignementViewSet(_BaseRhPaieViewSet):
     """ViewSet pour gérer les affectations d'enseignement"""
     queryset = AffectationEnseignement.objects.all()
     serializer_class = AffectationEnseignementSerializer
+    filterset_fields = ["enseignant", "classe", "annee_scolaire"]
 
     def get_queryset(self):
         queryset = AffectationEnseignement.objects.all()
@@ -252,6 +257,7 @@ class SalaireEnseignantViewSet(_BaseRhPaieViewSet):
     """ViewSet pour gérer les salaires des enseignants"""
     queryset = SalaireEnseignant.objects.all()
     serializer_class = SalaireEnseignantSerializer
+    filterset_fields = ["enseignant", "annee_scolaire", "mois", "statut"]
 
     def get_queryset(self):
         queryset = SalaireEnseignant.objects.all()
@@ -404,6 +410,7 @@ class SalaireAdministrationViewSet(_BaseRhPaieViewSet):
     """ViewSet pour gérer les salaires du personnel administratif"""
     queryset = SalaireAdministration.objects.all()
     serializer_class = SalaireAdministrationSerializer
+    filterset_fields = ["personnel_administratif", "annee_scolaire", "mois", "statut"]
 
     def get_queryset(self):
         queryset = SalaireAdministration.objects.all()
@@ -567,6 +574,7 @@ class AvancePersonnelViewSet(_BaseRhPaieViewSet):
     """ViewSet pour gérer les avances au personnel"""
     queryset = AvancePersonnel.objects.all()
     serializer_class = AvancePersonnelSerializer
+    filterset_fields = ["beneficiaire", "regularisee"]
 
     def get_queryset(self):
         queryset = AvancePersonnel.objects.all()

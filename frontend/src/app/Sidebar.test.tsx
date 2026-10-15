@@ -11,7 +11,7 @@ const rendre = () =>
   );
 
 describe("Sidebar", () => {
-  it("affiche Référentiel, Personnes, Scolarité et Trésorerie comme liens actifs", () => {
+  it("affiche tous les modules comme liens actifs", () => {
     rendre();
     expect(screen.getByRole("link", { name: /référentiel/i })).toHaveAttribute(
       "href",
@@ -37,12 +37,9 @@ describe("Sidebar", () => {
       "href",
       "/resultats/resultats-annuels",
     );
-  });
-
-  it("désactive les modules à venir (Paie)", () => {
-    rendre();
-    for (const nom of [/paie/i]) {
-      expect(screen.getByText(nom).closest("a")).toBeNull();
-    }
+    expect(screen.getByRole("link", { name: /paie/i })).toHaveAttribute(
+      "href",
+      "/paie/enseignants",
+    );
   });
 });

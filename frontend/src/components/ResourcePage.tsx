@@ -8,6 +8,7 @@ import { useMemo, useState } from "react";
 import { useAuth } from "../auth/AuthContext";
 import { DataState } from "./DataState";
 import { ConfirmDialog } from "./ConfirmDialog";
+import { Chip } from "./Chip";
 import { ResourceForm } from "./ResourceForm";
 import { useToast } from "./ToastProvider";
 import { messageErreur } from "../lib/errors";
@@ -15,6 +16,29 @@ import { createResourceHooks } from "../lib/resource";
 import { peutEcrire, type Descripteur } from "../referentiel/descripteur";
 
 type Ligne = Record<string, unknown> & { id: number };
+
+const VARIANTE_PAR_VALEUR: Record<string, "success" | "warning" | "error" | "info"> = {
+  VALIDE: "success",
+  VALIDÉE: "success",
+  VALIDEE: "success",
+  PAYÉ: "success",
+  ADMIS: "success",
+  SOLDE: "success",
+  EN_ATTENTE_VALIDATION: "warning",
+  BROUILLON: "warning",
+  ENGAGEE: "warning",
+  ADMIS_CONDITIONNEL: "warning",
+  AJOURNE: "warning",
+  PARTIEL: "warning",
+  ANNULE: "error",
+  ANNULEE: "error",
+  REDOUBLE: "error",
+  EXCLU: "error",
+};
+
+function variantePourValeur(valeur: string): "success" | "warning" | "error" | "info" {
+  return VARIANTE_PAR_VALEUR[valeur] ?? "info";
+}
 
 export function ResourcePage({ descripteur }: { descripteur: Descripteur }) {
   const hooks = useMemo(
@@ -49,6 +73,9 @@ export function ResourcePage({ descripteur }: { descripteur: Descripteur }) {
             ) : (
               <span className="text-gray-400">—</span>
             );
+          }
+          if ((c.cle === "statut" || c.cle === "decision") && v != null && v !== "") {
+            return <Chip variante={variantePourValeur(String(v))} label={String(v)} />;
           }
           return v == null ? "" : String(v);
         },

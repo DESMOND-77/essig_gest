@@ -9,7 +9,7 @@ export const NAV_MODULES: Module[] = [
   { cle: "tresorerie", libelle: "Trésorerie", chemin: "/tresorerie", disponible: true },
   { cle: "evaluations", libelle: "Évaluations", chemin: "/evaluations/evaluations", disponible: true },
   { cle: "resultats", libelle: "Résultats", chemin: "/resultats/resultats-annuels", disponible: true },
-  { cle: "paie", libelle: "Paie", chemin: "/paie", disponible: false },
+  { cle: "paie", libelle: "Paie", chemin: "/paie/enseignants", disponible: true },
 ];
 
 export function Sidebar() {

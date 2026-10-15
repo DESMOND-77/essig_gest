@@ -6,6 +6,7 @@ import { useAuth } from "../../auth/AuthContext";
 import { z } from "zod";
 import { virementDescripteur } from "../config/virement";
 import { Chip } from "../../components/Chip";
+import { ConfirmDialog } from "../../components/ConfirmDialog";
 import {
   creerVirement,
   engagerVirement,
@@ -145,10 +146,9 @@ export const VirementForm = () => {
     }
   };
 
+  const [confirmation, setConfirmation] = useState<null | "valider" | "annuler">(null);
+
   const handleValider = async () => {
-    if (!window.confirm("Confirmez-vous la validation de ce virement ? Les mouvements comptables seront créés.")) {
-      return;
-    }
     if (!virementId) return;
     try {
       const updatedData = await validerVirement(virementId);
@@ -157,13 +157,12 @@ export const VirementForm = () => {
     } catch (error) {
       toast("Erreur lors de la validation", "erreur");
       console.error(error);
+    } finally {
+      setConfirmation(null);
     }
   };
 
   const handleAnnuler = async () => {
-    if (!window.confirm("Confirmez-vous l'annulation de ce virement ?")) {
-      return;
-    }
     if (!virementId) return;
     try {
       const updatedData = await annulerVirement(virementId);
@@ -172,6 +171,8 @@ export const VirementForm = () => {
     } catch (error) {
       toast("Erreur lors de l'annulation", "erreur");
       console.error(error);
+    } finally {
+      setConfirmation(null);
     }
   };
 
@@ -359,7 +360,7 @@ export const VirementForm = () => {
               {peutValiderVirement && (
                 <button
                   type="button"
-                  onClick={handleValider}
+                  onClick={() => setConfirmation("valider")}
                   disabled={loadingDetail || formState.isSubmitting}
                   className="rounded bg-gray-800 px-3 py-1 text-sm text-white"
                 >
@@ -369,7 +370,7 @@ export const VirementForm = () => {
               {peutAnnulerVirement && (
                 <button
                   type="button"
-                  onClick={handleAnnuler}
+                  onClick={() => setConfirmation("annuler")}
                   disabled={loadingDetail || formState.isSubmitting}
                   className="rounded border px-3 py-1 text-sm text-red-600 hover:bg-red-50"
                 >
@@ -380,6 +381,25 @@ export const VirementForm = () => {
           )}
         </section>
       )}
+
+      <ConfirmDialog
+        ouvert={confirmation === "valider"}
+        titre="Confirmer la validation"
+        description="Les mouvements comptables seront créés et le virement passera au statut VALIDÉ."
+        labelConfirmer="Valider"
+        varianteConfirmer="neutre"
+        onConfirmer={handleValider}
+        onAnnuler={() => setConfirmation(null)}
+      />
+      <ConfirmDialog
+        ouvert={confirmation === "annuler"}
+        titre="Confirmer l'annulation"
+        description="Cette action est définitive."
+        labelConfirmer="Annuler le virement"
+        varianteConfirmer="danger"
+        onConfirmer={handleAnnuler}
+        onAnnuler={() => setConfirmation(null)}
+      />
     </div>
   );
 };

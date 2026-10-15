@@ -6,12 +6,16 @@ export function ConfirmDialog({
   description,
   onConfirmer,
   onAnnuler,
+  labelConfirmer = "Supprimer",
+  varianteConfirmer = "danger",
 }: {
   ouvert: boolean;
   titre: string;
   description: string;
   onConfirmer: () => void;
   onAnnuler: () => void;
+  labelConfirmer?: string;
+  varianteConfirmer?: "danger" | "neutre";
 }) {
   return (
     <Dialog.Root open={ouvert} onOpenChange={(o) => !o && onAnnuler()}>
@@ -28,9 +32,11 @@ export function ConfirmDialog({
             </button>
             <button
               onClick={onConfirmer}
-              className="rounded bg-red-600 px-3 py-1 text-sm text-white"
+              className={`rounded px-3 py-1 text-sm text-white ${
+                varianteConfirmer === "danger" ? "bg-red-600" : "bg-gray-800"
+              }`}
             >
-              Supprimer
+              {labelConfirmer}
             </button>
           </div>
         </Dialog.Content>
