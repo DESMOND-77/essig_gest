@@ -10,7 +10,7 @@ export type Page<T> = {
 
 export type ParamsListe = Record<string, string | number | undefined>;
 
-async function jsonOuLeve(resp: Response) {
+export async function jsonOuLeve(resp: Response) {
   const corps = resp.status === 204 ? null : await resp.json().catch(() => null);
   if (!resp.ok) {
     throw Object.assign(new Error(`HTTP ${resp.status}`), {

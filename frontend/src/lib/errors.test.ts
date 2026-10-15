@@ -16,4 +16,10 @@ describe("messageErreur", () => {
   it("409 -> message de suppression", () => {
     expect(messageErreur(409, null)).toMatch(/référencé/i);
   });
+  it("401 -> message de session expirée", () => {
+    expect(messageErreur(401, null)).toMatch(/session expirée/i);
+  });
+  it("429 -> message de limite de requêtes", () => {
+    expect(messageErreur(429, null)).toMatch(/trop de requêtes/i);
+  });
 });

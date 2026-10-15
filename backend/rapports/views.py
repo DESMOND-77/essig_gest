@@ -19,10 +19,19 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from personnes.models import Etudiant, Inscription
+from referentiel.models import AnneeScolaire
 from resultats.models import ResultatAnnuel, ResultatMatiere
 from rh_paie.models import AffectationEnseignement, SalaireAdministration, SalaireEnseignant
 from scolarite.models import Echeance, FraisInscription
-from tresorerie.models import ArreteCaisse, Billetage, Compte, ImputationEncaissement, Mouvement
+from tresorerie.models import (
+    ArreteCaisse,
+    Billetage,
+    Compte,
+    Depense,
+    Encaissement,
+    ImputationEncaissement,
+    Mouvement,
+)
 
 # `montant` est un DecimalField(12,0) sur la quasi-totalité des modèles financiers :
 # `Coalesce(Sum(...), Value(0))` lève FieldError ("mixed types Decimal/Integer") sans
@@ -613,3 +622,102 @@ def arrete_caisse(request):
             }
         )
     return Response(resultats)
+
+
+@extend_schema(tags=["rapports"], responses=OpenApiTypes.OBJECT)
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def tableau_de_bord(request):
+    """Indicateurs d'ensemble (§18 du mandat) : étudiants inscrits, encaissements,
+    reste à recouvrer, dépenses, solde des comptes, masse salariale, résultats,
+    alertes administratives. Scope sur l'année scolaire courante (`est_courante`)
+    quand une année est marquée comme telle, sinon sur l'ensemble des données."""
+    annee = AnneeScolaire.objects.filter(est_courante=True).first()
+
+    inscriptions = Inscription.objects.filter(etat=Inscription.Etat.ACTIVE)
+    encaissements = Encaissement.objects.filter(statut=Encaissement.Statut.VALIDE)
+    echeances = Echeance.objects.all()
+    depenses = Depense.objects.filter(statut=Depense.Statut.PAYEE)
+    salaires_enseignant = SalaireEnseignant.objects.all()
+    salaires_admin = SalaireAdministration.objects.all()
+    resultats_annuels = ResultatAnnuel.objects.all()
+
+    if annee:
+        inscriptions = inscriptions.filter(annee_scolaire=annee)
+        encaissements = encaissements.filter(inscription__annee_scolaire=annee)
+        echeances = echeances.filter(inscription__annee_scolaire=annee)
+        # Depense n'a pas de FK annee_scolaire directe : on scope sur la fenêtre de
+        # dates de l'année courante plutôt que de renoncer au filtrage.
+        depenses = depenses.filter(date__range=(annee.date_debut, annee.date_fin))
+        salaires_enseignant = salaires_enseignant.filter(annee_scolaire=annee)
+        salaires_admin = salaires_admin.filter(annee_scolaire=annee)
+        resultats_annuels = resultats_annuels.filter(annee_scolaire=annee)
+
+    etudiants_inscrits = inscriptions.count()
+
+    total_encaisse = encaissements.aggregate(total=Coalesce(Sum("montant_total"), ZERO_FCFA))[
+        "total"
+    ]
+
+    montant_echeances = echeances.aggregate(total=Coalesce(Sum("montant"), ZERO_FCFA))["total"]
+    montant_encaisse_echeances = ImputationEncaissement.objects.filter(
+        cible=ImputationEncaissement.Cible.ECHEANCE,
+        echeance__in=echeances,
+    ).aggregate(total=Coalesce(Sum("montant"), ZERO_FCFA))["total"]
+    reste_a_recouvrer = montant_echeances - montant_encaisse_echeances
+
+    total_depenses = depenses.aggregate(total=Coalesce(Sum("montant"), ZERO_FCFA))["total"]
+
+    solde_comptes = sum((row["solde"] for row in _solde_compte_donnees()), start=0)
+
+    masse_salariale_total = (
+        salaires_enseignant.aggregate(total=Coalesce(Sum("montant"), ZERO_FCFA))["total"]
+        + salaires_admin.aggregate(total=Coalesce(Sum("montant_paye"), ZERO_FCFA))["total"]
+    )
+
+    resultats_par_decision = dict(
+        resultats_annuels.values("decision")
+        .annotate(nb=Count("id"))
+        .values_list("decision", "nb")
+    )
+
+    aujourdhui = date.today()
+    echeances_en_retard = sum(
+        1
+        for e in echeances
+        if aujourdhui > e.date_echeance
+        and (e.montant - _montant_encaisse_echeance(e.id)) > 0
+    )
+    ecarts_caisse = ArreteCaisse.objects.exclude(ecart=0).count()
+
+    return Response(
+        {
+            "annee_scolaire_id": annee.id if annee else None,
+            "annee_scolaire_libelle": annee.libelle if annee else None,
+            "etudiants_inscrits": etudiants_inscrits,
+            "encaissements": total_encaisse,
+            "reste_a_recouvrer": reste_a_recouvrer,
+            "depenses": total_depenses,
+            "solde_comptes": solde_comptes,
+            "masse_salariale": masse_salariale_total,
+            "resultats_par_decision": resultats_par_decision,
+            "alertes": {
+                "echeances_en_retard": echeances_en_retard,
+                "arretes_caisse_en_ecart": ecarts_caisse,
+            },
+        }
+    )
+
+
+def _solde_compte_donnees():
+    comptes = Compte.objects.annotate(
+        credits=Coalesce(
+            Sum("mouvement__montant", filter=Q(mouvement__sens="CREDIT", mouvement__valide=True)),
+            ZERO_FCFA,
+        ),
+        debits=Coalesce(
+            Sum("mouvement__montant", filter=Q(mouvement__sens="DEBIT", mouvement__valide=True)),
+            ZERO_FCFA,
+        ),
+    )
+    return [{"solde": c.solde_initial + c.credits - c.debits} for c in comptes]

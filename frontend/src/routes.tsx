@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { AppShell } from "./app/AppShell";
+import { Dashboard } from "./app/Dashboard";
 import { LoginPage } from "./auth/LoginPage";
 import { routesEvaluations } from "./evaluations/routes";
 import { routesPaie } from "./paie/routes";
@@ -15,7 +16,7 @@ export const router = createBrowserRouter([
     path: "/",
     element: <AppShell />,
     children: [
-      { index: true, element: <p className="text-gray-600">Bienvenue. Choisissez un module.</p> },
+      { index: true, element: <Dashboard /> },
       ...routesReferentiel,
       ...routesPersonnes,
       ...routesScolarite,

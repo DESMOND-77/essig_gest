@@ -18,6 +18,8 @@ export function messageErreur(status: number, payload: PayloadErreur): string {
     payload && typeof payload === "object" && "detail" in payload
       ? String((payload as { detail?: unknown }).detail ?? "")
       : "";
+  if (status === 401) return "Session expirée. Veuillez vous reconnecter.";
+  if (status === 429) return detail || "Trop de requêtes. Réessayez dans un instant.";
   if (status === 403) return detail || "Rôle insuffisant pour cette action.";
   if (status === 409)
     return detail || "Suppression impossible : élément référencé ailleurs.";

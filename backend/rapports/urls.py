@@ -20,4 +20,5 @@ urlpatterns = [
     path("masse-salariale/", views.masse_salariale, name="rapport-masse-salariale"),
     path("paie-enseignant/", views.paie_enseignant, name="rapport-paie-enseignant"),
     path("arrete-caisse/", views.arrete_caisse, name="rapport-arrete-caisse"),
+    path("tableau-de-bord/", views.tableau_de_bord, name="rapport-tableau-de-bord"),
 ]

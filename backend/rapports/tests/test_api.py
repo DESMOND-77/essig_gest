@@ -147,6 +147,29 @@ def test_bulletin_periode_moyenne_ponderee():
     assert Decimal(resp.data[0]["moyenne_ponderee"]) == Decimal("10.00")
 
 
+def test_tableau_de_bord_scope_annee_courante():
+    from referentiel.tests.factories import AnneeScolaireFactory
+
+    annee = AnneeScolaireFactory(est_courante=True)
+    autre_annee = AnneeScolaireFactory(est_courante=False)
+
+    classe = ClasseFactory(annee_scolaire=annee)
+    inscription = InscriptionFactory(classe=classe, etat="ACTIVE")
+    InscriptionFactory(classe=ClasseFactory(annee_scolaire=autre_annee), etat="ACTIVE")
+
+    Echeance.objects.create(
+        inscription=inscription, numero=1, montant=100_000, date_echeance=datetime.date(2020, 1, 1)
+    )
+
+    resp = _client().get("/api/v1/rapports/tableau-de-bord/")
+    assert resp.status_code == 200
+    assert resp.data["annee_scolaire_id"] == annee.id
+    # Seule l'inscription de l'année courante est comptée, pas celle de l'autre année.
+    assert resp.data["etudiants_inscrits"] == 1
+    assert Decimal(resp.data["reste_a_recouvrer"]) == Decimal("100000")
+    assert resp.data["alertes"]["echeances_en_retard"] == 1
+
+
 def test_resultat_annuel_apres_deliberation():
     from referentiel.tests.factories import NiveauFactory
 
