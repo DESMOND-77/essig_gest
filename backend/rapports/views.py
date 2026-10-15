@@ -106,37 +106,34 @@ def situation_scolarite(request):
 def situation_frais(request):
     """v_situation_frais : reste à payer par (inscription, frais annexe)."""
     inscription_id = request.query_params.get("inscription_id")
-    qs = FraisInscription.objects.select_related("niveau", "annee_scolaire")
-    # FraisInscription n'a pas de FK inscription directe (grille par niveau/année) :
-    # on restreint via l'inscription demandée si fournie, sinon on renvoie la grille brute.
+    qs = FraisInscription.objects.select_related("inscription", "type_frais")
+    if inscription_id:
+        qs = qs.filter(inscription_id=inscription_id)
+
     resultats = []
-    inscriptions = (
-        Inscription.objects.filter(pk=inscription_id)
-        if inscription_id
-        else Inscription.objects.all()
-    )
-    for inscription in inscriptions.select_related("classe__niveau", "annee_scolaire"):
-        frais = qs.filter(
-            niveau=inscription.classe.niveau, annee_scolaire=inscription.annee_scolaire
+    for f in qs:
+        paye = (
+            ImputationEncaissement.objects.filter(
+                cible=ImputationEncaissement.Cible.FRAIS, frais_inscription=f
+            ).aggregate(total=Coalesce(Sum("montant"), ZERO_FCFA))["total"]
         )
-        for f in frais:
-            paye = (
-                ImputationEncaissement.objects.filter(
-                    cible=ImputationEncaissement.Cible.FRAIS, frais_inscription=f
-                ).aggregate(total=Coalesce(Sum("montant"), ZERO_FCFA))["total"]
-            )
-            reste = f.montant - paye
-            etat = "SOLDE" if paye >= f.montant else ("PARTIEL" if paye > 0 else "NON")
-            resultats.append(
-                {
-                    "frais_inscription_id": f.id,
-                    "inscription_id": inscription.id,
-                    "montant_du": f.montant,
-                    "paye": paye,
-                    "reste": reste,
-                    "etat": etat,
-                }
-            )
+        reste = 0 if f.exonere else f.montant_du - paye
+        etat = (
+            "EXONERE" if f.exonere
+            else "SOLDE" if paye >= f.montant_du
+            else "PARTIEL" if paye > 0
+            else "NON"
+        )
+        resultats.append(
+            {
+                "frais_inscription_id": f.id,
+                "inscription_id": f.inscription_id,
+                "montant_du": f.montant_du,
+                "paye": paye,
+                "reste": reste,
+                "etat": etat,
+            }
+        )
     return Response(resultats)
 
 
@@ -309,24 +306,21 @@ def _situation_scolarite_donnees(request):
 
 def _situation_frais_donnees(request):
     inscription_id = request.query_params.get("inscription_id")
-    qs = FraisInscription.objects.select_related("niveau", "annee_scolaire")
+    qs = FraisInscription.objects.all()
+    if inscription_id:
+        qs = qs.filter(inscription_id=inscription_id)
+
     resultats = []
-    inscriptions = (
-        Inscription.objects.filter(pk=inscription_id)
-        if inscription_id
-        else Inscription.objects.all()
-    )
-    for inscription in inscriptions.select_related("classe__niveau", "annee_scolaire"):
-        frais = qs.filter(
-            niveau=inscription.classe.niveau, annee_scolaire=inscription.annee_scolaire
+    for f in qs:
+        if f.exonere:
+            resultats.append({"inscription_id": f.inscription_id, "reste": 0})
+            continue
+        paye = (
+            ImputationEncaissement.objects.filter(
+                cible=ImputationEncaissement.Cible.FRAIS, frais_inscription=f
+            ).aggregate(total=Coalesce(Sum("montant"), ZERO_FCFA))["total"]
         )
-        for f in frais:
-            paye = (
-                ImputationEncaissement.objects.filter(
-                    cible=ImputationEncaissement.Cible.FRAIS, frais_inscription=f
-                ).aggregate(total=Coalesce(Sum("montant"), ZERO_FCFA))["total"]
-            )
-            resultats.append({"inscription_id": inscription.id, "reste": f.montant - paye})
+        resultats.append({"inscription_id": f.inscription_id, "reste": f.montant_du - paye})
     return resultats
 
 

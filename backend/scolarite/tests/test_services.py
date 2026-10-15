@@ -3,7 +3,7 @@ import datetime
 import decimal
 from django.test import TestCase
 from django.db import transaction
-from ..models import ModalitePaiement, TypeFrais, FraisInscription, Echeance, Bourse
+from ..models import ModalitePaiement, TypeFrais, Echeance, Bourse
 from referentiel.models import Niveau, AnneeScolaire, Ecole, Classe, OptionFiliere, ModaliteFormation, Filiere
 from personnes.models import Etudiant, Inscription
 from ..services import (
@@ -35,23 +35,23 @@ class ScolariteServicesTest(TestCase):
             date_fin=datetime.date(2026, 8, 31)
         )
 
-        # Setup scolarite data
+        # Setup scolarite data : échéance 0 (100000, frais d'inscription/réinscription)
+        # + 1 échéance de scolarité (150000) pour garder les assertions "2 échéances" du
+        # fichier inchangées (la grille porte maintenant les deux montants directement,
+        # cf. db/migrations/004_scolarite_facturation.sql).
         self.modalite_paiement = ModalitePaiement.objects.create(
             niveau=self.niveau,
             annee_scolaire=self.annee,
-            montant=150000  # 150,000 FCFA par échéance
-        )
-
-        self.frais_inscription = FraisInscription.objects.create(
-            niveau=self.niveau,
-            annee_scolaire=self.annee,
-            montant=100000  # 100,000 FCFA frais d'inscription
+            montant_inscription_reinscription=100000,
+            nombre_echeance=1,
+            montant_echeance=150000,
         )
 
         self.frais_scolarite = TypeFrais.objects.create(
             libelle="Frais de scolarité",
             code="SCOL",
-            description="Frais de scolarité mensuelle"
+            description="Frais de scolarité mensuelle",
+            montant_defaut=0,
         )
 
         # Setup personne data

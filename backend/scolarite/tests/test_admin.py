@@ -31,10 +31,9 @@ class ScolariteAdminTest(TestCase):
 
     def test_modalite_paiement_admin_list_display(self):
         ma = ModalitePaiementAdmin(ModalitePaiement, self.site)
-        # Should display niveau, annee_scolaire, montant
         self.assertIn('niveau', ma.list_display)
         self.assertIn('annee_scolaire', ma.list_display)
-        self.assertIn('montant', ma.list_display)
+        self.assertIn('montant_total', ma.list_display)
 
     def test_type_frais_admin_search_fields(self):
         ta = TypeFraisAdmin(TypeFrais, self.site)
@@ -43,8 +42,8 @@ class ScolariteAdminTest(TestCase):
 
     def test_frais_inscription_admin_list_filter(self):
         fia = FraisInscriptionAdmin(FraisInscription, self.site)
-        self.assertIn('niveau', fia.list_filter)
-        self.assertIn('annee_scolaire', fia.list_filter)
+        self.assertIn('type_frais', fia.list_filter)
+        self.assertIn('exonere', fia.list_filter)
 
     def test_echeance_admin_list_filter(self):
         eac = EcheanceAdmin(Echeance, self.site)

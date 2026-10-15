@@ -31,8 +31,8 @@ class FraisInscriptionFilter(df.FilterSet):
     class Meta:
         model = models.FraisInscription
         fields = {
-            "niveau": ["exact"],
-            "annee_scolaire": ["exact"],
+            "inscription": ["exact"],
+            "type_frais": ["exact"],
         }
 
 

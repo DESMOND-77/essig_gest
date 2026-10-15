@@ -2,16 +2,15 @@ import calendar
 import datetime as dt
 
 from django.db import transaction
-from django.db.models import Sum, Q, F
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
-from django.db.models import Q
+from django.db.models import Sum, Q
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 
 from .models import (
     Echeance, FraisInscription, ModalitePaiement, TypeFrais,
     Bourse
 )
-from referentiel.models import Niveau, AnneeScolaire
+from referentiel.models import AnneeScolaire
 from personnes.models import Etudiant, Inscription
 
 
@@ -23,17 +22,16 @@ def _ajouter_mois(d: dt.date, k: int) -> dt.date:
     return dt.date(annee, mois, min(d.day, dernier))
 
 
-NOMBRE_MENSUALITES = 9  # échéances 1..9 ; échéance 0 = frais d'inscription
-
-
 def generer_echeancier(inscription) -> list:
     """Génère l'échéancier d'une inscription à partir de la grille tarifaire
-    (CLAUDE.md §Échéancier) :
-      - échéance 0 = frais d'inscription (FraisInscription du niveau/année, 0 si absent) ;
-      - échéances 1..9 = coût de scolarité (cout_scolarite_negocie si renseigné, sinon
-        le montant de la grille ModalitePaiement) réparti en 9 mensualités à partir de
-        la date d'inscription ; le reliquat d'arrondi est absorbé par la dernière
-        mensualité pour que la somme reste exacte (montants entiers FCFA)."""
+    (CLAUDE.md §Échéancier ; db/migrations/004_scolarite_facturation.sql) :
+      - échéance 0 = `grille.montant_inscription_reinscription` ;
+      - échéances 1..`grille.nombre_echeance` = `grille.montant_echeance` chacune,
+        sauf si `inscription.cout_scolarite_negocie` est renseigné, auquel cas ce
+        montant négocié est réparti en `nombre_echeance` mensualités (reliquat
+        d'arrondi absorbé par la dernière, montants entiers FCFA).
+    Ne concerne PAS les frais annexes (`FraisInscription`/`TypeFrais`), qui sont un
+    système de facturation séparé, cf. `materialiser_frais_obligatoires`."""
     niveau = inscription.classe.niveau
     try:
         grille = ModalitePaiement.objects.get(
@@ -47,23 +45,12 @@ def generer_echeancier(inscription) -> list:
             }
         ) from exc
 
-    cout_scolarite = (
-        int(inscription.cout_scolarite_negocie)
-        if inscription.cout_scolarite_negocie is not None
-        else int(grille.montant)
-    )
-
-    frais_inscription = FraisInscription.objects.filter(
-        niveau=niveau, annee_scolaire=inscription.annee_scolaire
-    ).first()
-    montant_echeance_0 = int(frais_inscription.montant) if frais_inscription else 0
-
     d0 = inscription.date_inscription
     lignes = [
         Echeance(
             inscription=inscription,
             numero=0,
-            montant=montant_echeance_0,
+            montant=int(grille.montant_inscription_reinscription),
             date_echeance=d0,
             date_paiement=None,
             montant_paye=0,
@@ -71,9 +58,16 @@ def generer_echeancier(inscription) -> list:
         )
     ]
 
-    base, reste = divmod(cout_scolarite, NOMBRE_MENSUALITES)
-    for i in range(1, NOMBRE_MENSUALITES + 1):
-        montant = base + (reste if i == NOMBRE_MENSUALITES else 0)
+    if inscription.cout_scolarite_negocie is not None:
+        base, reste = divmod(int(inscription.cout_scolarite_negocie), grille.nombre_echeance)
+        montants = [
+            base + (reste if i == grille.nombre_echeance else 0)
+            for i in range(1, grille.nombre_echeance + 1)
+        ]
+    else:
+        montants = [int(grille.montant_echeance)] * grille.nombre_echeance
+
+    for i, montant in enumerate(montants, start=1):
         lignes.append(
             Echeance(
                 inscription=inscription,
@@ -91,90 +85,52 @@ def generer_echeancier(inscription) -> list:
 
 
 def materialiser_frais_obligatoires(inscription) -> list:
-    """Simplified version that works with current models.
-    In a full implementation, this would need to be updated to match the actual model relationships.
-    """
-    # This is a placeholder implementation to allow tests to run
-    # In reality, this would need to properly relate inscription to niveau and annee_scolaire
-    # and filter TypeFrais based on those relationships
+    """Matérialise une ligne `FraisInscription` pour chaque `TypeFrais` obligatoire
+    et actif applicable au périmètre (école/niveau/année) de l'inscription — un champ
+    de périmètre NULL sur le TypeFrais signifie "s'applique à tous"."""
+    niveau = inscription.classe.niveau
+    types_applicables = TypeFrais.objects.filter(
+        obligatoire=True, actif=True
+    ).filter(
+        Q(ecole__isnull=True) | Q(ecole=inscription.ecole)
+    ).filter(
+        Q(niveau__isnull=True) | Q(niveau=niveau)
+    ).filter(
+        Q(annee_scolaire__isnull=True) | Q(annee_scolaire=inscription.annee_scolaire)
+    )
+    lignes = [
+        FraisInscription(
+            inscription=inscription,
+            type_frais=t,
+            montant_du=t.montant_defaut,
+        )
+        for t in types_applicables
+    ]
+    FraisInscription.objects.bulk_create(lignes)
+    return lignes
 
-    # For now, return an empty list to avoid errors during testing
-    return []
+
 
 
 # NEW FUNCTIONS REQUIRED BY TASK 3
 def generer_echeancier_inscription(inscription_id):
-    """
-    Génère l'échéancier de paiement pour une inscription donnée.
-    Échéance 0 = frais d'inscription + frais annexes applicables
-    Échéances 1..N = montant de la grille tarifaire (scolarité)
-    """
+    """Variante de `generer_echeancier` prenant un id et appliquant les bourses
+    disponibles juste après génération. Délègue entièrement à `generer_echeancier`
+    pour le calcul des échéances (même grille tarifaire, même source de vérité) —
+    ne duplique plus sa propre logique (l'ancienne version datait d'avant la
+    correction du modèle `ModalitePaiement`/`FraisInscription` et ignorait
+    `nombre_echeance`/`montant_echeance`)."""
     try:
         inscription = Inscription.objects.select_related(
             'classe__niveau', 'annee_scolaire', 'etudiant'
         ).get(id=inscription_id)
-    except Inscription.DoesNotExist:
-        raise ObjectDoesNotExist(f"Inscription avec id {inscription_id} non trouvée")
-
-    # Vérifier que l'inscription est dans un état permettant la génération
-    if inscription.statut not in ['validee', 'confirmee']:
-        raise ValidationError(
-            f"L'inscription doit être validée ou confirmée pour générer l'échéancier. "
-            f"État actuel: {inscription.statut}"
-        )
+    except Inscription.DoesNotExist as exc:
+        raise ObjectDoesNotExist(f"Inscription avec id {inscription_id} non trouvée") from exc
 
     with transaction.atomic():
-        # 1. Échéance 0: Frais d'inscription + frais annexes applicables
-        frais_inscription = FraisInscription.objects.filter(
-            niveau=inscription.classe.niveau,
-            annee_scolaire=inscription.annee_scolaire
-        ).first()
-
-        montant_echeance_0 = frais_inscription.montant if frais_inscription else 0
-
-        # TODO: Ajouter les frais annexes applicables selon modalité/option
-        # Pour l'instant, on considère seulement les frais d'inscription
-
-        echeance_0 = Echeance.objects.create(
-            inscription=inscription,
-            numero=0,
-            montant=montant_echeance_0,
-            date_echeance=inscription.date_inscription,
-            statut='à payer'
-        )
-
-        # 2. Échéances 1..N: Montant de la grille tarifaire
-        # Récupérer toutes les modalités de paiement applicables
-        modalites = ModalitePaiement.objects.filter(
-            niveau=inscription.classe.niveau,
-            annee_scolaire=inscription.annee_scolaire
-        )
-
-        # Pour simplifier, on prend la première modalité trouvée
-        # Dans une implémentation complète, on skulle gérer plusieurs modalités
-        if modalites.exists():
-            modalite = modalites.first()
-            nombre_echeances = 1  # À déterminer selon la scolarité (mensuel, trimestriel, etc.)
-
-            for i in range(1, nombre_echeances + 1):
-                Echeance.objects.create(
-                    inscription=inscription,
-                    numero=i,
-                    montant=modalite.montant,
-                    date_echeance=inscription.date_inscription + dt.timedelta(days=30*i),
-                    statut='à payer'
-                )
-        else:
-            # Aucune modalité de paiement trouvée - lever une exception
-            raise ValidationError(
-                f"Aucune modalité de paiement trouvée pour le niveau {inscription.classe.niveau} "
-                f"et l'année {inscription.annee_scolaire}"
-            )
-
-        # 3. Application automatique des bourses si disponibles
+        lignes = generer_echeancier(inscription)
         appliquer_bourses_disponibles(inscription.etudiant_id, inscription.annee_scolaire_id)
-
-        return echeance_0  # Retourner la première échéance créée
+        return lignes[0]  # échéance 0, pour compatibilité avec l'appelant historique
 
 def appliquer_bourses_disponibles(etudiant_id, annee_scolaire_id):
     """

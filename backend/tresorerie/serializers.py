@@ -158,9 +158,11 @@ class ImputationEncaissementSerializer(AuditableSerializerMixin, serializers.Mod
     )
 
     frais_inscription = serializers.PrimaryKeyRelatedField(queryset=FraisInscription.objects.all(), allow_null=True)
-    frais_inscription_libelle = serializers.CharField(source='frais_inscription.nom', read_only=True)
+    frais_inscription_libelle = serializers.CharField(
+        source='frais_inscription.type_frais.libelle', read_only=True
+    )
     frais_inscription_montant = serializers.DecimalField(
-        source='frais_inscription.montant', max_digits=12, decimal_places=0, read_only=True
+        source='frais_inscription.montant_du', max_digits=12, decimal_places=0, read_only=True
     )
 
     cree_par_nom = serializers.CharField(source='cree_par.get_full_name', read_only=True)

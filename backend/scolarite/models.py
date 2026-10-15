@@ -2,33 +2,71 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from core.models import Auditable
-from referentiel.models import Niveau, AnneeScolaire
+from referentiel.models import Ecole, Niveau, AnneeScolaire
 from personnes.models import Etudiant
 
 class ModalitePaiement(Auditable):
-    """Modalité de paiement (grille tarifaire) par niveau et année scolaire"""
+    """Modalité de paiement (grille tarifaire) par niveau et année scolaire.
+
+    Conforme à db/migrations/004_scolarite_facturation.sql : l'échéance 0 de
+    l'échéancier (inscription/réinscription) est financée par
+    `montant_inscription_reinscription`, les échéances 1..N par
+    `nombre_echeance` mensualités de `montant_echeance` chacune.
+    """
     niveau = models.ForeignKey(Niveau, on_delete=models.RESTRICT)
     annee_scolaire = models.ForeignKey(AnneeScolaire, on_delete=models.RESTRICT)
-    montant = models.DecimalField(
+    montant_inscription_reinscription = models.DecimalField(
         max_digits=12,
         decimal_places=0,
+        default=0,
+        validators=[MinValueValidator(0)],
+        help_text="Montant de l'échéance 0 (inscription/réinscription) en FCFA"
+    )
+    nombre_echeance = models.PositiveSmallIntegerField(
+        default=1,
         validators=[MinValueValidator(1)],
-        help_text="Montant en FCFA"
+        help_text="Nombre de mensualités de scolarité (échéances 1..N)"
+    )
+    montant_echeance = models.DecimalField(
+        max_digits=12,
+        decimal_places=0,
+        default=0,
+        validators=[MinValueValidator(0)],
+        help_text="Montant d'une mensualité de scolarité en FCFA"
     )
 
     class Meta:
-        unique_together = ('niveau', 'annee_scolaire', 'montant')
+        unique_together = ('niveau', 'annee_scolaire')
         verbose_name = "Modalité de paiement"
         verbose_name_plural = "Modalités de paiement"
 
     def __str__(self):
-        return f"{self.niveau.code} - {self.annee_scolaire.libelle}: {self.montant} FCFA"
+        return f"{self.niveau.code} - {self.annee_scolaire.libelle}: {self.montant_total} FCFA"
+
+    @property
+    def montant_total(self):
+        return self.montant_inscription_reinscription + self.nombre_echeance * self.montant_echeance
 
 class TypeFrais(Auditable):
-    """Type/famille de frais (scolarité, inscription, activités, etc.)"""
-    libelle = models.CharField(max_length=100, unique=True)
-    code = models.CharField(max_length=20, unique=True)
+    """Type/famille de frais annexe (scolarité, inscription, activités, etc.).
+
+    `ecole`/`niveau`/`annee_scolaire` NULL = s'applique à tous (scope
+    générique) ; une valeur précise restreint le frais à ce périmètre.
+    Utilisé par `scolarite.services.materialiser_frais_obligatoires`.
+    """
+    code = models.CharField(max_length=30, unique=True)
+    libelle = models.CharField(max_length=120)
     description = models.TextField(blank=True)
+    ecole = models.ForeignKey(Ecole, null=True, blank=True, on_delete=models.RESTRICT)
+    niveau = models.ForeignKey(Niveau, null=True, blank=True, on_delete=models.RESTRICT)
+    annee_scolaire = models.ForeignKey(
+        AnneeScolaire, null=True, blank=True, on_delete=models.RESTRICT
+    )
+    montant_defaut = models.DecimalField(
+        max_digits=12, decimal_places=0, default=0, validators=[MinValueValidator(0)]
+    )
+    obligatoire = models.BooleanField(default=False)
+    actif = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = "Type de frais"
@@ -38,23 +76,30 @@ class TypeFrais(Auditable):
         return self.libelle
 
 class FraisInscription(Auditable):
-    """Frais d'inscription fixe par niveau et année scolaire"""
-    niveau = models.ForeignKey(Niveau, on_delete=models.RESTRICT)
-    annee_scolaire = models.ForeignKey(AnneeScolaire, on_delete=models.RESTRICT)
-    montant = models.DecimalField(
+    """Frais annexe matérialisé pour une inscription donnée (une ligne par
+    (inscription, type_frais)) — distinct de l'échéance 0 de l'échéancier,
+    qui elle vient de `ModalitePaiement.montant_inscription_reinscription`."""
+    inscription = models.ForeignKey(
+        'personnes.Inscription', on_delete=models.CASCADE, related_name='frais_inscription'
+    )
+    type_frais = models.ForeignKey(TypeFrais, on_delete=models.RESTRICT)
+    montant_du = models.DecimalField(
         max_digits=12,
         decimal_places=0,
+        default=0,
         validators=[MinValueValidator(0)],
         help_text="Montant en FCFA (peut être zéro pour frais gratuits)"
     )
+    exonere = models.BooleanField(default=False)
+    commentaire = models.CharField(max_length=255, null=True, blank=True)  # noqa: DJ001
 
     class Meta:
-        unique_together = ('niveau', 'annee_scolaire')
+        unique_together = ('inscription', 'type_frais')
         verbose_name = "Frais d'inscription"
         verbose_name_plural = "Frais d'inscription"
 
     def __str__(self):
-        return f"{self.niveau.code} - {self.annee_scolaire.libelle}: {self.montant} FCFA"
+        return f"{self.type_frais.libelle} - inscription {self.inscription_id}: {self.montant_du} FCFA"
 
 class Echeance(Auditable):
     """Échéance de paiement associée à une inscription"""
@@ -68,7 +113,7 @@ class Echeance(Auditable):
 
     inscription = models.ForeignKey(
         'personnes.Inscription',
-        on_delete=models.CASCADE,
+        on_delete=models.RESTRICT,
         related_name='echeances'
     )
     numero = models.PositiveSmallIntegerField(

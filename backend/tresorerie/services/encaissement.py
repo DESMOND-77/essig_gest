@@ -223,22 +223,18 @@ def imputer_encaissement(encaissement_id, imputations, cree_par_id=None):
                     if not frais_inscription_id:
                         raise ValidationError("L'ID de frais d'inscription est requis pour une cible FRAIS")
 
-                    frais_inscription = FraisInscription.objects.select_for_update().get(id=frais_inscription_id)
-                    # Vérifier que les frais appartiennent bien à la même inscription (via l'étudiant)
-                    # Comme les frais d'inscription sont liés à un niveau et année scolaire,
-                    # on vérifie via l'inscription de l'étudiant
-                    from personnes.models import Inscription
-                    inscription_actuelle = Inscription.objects.get(
-                        etudiant_id=frais_inscription.etudiant_id,
-                        annee_scolaire_id=frais_inscription.annee_scolaire_id
-                    ) if hasattr(frais_inscription, 'etudiant_id') else None
+                    frais_inscription = FraisInscription.objects.select_for_update().get(
+                        id=frais_inscription_id
+                    )
+                    # Vérifier que le frais appartient bien à la même inscription que
+                    # l'encaissement (relation directe depuis la correction du modèle
+                    # FraisInscription — cf. db/migrations/004_scolarite_facturation.sql).
+                    if frais_inscription.inscription_id != encaissement.inscription_id:
+                        raise ValidationError(
+                            f"Le frais {frais_inscription_id} n'appartient pas à "
+                            f"l'inscription {encaissement.inscription_id}"
+                        )
 
-                    # Pour simplifier, on vérifie que l'inscription de l'encaissement correspond
-                    # à l'étudiant et à l'année scolaire des frais
-                    inscription_encaissement = Encaissement.objects.get(id=encaissement_id).inscription
-
-                    # En réalité, il faudrait une relation plus directe, mais pour maintenant
-                    # on assume que la validation métier sera faite au niveau du service d'appel
                     imputations_a_creer.append(
                         ImputationEncaissement(
                             encaissement_id=encaissement_id,

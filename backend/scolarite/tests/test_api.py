@@ -34,13 +34,15 @@ def test_rbac_modalite_paiement(role, attendu):
         {
             "niveau": n.pk,
             "annee_scolaire": a.pk,
-            "montant": 70000,  # Changed from the test-specific fields to actual model field
+            "montant_inscription_reinscription": 50000,
+            "nombre_echeance": 9,
+            "montant_echeance": 70000,
         },
         format="json",
     )
     assert resp.status_code == attendu
     if attendu == 201:
-        assert int(resp.data["montant"]) == 70000
+        assert int(resp.data["montant_echeance"]) == 70000
 
 
 @pytest.mark.parametrize(
@@ -68,7 +70,7 @@ def test_rbac_types_frais(role, attendu):
     c, _ = _client(role)
     resp = c.post(
         "/api/v1/scolarite/types-frais/",
-        {"code": f"X_{role}", "libelle": "X"},  # Removed montant_defaut (not in model)
+        {"code": f"X_{role}", "libelle": "X", "montant_defaut": 5000},
         format="json",
     )
     assert resp.status_code == attendu
@@ -80,15 +82,14 @@ def test_rbac_types_frais(role, attendu):
 )
 def test_rbac_frais_inscription(role, attendu):
     c, _ = _client(role)
-    # Note: FraisInscription doesn't have inscription or type_frais foreign keys in current model
-    # It has niveau and annee_scolaire instead
-    n, a = rf.NiveauFactory(), rf.AnneeScolaireFactory()
+    inscription = pf.InscriptionFactory()
+    type_frais = sf.TypeFraisFactory()
     resp = c.post(
         "/api/v1/scolarite/frais-inscription/",
         {
-            "niveau": n.pk,
-            "annee_scolaire": a.pk,
-            "montant": 12000,
+            "inscription": inscription.pk,
+            "type_frais": type_frais.pk,
+            "montant_du": 12000,
         },
         format="json",
     )
@@ -99,11 +100,11 @@ def test_rbac_frais_inscription(role, attendu):
 
 def test_frais_inscription_liste_et_detail_ne_plantent_pas():
     """Régression : `FraisInscriptionViewSet.queryset` faisait un `select_related` sur
-    `inscription`/`type_frais`, deux champs qui n'existent pas sur `FraisInscription`
-    (seulement `niveau`/`annee_scolaire`) -> FieldError sur tout GET liste/détail."""
+    `inscription`/`type_frais` alors que le modèle n'avait que `niveau`/`annee_scolaire`
+    -> FieldError sur tout GET liste/détail. Corrigé : `FraisInscription` porte
+    maintenant une vraie FK `inscription`/`type_frais` (cf. modèle)."""
     c, _ = _client("DIRECTION")
-    n, a = rf.NiveauFactory(), rf.AnneeScolaireFactory()
-    frais = sf.FraisInscriptionFactory(niveau=n, annee_scolaire=a)
+    frais = sf.FraisInscriptionFactory()
 
     liste = c.get("/api/v1/scolarite/frais-inscription/")
     assert liste.status_code == 200, liste.data

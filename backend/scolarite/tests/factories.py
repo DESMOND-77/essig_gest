@@ -12,7 +12,9 @@ class ModalitePaiementFactory(factory.django.DjangoModelFactory):
 
     niveau = factory.SubFactory(NiveauFactory)
     annee_scolaire = factory.SubFactory(AnneeScolaireFactory)
-    montant = 70000
+    montant_inscription_reinscription = 0
+    nombre_echeance = 9
+    montant_echeance = 70000
 
 
 class EcheanceFactory(factory.django.DjangoModelFactory):
@@ -31,15 +33,18 @@ class TypeFraisFactory(factory.django.DjangoModelFactory):
 
     code = factory.Sequence(lambda n: f"FRAIS_{n}")
     libelle = factory.LazyAttribute(lambda o: f"Frais {o.code}")
+    montant_defaut = 0
+    obligatoire = False
+    actif = True
 
 
 class FraisInscriptionFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.FraisInscription
 
-    niveau = factory.SubFactory(NiveauFactory)
-    annee_scolaire = factory.SubFactory(AnneeScolaireFactory)
-    montant = 15000
+    inscription = factory.SubFactory(InscriptionFactory)
+    type_frais = factory.SubFactory(TypeFraisFactory)
+    montant_du = 15000
 
 
 class BourseFactory(factory.django.DjangoModelFactory):

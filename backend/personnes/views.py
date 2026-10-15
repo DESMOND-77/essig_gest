@@ -64,13 +64,11 @@ class InscriptionViewSet(_BasePersonnesViewSet):
     permission_classes = [permissions.PeutEcrireInscriptions]
     queryset = models.Inscription.objects.select_related(
         "etudiant", "classe__niveau__ecole", "annee_scolaire", "cree_par", "modifie_par"
-    # `frais_inscription`/`bourses` retirés : aucune relation inverse de ce nom n'existe sur
-    # Inscription (FraisInscription/Bourse n'ont pas de FK inscription, cf. scolarite/models.py)
-    # — `prefetch_related` plantait avec AttributeError sur chaque GET détail/PATCH/DELETE.
-    # Les champs serializer du même nom restent déclarés mais sont silencieusement absents de
-    # la sortie (lecture seule + non requis -> DRF les SkipField plutôt que planter) ; les
-    # réintroduire nécessite de modéliser une vraie relation inscription<->frais, hors scope ici.
-    ).prefetch_related("echeances", "pieces_dossier")
+    # `bourses` reste absent : `Bourse` n'a pas de FK `inscription` (seulement
+    # `etudiant`+`annee_scolaire`, cf. scolarite/models.py) — hors scope de cette
+    # correction. `frais_inscription` restauré : la relation est désormais réelle
+    # (FraisInscription.inscription, cf. db/migrations/004_scolarite_facturation.sql).
+    ).prefetch_related("echeances", "pieces_dossier", "frais_inscription")
     filterset_class = p_filters.InscriptionFilter
     search_fields = ["numero_ordre", "etudiant__matricule", "etudiant__nom"]
     ordering_fields = ["numero_ordre", "date_inscription", "id"]

@@ -7,7 +7,7 @@ from tresorerie.models import (
     ImputationEncaissement, Depense, ArreteCaisse, Billetage
 )
 from personnes.models import Inscription, Etudiant
-from scolarite.models import Echeance, FraisInscription
+from scolarite.models import Echeance, FraisInscription, TypeFrais
 from referentiel.models import Ecole, AnneeScolaire, Niveau
 
 User = get_user_model()
@@ -76,11 +76,14 @@ class TresorerieModelsTestCase(TestCase):
             date_echeance='2025-10-31'
         )
 
-        # Créer un frais d'inscription de test
+        # Créer un type de frais + un frais d'inscription de test
+        self.type_frais = TypeFrais.objects.create(
+            code='TEST_FRAIS', libelle='Frais de test', montant_defaut=50000
+        )
         self.frais_inscription = FraisInscription.objects.create(
-            niveau=self.niveau,
-            annee_scolaire=self.annee_scolaire,
-            montant=50000
+            inscription=self.inscription,
+            type_frais=self.type_frais,
+            montant_du=50000
         )
 
     def test_compte_creation(self):

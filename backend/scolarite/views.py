@@ -22,11 +22,8 @@ class TypeFraisViewSet(_BaseScolariteViewSet):
 
 class FraisInscriptionViewSet(_BaseScolariteViewSet):
     permission_classes = [permissions.PeutEcrireFraisEleve]
-    # `FraisInscription` n'a ni `inscription` ni `type_frais` (seulement `niveau` et
-    # `annee_scolaire`, cf. models.py) : select_related sur ces deux noms faisait planter
-    # tout GET (liste/détail) en FieldError.
     queryset = models.FraisInscription.objects.select_related(
-        "niveau", "annee_scolaire", "cree_par", "modifie_par"
+        "inscription", "type_frais", "cree_par", "modifie_par"
     )
     serializer_class = serializers.FraisInscriptionSerializer
     filterset_class = s_filters.FraisInscriptionFilter
