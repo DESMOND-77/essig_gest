@@ -663,7 +663,7 @@ class TableauDeBordViewSet(viewsets.ViewSet):
         """Get balance for each account"""
         try:
             # We'll compute the solde for each active compte
-            from .services.compte_service import calculer_solde_compte
+            from .services.compte import calculer_solde_compte
             comptes = Compte.objects.filter(actif=True)
             soldes_par_compte = []
             for compte in comptes:
