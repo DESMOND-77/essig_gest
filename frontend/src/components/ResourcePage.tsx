@@ -86,7 +86,7 @@ export function ResourcePage({ descripteur }: { descripteur: Descripteur }) {
               id: "_actions",
               header: "",
               cell: ({ row }: { row: { original: Ligne } }) => (
-                <span className="flex gap-2">
+                <span className="flex items-center gap-2">
                   <button
                     className="text-blue-600 underline"
                     onClick={() => setEdition(row.original)}
@@ -99,13 +99,14 @@ export function ResourcePage({ descripteur }: { descripteur: Descripteur }) {
                   >
                     Supprimer
                   </button>
+                  {descripteur.actionsLigne?.(row.original)}
                 </span>
               ),
             } as ColumnDef<Ligne>,
           ]
         : []),
     ],
-    [descripteur.colonnes, ecrivable],
+    [descripteur.colonnes, descripteur.actionsLigne, ecrivable],
   );
 
   const table = useReactTable({

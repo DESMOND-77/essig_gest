@@ -83,5 +83,20 @@ export function createResourceHooks<T extends { id: number }>(endpoint: string) 
         onSuccess: () => qc.invalidateQueries({ queryKey: [endpoint, "liste"] }),
       });
     },
+    /** Appelle une action POST détail (`/{endpoint}/{id}/{action}/`), ex. valider/engager/payer. */
+    useAction(action: string) {
+      const qc = useQueryClient();
+      return useMutation({
+        mutationFn: ({ id, corps }: { id: number; corps?: Record<string, unknown> }) =>
+          apiFetch(`/${endpoint}/${id}/${action}/`, {
+            method: "POST",
+            body: corps ? JSON.stringify(corps) : undefined,
+          }).then(jsonOuLeve) as Promise<T>,
+        onSuccess: (_d, { id }) => {
+          qc.invalidateQueries({ queryKey: [endpoint, "liste"] });
+          qc.invalidateQueries({ queryKey: cleDetail(id) });
+        },
+      });
+    },
   };
 }

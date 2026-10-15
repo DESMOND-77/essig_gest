@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { ZodTypeAny } from "zod";
 
 export type Champ = {
@@ -29,6 +30,8 @@ export type Descripteur<T extends { id: number } = { id: number }, S extends Zod
   triDefaut?: string;
   filtres?: { nom: string; label: string; fkEndpoint?: string; options?: { valeur: string; label: string }[] }[];
   rechercheActive?: boolean;
+  /** Actions supplémentaires par ligne (en plus d'Éditer/Supprimer), ex. workflow de validation. */
+  actionsLigne?: (ligne: Record<string, unknown> & { id: number }) => ReactNode;
   _t?: T;
 };
 

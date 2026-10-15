@@ -1,11 +1,22 @@
 import { z } from "zod";
 import type { Descripteur } from "../../referentiel/descripteur";
+import { DeliberationActions } from "../components/DeliberationActions";
 
 export const deliberationDescripteur: Descripteur = {
   titre: "Délibérations",
   endpoint: "resultats/deliberations",
   roleEcriture: ["DIRECTION"],
   rechercheActive: false,
+  actionsLigne: (ligne) => (
+    <DeliberationActions
+      deliberation={{
+        id: ligne.id,
+        statut: String(ligne.statut),
+        classe: Number(ligne.classe),
+        periode: ligne.periode == null ? null : Number(ligne.periode),
+      }}
+    />
+  ),
   colonnes: [
     { cle: "date", entete: "Date" },
     { cle: "president_jury", entete: "Président du jury" },
