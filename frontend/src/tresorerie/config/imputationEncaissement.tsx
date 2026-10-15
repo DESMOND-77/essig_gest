@@ -15,5 +15,5 @@ export const imputationEncaissementDescripteur: Descripteur = {
   ],
   champs: [], // Aucun champ en lecture seule
   schema: z.object({}), // Schéma vide car aucun champ modifiable
-  rechercheActive: false,
+  rechercheActive: true,
 };

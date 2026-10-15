@@ -61,6 +61,11 @@ class EcheanceViewSet(_BaseScolariteViewSet):
     )
     serializer_class = serializers.EcheanceSerializer
     filterset_class = s_filters.EcheanceFilter
+    search_fields = [
+        "inscription__etudiant__matricule",
+        "inscription__etudiant__nom",
+        "inscription__etudiant__prenoms",
+    ]
     # Le champ réel est `date_echeance` (models.py) ; `date_prevue` n'existe pas et faisait
     # planter `?ordering=date_prevue` en FieldError.
     ordering_fields = ["numero", "date_echeance", "id"]

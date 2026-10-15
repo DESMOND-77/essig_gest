@@ -5,7 +5,7 @@ export const echeanceDescripteur: Descripteur = {
   titre: "Échéances",
   endpoint: "scolarite/echeances",
   roleEcriture: ["DIRECTION", "DAF", "COMPTABLE"],
-  rechercheActive: false,
+  rechercheActive: true,
   colonnes: [
     { cle: "inscription", entete: "Inscription" },
     { cle: "numero", entete: "N°" },

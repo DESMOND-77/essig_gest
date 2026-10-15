@@ -5,7 +5,7 @@ export const resultatMatiereDescripteur: Descripteur = {
   titre: "Résultats par matière",
   endpoint: "resultats/resultats-matiere",
   roleEcriture: [],
-  rechercheActive: false,
+  rechercheActive: true,
   colonnes: [
     { cle: "note_normale", entete: "Note normale" },
     { cle: "note_rattrapage", entete: "Note rattrapage" },

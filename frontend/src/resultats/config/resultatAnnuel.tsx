@@ -5,7 +5,7 @@ export const resultatAnnuelDescripteur: Descripteur = {
   titre: "Résultats annuels",
   endpoint: "resultats/resultats-annuels",
   roleEcriture: [],
-  rechercheActive: false,
+  rechercheActive: true,
   colonnes: [
     { cle: "regime", entete: "Régime" },
     { cle: "moyenne_annuelle", entete: "Moyenne annuelle" },

@@ -1,5 +1,6 @@
 # backend/tresorerie/views.py
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, filters
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError as DRFValidationError
@@ -217,6 +218,16 @@ class EncaissementViewSet(viewsets.ModelViewSet):
     queryset = Encaissement.objects.all()
     serializer_class = EncaissementSerializer
     permission_classes = [TresoreriePermission]
+    # Ce ViewSet ne dérive pas de `core.viewsets._BaseCrudViewSet` (filtrage manuel via
+    # `get_queryset` ci-dessous) : `SearchFilter` n'est donc pas actif par défaut, il faut le
+    # déclarer explicitement pour permettre la recherche par reçu/étudiant (§19 du mandat).
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    search_fields = [
+        "recu_numero",
+        "inscription__etudiant__matricule",
+        "inscription__etudiant__nom",
+        "inscription__etudiant__prenoms",
+    ]
 
     def get_queryset(self):
         queryset = Encaissement.objects.all()
@@ -349,6 +360,13 @@ class ImputationEncaissementViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = ImputationEncaissement.objects.all()
     serializer_class = ImputationEncaissementSerializer
     permission_classes = [TresoreriePermission]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    search_fields = [
+        "encaissement__recu_numero",
+        "encaissement__inscription__etudiant__matricule",
+        "encaissement__inscription__etudiant__nom",
+        "encaissement__inscription__etudiant__prenoms",
+    ]
 
     def get_queryset(self):
         queryset = ImputationEncaissement.objects.all()

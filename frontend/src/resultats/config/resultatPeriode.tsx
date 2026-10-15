@@ -5,7 +5,7 @@ export const resultatPeriodeDescripteur: Descripteur = {
   titre: "Résultats par période",
   endpoint: "resultats/resultats-periode",
   roleEcriture: [],
-  rechercheActive: false,
+  rechercheActive: true,
   colonnes: [
     { cle: "moyenne_ponderee", entete: "Moyenne pondérée" },
     { cle: "credits_acquis", entete: "Crédits acquis" },

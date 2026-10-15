@@ -1,7 +1,8 @@
 from django.core.exceptions import ValidationError as DjangoValidationError
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema
-from rest_framework import viewsets
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError as DRFValidationError
 from rest_framework.response import Response
@@ -67,6 +68,14 @@ class ResultatMatiereViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = models.ResultatMatiere.objects.select_related("inscription", "matiere", "periode")
     serializer_class = serializers.ResultatMatiereSerializer
     filterset_class = r_filters.ResultatMatiereFilter
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    search_fields = [
+        "inscription__etudiant__matricule",
+        "inscription__etudiant__nom",
+        "inscription__etudiant__prenoms",
+        "matiere__nom",
+        "matiere__code",
+    ]
     ordering_fields = ["id"]
 
 
@@ -75,6 +84,12 @@ class ResultatPeriodeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = models.ResultatPeriode.objects.select_related("inscription", "periode")
     serializer_class = serializers.ResultatPeriodeSerializer
     filterset_class = r_filters.ResultatPeriodeFilter
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    search_fields = [
+        "inscription__etudiant__matricule",
+        "inscription__etudiant__nom",
+        "inscription__etudiant__prenoms",
+    ]
     ordering_fields = ["id"]
 
 
@@ -83,4 +98,10 @@ class ResultatAnnuelViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = models.ResultatAnnuel.objects.select_related("inscription", "annee_scolaire")
     serializer_class = serializers.ResultatAnnuelSerializer
     filterset_class = r_filters.ResultatAnnuelFilter
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    search_fields = [
+        "inscription__etudiant__matricule",
+        "inscription__etudiant__nom",
+        "inscription__etudiant__prenoms",
+    ]
     ordering_fields = ["id"]
