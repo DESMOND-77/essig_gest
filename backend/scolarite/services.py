@@ -23,13 +23,21 @@ def _ajouter_mois(d: dt.date, k: int) -> dt.date:
     return dt.date(annee, mois, min(d.day, dernier))
 
 
+NOMBRE_MENSUALITES = 9  # échéances 1..9 ; échéance 0 = frais d'inscription
+
+
 def generer_echeancier(inscription) -> list:
-    # This is a simplified version that works with our current models
-    # In a real implementation, this would need to be updated to match the actual model fields
+    """Génère l'échéancier d'une inscription à partir de la grille tarifaire
+    (CLAUDE.md §Échéancier) :
+      - échéance 0 = frais d'inscription (FraisInscription du niveau/année, 0 si absent) ;
+      - échéances 1..9 = coût de scolarité (cout_scolarite_negocie si renseigné, sinon
+        le montant de la grille ModalitePaiement) réparti en 9 mensualités à partir de
+        la date d'inscription ; le reliquat d'arrondi est absorbé par la dernière
+        mensualité pour que la somme reste exacte (montants entiers FCFA)."""
+    niveau = inscription.classe.niveau
     try:
         grille = ModalitePaiement.objects.get(
-            niveau=inscription.niveau,  # Assuming inscription has niveau directly
-            annee_scolaire=inscription.annee_scolaire,  # Assuming inscription has annee_scolaire directly
+            niveau=niveau, annee_scolaire=inscription.annee_scolaire
         )
     except ModalitePaiement.DoesNotExist as exc:
         raise serializers.ValidationError(
@@ -39,24 +47,45 @@ def generer_echeancier(inscription) -> list:
             }
         ) from exc
 
-    # Using the simplified montant field from our ModalitePaiement model
-    i_montant = int(grille.montant)
-    n = 1  # Simplified - in reality this would come from nombre_echeance field
+    cout_scolarite = (
+        int(inscription.cout_scolarite_negocie)
+        if inscription.cout_scolarite_negocie is not None
+        else int(grille.montant)
+    )
 
-    # For now, we'll just create one échéance with the montant from ModalitePaiement
-    # This is a placeholder implementation to allow tests to run
-    d0 = inscription.date_inscription  # Assuming inscription has date_inscription
+    frais_inscription = FraisInscription.objects.filter(
+        niveau=niveau, annee_scolaire=inscription.annee_scolaire
+    ).first()
+    montant_echeance_0 = int(frais_inscription.montant) if frais_inscription else 0
+
+    d0 = inscription.date_inscription
     lignes = [
         Echeance(
             inscription=inscription,
             numero=0,
-            montant=i_montant,
+            montant=montant_echeance_0,
             date_echeance=d0,
             date_paiement=None,
             montant_paye=0,
             statut='à payer',
         )
     ]
+
+    base, reste = divmod(cout_scolarite, NOMBRE_MENSUALITES)
+    for i in range(1, NOMBRE_MENSUALITES + 1):
+        montant = base + (reste if i == NOMBRE_MENSUALITES else 0)
+        lignes.append(
+            Echeance(
+                inscription=inscription,
+                numero=i,
+                montant=montant,
+                date_echeance=_ajouter_mois(d0, i),
+                date_paiement=None,
+                montant_paye=0,
+                statut='à payer',
+            )
+        )
+
     Echeance.objects.bulk_create(lignes)
     return lignes
 

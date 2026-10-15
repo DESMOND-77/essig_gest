@@ -229,7 +229,7 @@ def test_creation_inscription_cout_negocie():
         format="json",
     )
     assert resp.status_code == 201
-    assert sum(int(e["montant_prevu"]) for e in resp.data["echeances"]) == 600000
+    assert sum(int(e["montant"]) for e in resp.data["echeances"]) == 600000
 
 
 def test_patch_inscription_refuse_classe_et_numero():
