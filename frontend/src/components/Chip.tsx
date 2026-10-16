@@ -1,4 +1,3 @@
-
 type Variante = "success" | "warning" | "error" | "info";
 
 interface ChipProps {
@@ -7,26 +6,27 @@ interface ChipProps {
 }
 
 export const Chip = ({ variante, label }: ChipProps) => {
-  // Map variante to Tailwind colors
   const getVariantClasses = (v: Variante) => {
     switch (v) {
       case "success":
-        return "bg-green-100 text-green-800";
+        return "bg-primary/15 text-primary";
       case "warning":
-        return "bg-yellow-100 text-yellow-800";
+        return "bg-warning/20 text-warning-foreground";
       case "error":
-        return "bg-red-100 text-red-800";
+        return "bg-danger/15 text-danger";
       case "info":
-        return "bg-blue-100 text-blue-800";
+        return "bg-violet/15 text-violet";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-muted text-muted-foreground";
     }
   };
 
   return (
-    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getVariantClasses(
-      variante
-    )}`}>
+    <span
+      className={`inline-flex px-2 text-xs font-semibold leading-5 rounded-full ${getVariantClasses(
+        variante,
+      )}`}
+    >
       {label}
     </span>
   );
