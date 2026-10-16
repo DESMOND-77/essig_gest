@@ -9,6 +9,10 @@ from drf_spectacular.types import OpenApiTypes
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import transaction
+from django.http import HttpResponse
+from datetime import date
+from core.pdf import render_pdf
+from rapports.views import situation_scolarite_ligne
 from .models import (
     Compte, CategorieMouvement, Virement, Mouvement, Encaissement,
     ImputationEncaissement, Depense, ArreteCaisse, Billetage
@@ -347,12 +351,26 @@ class EncaissementViewSet(viewsets.ModelViewSet):
     def recu(self, request, pk=None):
         """Générer le reçu d'un encaissement (PDF)"""
         encaissement = self.get_object()
-        # Ici on générerait le PDF du reçu - pour l'instant on retourne juste les données
-        serializer = self.get_serializer(encaissement)
-        return Response({
-            'encaissement': serializer.data,
-            'message': 'La génération de reçu PDF serait implémentée ici'
-        })
+        imputations = ImputationEncaissement.objects.filter(
+            encaissement=encaissement
+        ).select_related("echeance", "frais_inscription__type_frais")
+        situation = situation_scolarite_ligne(encaissement.inscription)
+        pdf_bytes = render_pdf(
+            "pdf/recu.html",
+            {
+                "encaissement": encaissement,
+                "imputations": imputations,
+                "situation": situation,
+                "date_generation": date.today(),
+            },
+        )
+        disposition = request.query_params.get("disposition", "inline")
+        disposition = "attachment" if disposition == "attachment" else "inline"
+        response = HttpResponse(pdf_bytes, content_type="application/pdf")
+        response["Content-Disposition"] = (
+            f'{disposition}; filename="recu_{encaissement.recu_numero}.pdf"'
+        )
+        return response
 
 
 class ImputationEncaissementViewSet(viewsets.ReadOnlyModelViewSet):

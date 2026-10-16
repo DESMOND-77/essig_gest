@@ -1,0 +1,61 @@
+{% extends "pdf/_base_pdf.html" %}
+
+{% block title %}Reçu {{ encaissement.recu_numero }}{% endblock %}
+
+{% block content %}
+<h1>Reçu d'encaissement</h1>
+
+<table>
+    <tr><th>N° de reçu</th><td>{{ encaissement.recu_numero }}</td></tr>
+    <tr><th>Date</th><td>{{ encaissement.date }}</td></tr>
+    <tr><th>Statut</th><td>{{ encaissement.get_statut_display }}</td></tr>
+</table>
+
+<h2>Étudiant</h2>
+<table>
+    <tr><th>Matricule</th><td>{{ encaissement.inscription.etudiant.matricule }}</td></tr>
+    <tr><th>Nom et prénoms</th><td>{{ encaissement.inscription.etudiant.nom }} {{ encaissement.inscription.etudiant.prenoms }}</td></tr>
+    <tr><th>Classe</th><td>{{ encaissement.inscription.classe }}</td></tr>
+    <tr><th>Année scolaire</th><td>{{ encaissement.inscription.annee_scolaire }}</td></tr>
+</table>
+
+<h2>Paiement</h2>
+<table>
+    <tr><th>Montant total encaissé</th><td>{{ encaissement.montant_total }} FCFA</td></tr>
+    <tr><th>Mode de paiement</th><td>{{ encaissement.get_mode_display }}</td></tr>
+    <tr><th>Compte de crédit</th><td>{{ encaissement.compte }}</td></tr>
+</table>
+
+<h2>Imputations</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Cible</th>
+            <th>Détail</th>
+            <th>Montant</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for imputation in imputations %}
+        <tr>
+            <td>{{ imputation.get_cible_display }}</td>
+            <td>
+                {% if imputation.echeance %}Échéance n°{{ imputation.echeance.numero }}{% endif %}
+                {% if imputation.frais_inscription %}{{ imputation.frais_inscription.type_frais }}{% endif %}
+            </td>
+            <td>{{ imputation.montant }} FCFA</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Situation de l'inscription</h2>
+<table>
+    <tr><th>Part étudiant due</th><td>{{ situation.part_etudiant }} FCFA</td></tr>
+    <tr><th>Total encaissé</th><td>{{ situation.total_encaisse }} FCFA</td></tr>
+    <tr><th>Reste à payer</th><td>{{ situation.reste }} FCFA</td></tr>
+    <tr><th>État</th><td>{{ situation.etat }}</td></tr>
+</table>
+
+<p>Document généré le {{ date_generation }}.</p>
+{% endblock %}

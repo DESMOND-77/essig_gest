@@ -1,0 +1,92 @@
+{% extends "pdf/_base_pdf.html" %}
+
+{% block title %}Bulletin de résultats{% endblock %}
+
+{% block content %}
+<h1>Bulletin de résultats</h1>
+
+<table>
+    <tr>
+        <th>Étudiant</th>
+        <td>{{ etudiant.nom }} {{ etudiant.prenoms }} ({{ etudiant.matricule }})</td>
+        <th>Année scolaire</th>
+        <td>{{ annee_scolaire.libelle }}</td>
+    </tr>
+    <tr>
+        <th>Classe</th>
+        <td>{{ classe }}</td>
+        <th>Régime</th>
+        <td>{{ resultat_annuel.regime }}</td>
+    </tr>
+</table>
+
+<h2>Résultats par période</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Période</th>
+            <th>Moyenne pondérée</th>
+            <th>Crédits acquis</th>
+            <th>Matières</th>
+            <th>Matières validées</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in periodes %}
+        <tr>
+            <td>{{ p.periode_id }}</td>
+            <td>{{ p.moyenne_ponderee|default:"—" }}</td>
+            <td>{{ p.credits_acquis|default:"0" }}</td>
+            <td>{{ p.nb_matieres }}</td>
+            <td>{{ p.nb_matieres_validees }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Détail des matières</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Période</th>
+            <th>Matière</th>
+            <th>Note retenue</th>
+            <th>Crédits acquis</th>
+            <th>Validée</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for m in matieres %}
+        <tr>
+            <td>{{ m.periode }}</td>
+            <td>{{ m.matiere.nom }}</td>
+            <td>{{ m.note_retenue }}</td>
+            <td>{{ m.credits_acquis|default:"—" }}</td>
+            <td>{{ m.validee|yesno:"Oui,Non" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Résultat annuel</h2>
+<table>
+    <tr>
+        <th>Moyenne annuelle</th>
+        <td>{{ resultat_annuel.moyenne_annuelle }}</td>
+        <th>Crédits requis</th>
+        <td>{{ resultat_annuel.credits_requis|default:"—" }}</td>
+    </tr>
+    <tr>
+        <th>Crédits acquis</th>
+        <td>{{ resultat_annuel.credits_acquis|default:"—" }}</td>
+        <th>Dette de crédits</th>
+        <td>{{ resultat_annuel.dette_credits|default:"0" }}</td>
+    </tr>
+    <tr>
+        <th>Décision</th>
+        <td>{{ resultat_annuel.decision }}</td>
+        <th>Mention</th>
+        <td>{{ resultat_annuel.mention|default:"—" }}</td>
+    </tr>
+</table>
+{% endblock %}

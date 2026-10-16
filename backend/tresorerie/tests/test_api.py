@@ -178,6 +178,30 @@ def test_encaissement_cree_poste_le_mouvement_et_genere_le_recu():
     assert encaissement.recu_numero  # généré serveur, non vide
 
 
+def test_recu_encaissement_retourne_un_pdf():
+    c, _ = _client("DAF")
+    compte = _compte(code="ENC2")
+    inscription = pf.InscriptionFactory()
+
+    resp_create = c.post(
+        "/api/v1/tresorerie/encaissements/",
+        {
+            "inscription": inscription.id,
+            "date": "2025-10-14",
+            "montant_total": 25000,
+            "mode": Encaissement.Mode.ESPECES,
+            "compte": compte.id,
+        },
+        format="json",
+    )
+    assert resp_create.status_code == 201, resp_create.data
+    encaissement_id = resp_create.data["id"]
+
+    resp = c.get(f"/api/v1/tresorerie/encaissements/{encaissement_id}/recu/")
+    assert resp.status_code == 200, resp.content
+    assert resp["Content-Type"] == "application/pdf"
+
+
 def test_depense_cree_poste_le_mouvement():
     c, _ = _client("DAF")
     compte = _compte(code="DEP1")

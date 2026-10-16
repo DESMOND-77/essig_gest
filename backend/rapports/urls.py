@@ -4,11 +4,17 @@ from . import views
 
 urlpatterns = [
     path("situation-scolarite/", views.situation_scolarite, name="rapport-situation-scolarite"),
+    path(
+        "situation-scolarite/pdf/",
+        views.fiche_scolarite_pdf,
+        name="rapport-fiche-scolarite-pdf",
+    ),
     path("situation-frais/", views.situation_frais, name="rapport-situation-frais"),
     path("echeancier/", views.echeancier, name="rapport-echeancier"),
     path("solde-compte/", views.solde_compte, name="rapport-solde-compte"),
     path("bilan-mensuel/", views.bilan_mensuel, name="rapport-bilan-mensuel"),
     path("bilan-consolide/", views.bilan_consolide, name="rapport-bilan-consolide"),
+    path("etat-financier/pdf/", views.etat_financier_pdf, name="rapport-etat-financier-pdf"),
     path(
         "etat-scolarite-etudiant/",
         views.etat_scolarite_etudiant,

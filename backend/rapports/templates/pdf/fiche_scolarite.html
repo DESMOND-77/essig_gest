@@ -1,0 +1,51 @@
+{% extends "pdf/_base_pdf.html" %}
+
+{% block title %}Fiche de scolarité — {{ inscription.etudiant.nom }} {{ inscription.etudiant.prenoms }}{% endblock %}
+
+{% block content %}
+<h1>Fiche de scolarité</h1>
+
+<h2>Étudiant</h2>
+<table>
+    <tr><th>Matricule</th><td>{{ inscription.etudiant.matricule }}</td></tr>
+    <tr><th>Nom et prénoms</th><td>{{ inscription.etudiant.nom }} {{ inscription.etudiant.prenoms }}</td></tr>
+    <tr><th>Classe</th><td>{{ inscription.classe }}</td></tr>
+    <tr><th>Année scolaire</th><td>{{ inscription.annee_scolaire }}</td></tr>
+    <tr><th>Date d'inscription</th><td>{{ inscription.date_inscription }}</td></tr>
+    <tr><th>État de l'inscription</th><td>{{ inscription.get_etat_display }}</td></tr>
+</table>
+
+<h2>Situation de paiement</h2>
+<table>
+    <tr><th>Part étudiant due</th><td>{{ situation.part_etudiant }} FCFA</td></tr>
+    <tr><th>Total encaissé</th><td>{{ situation.total_encaisse }} FCFA</td></tr>
+    <tr><th>Reste à payer</th><td>{{ situation.reste }} FCFA</td></tr>
+    <tr><th>État</th><td>{{ situation.etat }}</td></tr>
+</table>
+
+<h2>Échéances</h2>
+<table>
+    <thead>
+        <tr>
+            <th>N°</th>
+            <th>Date d'échéance</th>
+            <th>Montant</th>
+            <th>Encaissé</th>
+            <th>Statut</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for e in echeances %}
+        <tr>
+            <td>{{ e.numero }}</td>
+            <td>{{ e.date_echeance }}</td>
+            <td>{{ e.montant }} FCFA</td>
+            <td>{{ e.encaisse }} FCFA</td>
+            <td>{{ e.statut }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<p>Document généré le {{ date_generation }}.</p>
+{% endblock %}

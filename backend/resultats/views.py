@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError as DjangoValidationError
+from django.http import HttpResponse
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema
 from django_filters.rest_framework import DjangoFilterBackend
@@ -7,7 +8,9 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError as DRFValidationError
 from rest_framework.response import Response
 
+from core.pdf import render_pdf
 from core.viewsets import _BaseCrudViewSet
+from rapports.views import calculer_bulletin_periode
 
 from . import filters as r_filters
 from . import models, permissions, serializers, services
@@ -105,3 +108,37 @@ class ResultatAnnuelViewSet(viewsets.ReadOnlyModelViewSet):
         "inscription__etudiant__prenoms",
     ]
     ordering_fields = ["id"]
+
+    @extend_schema(responses=OpenApiTypes.BINARY)
+    @action(detail=True, methods=["get"], url_path="bulletin")
+    def bulletin(self, request, pk=None):
+        """Bulletin de résultats (périodes + année) en PDF, pour une inscription.
+
+        Réutilise la logique de `rapports.views.calculer_bulletin_periode` (périodes)
+        et l'objet `ResultatAnnuel` courant (année) — aucun recalcul métier ici.
+        """
+        resultat_annuel = self.get_object()
+        inscription = resultat_annuel.inscription
+        periodes = calculer_bulletin_periode(inscription_id=inscription.id)
+        matieres = (
+            models.ResultatMatiere.objects.select_related("matiere", "periode")
+            .filter(inscription_id=inscription.id)
+            .order_by("periode__numero", "matiere__nom")
+        )
+        context = {
+            "inscription": inscription,
+            "etudiant": inscription.etudiant,
+            "classe": inscription.classe,
+            "annee_scolaire": resultat_annuel.annee_scolaire,
+            "resultat_annuel": resultat_annuel,
+            "periodes": periodes,
+            "matieres": matieres,
+        }
+        pdf_bytes = render_pdf("pdf/bulletin.html", context)
+        disposition = request.query_params.get("disposition", "inline")
+        disposition = "attachment" if disposition == "attachment" else "inline"
+        response = HttpResponse(pdf_bytes, content_type="application/pdf")
+        response["Content-Disposition"] = (
+            f'{disposition}; filename="bulletin_{inscription.etudiant.matricule}.pdf"'
+        )
+        return response

@@ -12,12 +12,15 @@ from datetime import date
 
 from django.db.models import Case, Count, DecimalField, F, Q, Sum, Value, When
 from django.db.models.functions import Coalesce
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from core.pdf import render_pdf
 from personnes.models import Etudiant, Inscription
 from referentiel.models import AnneeScolaire
 from resultats.models import ResultatAnnuel, ResultatMatiere
@@ -61,39 +64,89 @@ def situation_scolarite(request):
     if inscription_id:
         qs = qs.filter(pk=inscription_id)
 
-    resultats = []
-    for inscription in qs.select_related("etudiant", "classe__niveau"):
-        part_etudiant = (
-            Echeance.objects.filter(inscription=inscription)
-            .aggregate(total=Coalesce(Sum("montant"), ZERO_FCFA))["total"]
-        )
-        total_encaisse = (
-            ImputationEncaissement.objects.filter(
-                cible=ImputationEncaissement.Cible.ECHEANCE,
-                echeance__inscription=inscription,
-            ).aggregate(total=Coalesce(Sum("montant"), ZERO_FCFA))["total"]
-        )
-        reste = part_etudiant - total_encaisse
-        if total_encaisse >= part_etudiant and part_etudiant > 0:
-            etat = "SOLDE"
-        elif total_encaisse > 0:
-            etat = "PARTIEL"
-        else:
-            etat = "A_JOUR"
-        resultats.append(
-            {
-                "inscription_id": inscription.id,
-                "etudiant_id": inscription.etudiant_id,
-                "ecole_id": inscription.ecole_id,
-                "annee_scolaire_id": inscription.annee_scolaire_id,
-                "cout_du": part_etudiant,
-                "part_etudiant": part_etudiant,
-                "total_encaisse": total_encaisse,
-                "reste": reste,
-                "etat": etat,
-            }
-        )
+    resultats = [
+        situation_scolarite_ligne(inscription)
+        for inscription in qs.select_related("etudiant", "classe__niveau")
+    ]
     return Response(resultats)
+
+
+def situation_scolarite_ligne(inscription):
+    """Ligne v_situation_scolarite pour une inscription (réutilisée par la fiche PDF)."""
+    part_etudiant = (
+        Echeance.objects.filter(inscription=inscription)
+        .aggregate(total=Coalesce(Sum("montant"), ZERO_FCFA))["total"]
+    )
+    total_encaisse = (
+        ImputationEncaissement.objects.filter(
+            cible=ImputationEncaissement.Cible.ECHEANCE,
+            echeance__inscription=inscription,
+        ).aggregate(total=Coalesce(Sum("montant"), ZERO_FCFA))["total"]
+    )
+    reste = part_etudiant - total_encaisse
+    if total_encaisse >= part_etudiant and part_etudiant > 0:
+        etat = "SOLDE"
+    elif total_encaisse > 0:
+        etat = "PARTIEL"
+    else:
+        etat = "A_JOUR"
+    return {
+        "inscription_id": inscription.id,
+        "etudiant_id": inscription.etudiant_id,
+        "ecole_id": inscription.ecole_id,
+        "annee_scolaire_id": inscription.annee_scolaire_id,
+        "cout_du": part_etudiant,
+        "part_etudiant": part_etudiant,
+        "total_encaisse": total_encaisse,
+        "reste": reste,
+        "etat": etat,
+    }
+
+
+@extend_schema(
+    tags=["rapports"],
+    parameters=[OpenApiParameter("inscription_id", OpenApiTypes.INT, required=True)],
+    responses=OpenApiTypes.BINARY,
+)
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def fiche_scolarite_pdf(request):
+    """Fiche de scolarité PDF d'une inscription (situation de paiement, reste à payer)."""
+    inscription_id = request.query_params.get("inscription_id")
+    inscription = get_object_or_404(
+        Inscription.objects.select_related(
+            "etudiant", "classe__niveau", "annee_scolaire", "ecole"
+        ),
+        pk=inscription_id,
+    )
+    situation = situation_scolarite_ligne(inscription)
+    echeances = Echeance.objects.filter(inscription=inscription).order_by("numero")
+    echeances_detail = [
+        {
+            "numero": e.numero,
+            "date_echeance": e.date_echeance,
+            "montant": e.montant,
+            "encaisse": _montant_encaisse_echeance(e.id),
+            "statut": e.get_statut_display(),
+        }
+        for e in echeances
+    ]
+    pdf_bytes = render_pdf(
+        "pdf/fiche_scolarite.html",
+        {
+            "inscription": inscription,
+            "situation": situation,
+            "echeances": echeances_detail,
+            "date_generation": date.today(),
+        },
+    )
+    disposition = request.query_params.get("disposition", "inline")
+    disposition = "attachment" if disposition == "attachment" else "inline"
+    response = HttpResponse(pdf_bytes, content_type="application/pdf")
+    response["Content-Disposition"] = (
+        f'{disposition}; filename="fiche_scolarite_{inscription.id}.pdf"'
+    )
+    return response
 
 
 @extend_schema(
@@ -254,6 +307,10 @@ def _bilan_mensuel_donnees(request):
 @permission_classes([IsAuthenticated])
 def bilan_consolide(request):
     """v_bilan_consolide : v_bilan_mensuel consolidé toutes écoles confondues."""
+    return Response(_bilan_consolide_donnees(request))
+
+
+def _bilan_consolide_donnees(request):
     agrege = {}
     for ligne in _bilan_mensuel_donnees(request):
         cle = (ligne["annee_scolaire_id"], ligne["annee"], ligne["mois"])
@@ -271,7 +328,41 @@ def bilan_consolide(request):
         acc["entrees"] += ligne["entrees"]
         acc["depenses"] += ligne["depenses"]
         acc["solde"] += ligne["solde"]
-    return Response(sorted(agrege.values(), key=lambda r: (r["annee"], r["mois"])))
+    return sorted(agrege.values(), key=lambda r: (r["annee"], r["mois"]))
+
+
+@extend_schema(
+    tags=["rapports"],
+    parameters=[
+        OpenApiParameter("ecole_id", OpenApiTypes.INT, required=False),
+        OpenApiParameter("annee_scolaire_id", OpenApiTypes.INT, required=False),
+        OpenApiParameter("consolide", OpenApiTypes.BOOL, required=False),
+        OpenApiParameter("disposition", OpenApiTypes.STR, required=False),
+    ],
+    responses=OpenApiTypes.BINARY,
+)
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def etat_financier_pdf(request):
+    """État financier PDF (bilan mensuel ou consolidé) — réutilise les calculs de
+    `bilan_mensuel`/`bilan_consolide`."""
+    consolide = request.query_params.get("consolide") == "true"
+    lignes = _bilan_consolide_donnees(request) if consolide else _bilan_mensuel_donnees(request)
+
+    pdf_bytes = render_pdf(
+        "pdf/etat_financier.html",
+        {
+            "lignes": lignes,
+            "consolide": consolide,
+            "date_generation": date.today(),
+        },
+    )
+    disposition = request.query_params.get("disposition", "inline")
+    disposition = "attachment" if disposition == "attachment" else "inline"
+    response = HttpResponse(pdf_bytes, content_type="application/pdf")
+    nom = "etat_financier_consolide" if consolide else "etat_financier_mensuel"
+    response["Content-Disposition"] = f'{disposition}; filename="{nom}.pdf"'
+    return response
 
 
 def _situation_scolarite_donnees(request):
@@ -401,21 +492,13 @@ def resultat_matiere(request):
     return Response(resultats)
 
 
-@extend_schema(
-    tags=["rapports"],
-    parameters=[
-        OpenApiParameter("inscription_id", OpenApiTypes.INT, required=False),
-        OpenApiParameter("periode_id", OpenApiTypes.INT, required=False),
-    ],
-    responses=OpenApiTypes.OBJECT,
-)
-@api_view(["GET"])
-@permission_classes([IsAuthenticated])
-def bulletin_periode(request):
-    """v_bulletin_periode : moyenne pondérée par (inscription, période)."""
+def calculer_bulletin_periode(inscription_id=None, periode_id=None):
+    """v_bulletin_periode : moyenne pondérée par (inscription, période).
+
+    Logique de calcul partagée entre `bulletin_periode` (JSON) et la génération
+    PDF du bulletin (`resultats.views.ResultatAnnuelViewSet.bulletin`).
+    """
     qs = ResultatMatiere.objects.select_related("matiere")
-    inscription_id = request.query_params.get("inscription_id")
-    periode_id = request.query_params.get("periode_id")
     if inscription_id:
         qs = qs.filter(inscription_id=inscription_id)
     if periode_id:
@@ -446,6 +529,25 @@ def bulletin_periode(request):
                 "nb_matieres_validees": r["nb_matieres_validees"],
             }
         )
+    return resultats
+
+
+@extend_schema(
+    tags=["rapports"],
+    parameters=[
+        OpenApiParameter("inscription_id", OpenApiTypes.INT, required=False),
+        OpenApiParameter("periode_id", OpenApiTypes.INT, required=False),
+    ],
+    responses=OpenApiTypes.OBJECT,
+)
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def bulletin_periode(request):
+    """v_bulletin_periode : moyenne pondérée par (inscription, période)."""
+    resultats = calculer_bulletin_periode(
+        inscription_id=request.query_params.get("inscription_id"),
+        periode_id=request.query_params.get("periode_id"),
+    )
     return Response(resultats)
 
 

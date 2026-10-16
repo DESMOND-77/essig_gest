@@ -65,6 +65,12 @@ def test_solde_compte_endpoint():
     assert Decimal(ligne["solde"]) == Decimal("130000")
 
 
+def test_etat_financier_pdf_endpoint():
+    resp = _client().get("/api/v1/rapports/etat-financier/pdf/")
+    assert resp.status_code == 200
+    assert resp["Content-Type"] == "application/pdf"
+
+
 def test_echeancier_calcule_reste_et_retard():
     inscription = InscriptionFactory()
     echeance = Echeance.objects.create(
@@ -193,3 +199,16 @@ def test_resultat_annuel_apres_deliberation():
     assert resp.status_code == 200
     assert len(resp.data) == 1
     assert resp.data[0]["decision"] == "ADMIS"
+
+
+def test_fiche_scolarite_pdf_renvoie_un_pdf():
+    inscription = InscriptionFactory()
+    Echeance.objects.create(
+        inscription=inscription,
+        numero=1,
+        montant=100_000,
+        date_echeance=datetime.date(2025, 1, 1),
+    )
+    resp = _client().get(f"/api/v1/rapports/situation-scolarite/pdf/?inscription_id={inscription.id}")
+    assert resp.status_code == 200
+    assert resp["Content-Type"] == "application/pdf"
