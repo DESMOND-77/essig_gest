@@ -221,7 +221,7 @@ export function FormSection({
   return (
     <section className="space-y-4">
       <div>
-        <h3 className="text-sm font-bold tracking-wide text-[var(--muted-foreground)] uppercase">
+        <h3 className="font-display text-base font-semibold text-[var(--foreground)]">
           {title}
         </h3>
         {description ? <p className="mt-1 text-sm text-[var(--muted-foreground)]">{description}</p> : null}

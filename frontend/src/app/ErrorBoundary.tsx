@@ -27,7 +27,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
     return (
       <div className="grid min-h-dvh place-items-center bg-[var(--background)] p-6">
         <div className="surface-card w-full max-w-lg p-6 text-center">
-          <p className="text-sm font-semibold tracking-wide text-[var(--destructive)] uppercase">
+          <p className="text-sm font-semibold text-[var(--destructive)]">
             Erreur inattendue
           </p>
           <h1 className="mt-2 text-xl font-bold text-[var(--foreground)]">

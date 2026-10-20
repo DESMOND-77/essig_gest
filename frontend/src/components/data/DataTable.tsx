@@ -119,7 +119,7 @@ export function DataTable<T>({
                           <button
                             type="button"
                             onClick={() => onSortChange(column.key)}
-                            className="inline-flex items-center gap-1 font-semibold uppercase hover:text-[var(--foreground)]"
+                            className="inline-flex items-center gap-1 font-semibold hover:text-[var(--foreground)]"
                           >
                             {column.header}
                             {isSorted ? (
@@ -186,7 +186,7 @@ export function DataTable<T>({
                       <dl className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1.5">
                         {others.map((column) => (
                           <div key={column.key} className="min-w-0">
-                            <dt className="text-[11px] font-semibold tracking-wide text-[var(--muted-foreground)] uppercase">
+                            <dt className="text-xs font-medium text-[var(--muted-foreground)]">
                               {column.header}
                             </dt>
                             <dd className="truncate text-sm text-[var(--foreground)]">

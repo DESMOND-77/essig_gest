@@ -25,7 +25,7 @@ export function PageHeader({
   className?: string
 }) {
   return (
-    <header className={cn('mb-5 sm:mb-6', className)}>
+    <header className={cn('mb-6 sm:mb-8', className)}>
       {breadcrumbs && breadcrumbs.length > 0 ? (
         <nav aria-label="Fil d'Ariane" className="mb-2 hidden items-center gap-1 text-sm text-[var(--muted-foreground)] sm:flex">
           {breadcrumbs.map((item, index) => (
@@ -47,13 +47,13 @@ export function PageHeader({
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <h1 className="text-xl font-bold tracking-tight text-[var(--foreground)] sm:text-2xl">
+            <h1 className="text-[1.75rem] leading-tight font-semibold text-[var(--foreground)] sm:text-[2rem]">
               {title}
             </h1>
             {badge}
           </div>
           {description ? (
-            <p className="mt-1 max-w-3xl text-sm text-[var(--muted-foreground)]">{description}</p>
+            <p className="mt-1.5 max-w-[68ch] text-sm text-[var(--muted-foreground)]">{description}</p>
           ) : null}
         </div>
         {actions ? (

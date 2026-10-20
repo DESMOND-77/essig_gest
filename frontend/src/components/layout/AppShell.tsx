@@ -82,7 +82,7 @@ export function AppShell() {
       <div
         className={cn(
           'flex min-h-dvh flex-col transition-[padding] duration-200',
-          reduite ? 'lg:pl-[76px]' : 'lg:pl-[264px]',
+          reduite ? 'lg:pl-[72px]' : 'lg:pl-[256px]',
         )}
       >
         <Topbar
@@ -98,8 +98,8 @@ export function AppShell() {
         >
           <Outlet />
         </main>
-        <footer className="no-print border-t border-[var(--border)] px-4 py-4 text-center text-xs text-[var(--muted-foreground)] sm:px-6">
-          ESSIG Gest · Gestion scolaire · {new Date().getFullYear()}
+        <footer className="no-print mx-auto w-full max-w-[1440px] px-4 pt-2 pb-5 text-xs text-[var(--muted-foreground)] sm:px-6 lg:px-8">
+          Groupe ESSIG, {new Date().getFullYear()}
         </footer>
       </div>
     </div>
@@ -118,22 +118,22 @@ function SidebarReduite({
   return (
     <aside
       className={cn(
-        'no-print fixed inset-y-0 left-0 z-40 hidden flex-col border-r border-white/10 bg-[var(--sidebar)] text-[var(--sidebar-foreground)] transition-[width] duration-200 lg:flex',
-        reduite ? 'w-[76px]' : 'w-[264px]',
+        'no-print fixed inset-y-0 left-0 z-40 hidden flex-col bg-[var(--sidebar)] text-[var(--sidebar-foreground)] transition-[width] duration-200 lg:flex',
+        reduite ? 'w-[72px]' : 'w-[256px]',
       )}
       aria-label="Navigation principale"
     >
-      <div className={cn('flex items-center gap-3 px-4 py-4', reduite && 'justify-center px-2')}>
+      <div className={cn('flex h-16 items-center gap-3 px-4', reduite && 'justify-center px-2')}>
         <Link to="/" className="flex min-w-0 items-center gap-3" aria-label="ESSIG Gest — accueil">
-          <span className="grid size-10 shrink-0 place-items-center overflow-hidden rounded-xl bg-white">
+          <span className="grid size-10 shrink-0 place-items-center overflow-hidden rounded-[var(--radius-control)] bg-white">
             <img src={logoMark} alt="" width={40} height={40} className="size-10 object-contain" />
           </span>
           {!reduite ? (
-            <span className="min-w-0">
-              <span className="block truncate text-sm font-bold tracking-wide text-white">
+            <span className="min-w-0 leading-tight">
+              <span className="font-display block truncate text-xl font-bold text-white">
                 ESSIG Gest
               </span>
-              <span className="block truncate text-[11px] text-[var(--sidebar-muted)]">
+              <span className="block truncate text-xs text-[var(--sidebar-muted)]">
                 Gestion scolaire
               </span>
             </span>
@@ -141,15 +141,13 @@ function SidebarReduite({
         </Link>
       </div>
 
-      <nav className="scroll-slim flex-1 overflow-y-auto px-2 pb-4">
+      <nav className={cn('scroll-slim flex-1 overflow-y-auto pt-2 pb-4', reduite ? 'pl-2' : 'pl-3')}>
         {sections.map((section) => (
-          <div key={section.id} className="mt-3 first:mt-1">
+          <div key={section.id} className="mt-4 first:mt-1">
             {!reduite ? (
-              <p className="mb-1 px-3 text-[10px] font-bold tracking-[0.12em] text-[var(--sidebar-muted)] uppercase">
-                {section.label}
-              </p>
+              <p className="nav-section">{section.label}</p>
             ) : (
-              <div className="mx-2 mb-1 border-t border-white/10" aria-hidden />
+              <div className="mr-2 mb-2 border-t border-[var(--sidebar-rule)]" aria-hidden />
             )}
             <ul className="space-y-0.5">
               {section.items.map((item) => (
@@ -158,15 +156,8 @@ function SidebarReduite({
                     to={item.to}
                     end={item.end}
                     title={reduite ? item.label : undefined}
-                    className={({ isActive }) =>
-                      cn(
-                        'group flex min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-medium transition',
-                        reduite && 'justify-center px-0',
-                        isActive
-                          ? 'bg-[var(--sidebar-active)] text-white shadow-[inset_2px_0_0_var(--brand-primary)]'
-                          : 'text-[var(--sidebar-muted)] hover:bg-white/5 hover:text-white',
-                      )
-                    }
+                    aria-label={reduite ? item.label : undefined}
+                    className={cn('nav-tab nav-tab--joint', reduite && 'justify-center px-0')}
                   >
                     <item.icon className="size-[18px] shrink-0" aria-hidden />
                     {!reduite ? <span className="truncate">{item.label}</span> : null}
@@ -178,12 +169,12 @@ function SidebarReduite({
         ))}
       </nav>
 
-      <div className="border-t border-white/10 p-2">
+      <div className="border-t border-[var(--sidebar-rule)] p-2">
         <button
           type="button"
           onClick={onToggleReduction}
           className={cn(
-            'flex min-h-10 w-full items-center gap-3 rounded-lg px-3 text-sm text-[var(--sidebar-muted)] transition hover:bg-white/5 hover:text-white',
+            'flex min-h-10 w-full items-center gap-3 rounded-[var(--radius-control)] px-3 text-sm text-[var(--sidebar-muted)] transition hover:bg-[var(--sidebar-hover)] hover:text-white',
             reduite && 'justify-center px-0',
           )}
           aria-label={reduite ? 'Déplier la navigation' : 'Réduire la navigation'}
@@ -241,30 +232,28 @@ function TiroirMobile({
       >
         <div className="flex items-center justify-between px-4 py-4">
           <div className="flex items-center gap-3">
-            <span className="grid size-10 place-items-center overflow-hidden rounded-xl bg-white">
+            <span className="grid size-10 place-items-center overflow-hidden rounded-[var(--radius-control)] bg-white">
               <img src={logoMark} alt="" width={40} height={40} className="size-10 object-contain" />
             </span>
-            <div>
-              <p className="text-sm font-bold text-white">ESSIG Gest</p>
-              <p className="text-[11px] text-[var(--sidebar-muted)]">Gestion scolaire</p>
+            <div className="leading-tight">
+              <p className="font-display text-xl font-bold text-white">ESSIG Gest</p>
+              <p className="text-xs text-[var(--sidebar-muted)]">Gestion scolaire</p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
             aria-label="Fermer la navigation"
-            className="grid size-10 place-items-center rounded-full text-[var(--sidebar-muted)] hover:bg-white/10 hover:text-white"
+            className="grid size-10 place-items-center rounded-full text-[var(--sidebar-muted)] hover:bg-[var(--sidebar-hover)] hover:text-white"
           >
             <X className="size-5" aria-hidden />
           </button>
         </div>
 
-        <nav className="scroll-slim flex-1 overflow-y-auto px-2 pb-4">
+        <nav className="scroll-slim flex-1 overflow-y-auto px-3 pb-4">
           {sections.map((section) => (
-            <div key={section.id} className="mt-3 first:mt-1">
-              <p className="mb-1 px-3 text-[10px] font-bold tracking-[0.12em] text-[var(--sidebar-muted)] uppercase">
-                {section.label}
-              </p>
+            <div key={section.id} className="mt-4 first:mt-1">
+              <p className="nav-section">{section.label}</p>
               <ul className="space-y-0.5">
                 {section.items.map((item) => (
                   <li key={item.to}>
@@ -272,14 +261,7 @@ function TiroirMobile({
                       to={item.to}
                       end={item.end}
                       onClick={onClose}
-                      className={({ isActive }) =>
-                        cn(
-                          'flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm font-medium transition',
-                          isActive
-                            ? 'bg-[var(--sidebar-active)] text-white'
-                            : 'text-[var(--sidebar-muted)] hover:bg-white/5 hover:text-white',
-                        )
-                      }
+                      className="nav-tab min-h-11"
                     >
                       <item.icon className="size-[18px] shrink-0" aria-hidden />
                       <span className="truncate">{item.label}</span>
@@ -291,9 +273,9 @@ function TiroirMobile({
           ))}
         </nav>
 
-        <div className="border-t border-white/10 p-3 pb-[calc(0.75rem+var(--safe-bottom))]">
+        <div className="border-t border-[var(--sidebar-rule)] p-3 pb-[calc(0.75rem+var(--safe-bottom))]">
           <div className="flex items-center gap-3 px-1">
-            <span className="grid size-9 place-items-center rounded-full bg-brand-600 text-sm font-bold text-white">
+            <span className="grid size-9 place-items-center rounded-full bg-white text-sm font-bold text-[var(--sidebar)]">
               {initiales(user?.login, user?.login?.slice(1))}
             </span>
             <div className="min-w-0 flex-1">
@@ -306,7 +288,7 @@ function TiroirMobile({
           <button
             type="button"
             onClick={onLogout}
-            className="mt-2 flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-sm text-[var(--sidebar-muted)] hover:bg-white/5 hover:text-white"
+            className="mt-2 flex min-h-11 w-full items-center gap-3 rounded-[var(--radius-control)] px-3 text-sm text-[var(--sidebar-muted)] hover:bg-[var(--sidebar-hover)] hover:text-white"
           >
             <LogOut className="size-4" aria-hidden />
             Se déconnecter
@@ -333,15 +315,17 @@ function Topbar({
   const location = useLocation()
   const menuRef = useRef<HTMLDivElement>(null)
 
-  const titre = useMemo(() => {
-    const navItems: NavItem[] = sectionsVisibles(user).flatMap((section) => section.items)
-    return (
-      navItems
-        .filter((item) =>
-          item.end ? location.pathname === item.to : location.pathname.startsWith(item.to),
-        )
-        .sort((a, b) => b.to.length - a.to.length)[0]?.label ?? 'ESSIG Gest'
+  // Où suis-je : section du classeur + entrée active (la plus spécifique).
+  const { section, titre } = useMemo(() => {
+    const candidats: { section: string; item: NavItem }[] = sectionsVisibles(user).flatMap(
+      (s) => s.items.map((item) => ({ section: s.label, item })),
     )
+    const actif = candidats
+      .filter(({ item }) =>
+        item.end ? location.pathname === item.to : location.pathname.startsWith(item.to),
+      )
+      .sort((a, b) => b.item.to.length - a.item.to.length)[0]
+    return { section: actif?.section, titre: actif?.item.label ?? 'ESSIG Gest' }
   }, [location.pathname, user])
 
   useEffect(() => {
@@ -361,7 +345,7 @@ function Topbar({
   }, [menuOpen])
 
   return (
-    <header className="no-print glass sticky top-0 z-30 flex h-14 items-center gap-2 border-x-0 border-t-0 px-3 sm:h-16 sm:gap-3 sm:px-5">
+    <header className="no-print glass sticky top-0 z-30 flex h-14 items-center gap-2 border-x-0 border-t-0 px-3 shadow-none sm:h-16 sm:gap-3 sm:px-5 lg:px-6">
       <button
         type="button"
         onClick={onOpenDrawer}
@@ -388,9 +372,19 @@ function Topbar({
           height={28}
           className="size-7 shrink-0 rounded-md object-contain lg:hidden"
         />
-        <span className="truncate text-sm font-semibold text-[var(--foreground)] sm:text-base">
-          {titre}
-        </span>
+        <p className="flex min-w-0 items-baseline gap-1.5 text-sm">
+          {section ? (
+            <>
+              <span className="hidden shrink-0 text-[var(--muted-foreground)] sm:inline">
+                {section}
+              </span>
+              <span className="hidden text-[var(--border-strong)] sm:inline" aria-hidden>
+                /
+              </span>
+            </>
+          ) : null}
+          <span className="truncate font-semibold text-[var(--foreground)]">{titre}</span>
+        </p>
       </div>
 
       <div className="flex-1" />
@@ -412,7 +406,7 @@ function Topbar({
           aria-haspopup="menu"
           className="flex h-10 items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] pr-2 pl-1 transition hover:border-brand-300"
         >
-          <span className="grid size-8 place-items-center rounded-full bg-brand-600 text-xs font-bold text-white">
+          <span className="grid size-8 place-items-center rounded-full bg-[var(--sidebar)] text-xs font-bold text-white">
             {initiales(user?.login, user?.login?.slice(1))}
           </span>
           <span className="hidden max-w-32 truncate text-sm font-medium text-[var(--foreground)] sm:block">
@@ -429,7 +423,7 @@ function Topbar({
             <div className="border-b border-[var(--border)] px-4 py-3">
               <p className="truncate text-sm font-semibold text-[var(--foreground)]">{user?.login}</p>
               <p className="truncate text-xs text-[var(--muted-foreground)]">{user?.email}</p>
-              <p className="mt-1 text-xs text-brand-700">
+              <p className="mt-1 text-xs text-[var(--sidebar)]">
                 {user?.roles.map((role) => libelleRole(role.code)).join(' · ') || 'Aucun rôle'}
               </p>
             </div>

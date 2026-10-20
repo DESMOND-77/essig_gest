@@ -33,7 +33,7 @@ export function CardHeader({
       )}
     >
       <div className="min-w-0">
-        <h2 className="font-semibold text-[var(--foreground)]">{title}</h2>
+        <h2 className="text-[1.1875rem] leading-snug font-semibold text-[var(--foreground)]">{title}</h2>
         {description ? (
           <p className="mt-0.5 text-sm text-[var(--muted-foreground)]">{description}</p>
         ) : null}
@@ -73,12 +73,12 @@ export function StatCard({
   return (
     <div className={cn('surface-card flex items-start gap-3 p-4', className)}>
       {icon ? (
-        <div className={cn('grid size-10 shrink-0 place-items-center rounded-xl', tones)}>
+        <div className={cn('grid size-10 shrink-0 place-items-center rounded-[var(--radius-control)]', tones)}>
           {icon}
         </div>
       ) : null}
       <div className="min-w-0">
-        <p className="truncate text-xs font-semibold tracking-wide text-[var(--muted-foreground)] uppercase">
+        <p className="truncate text-[0.8125rem] font-medium text-[var(--muted-foreground)]">
           {label}
         </p>
         <p className="numeric mt-1 truncate text-xl font-bold text-[var(--foreground)] sm:text-2xl">

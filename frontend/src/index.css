@@ -1,10 +1,18 @@
 @import 'tailwindcss';
+@import '@fontsource-variable/public-sans';
+@import '@fontsource/zilla-slab/600.css';
+@import '@fontsource/zilla-slab/700.css';
 
 /* ------------------------------------------------------------------ *
  * Design tokens ESSIG Gest
  * Palette extraite des logos officiels : cyan institutionnel, brun/ocre,
  * charbon, blanc bleuté. Aucun composant ne code une couleur en dur :
  * tout passe par ces tokens (et par le mapping Tailwind ci-dessous).
+ *
+ * Parti pris « le classeur » : la navigation est la couverture du
+ * classeur (encre ESSIG), la page est une feuille ; l'entrée active est
+ * l'onglet intercalaire qui se raccorde à la feuille. Titres en Zilla
+ * Slab, écho de l'empattement du logo ; interface en Public Sans.
  * ------------------------------------------------------------------ */
 @theme {
   --color-brand-50: #eaf7fd;
@@ -51,39 +59,45 @@
   --color-danger-500: #b42318;
   --color-danger-600: #912018;
 
-  --radius-control: 0.625rem;
-  --radius-card: 1rem;
-  --radius-sheet: 1.25rem;
+  --radius-control: 0.5rem;
+  --radius-card: 0.75rem;
+  --radius-sheet: 1rem;
 
   --font-sans:
-    'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
-    Arial, sans-serif;
+    'Public Sans Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --font-display: 'Zilla Slab', 'Rockwell', 'Roboto Slab', Georgia, serif;
 
-  --shadow-card: 0 1px 2px rgb(32 35 34 / 0.06), 0 8px 24px -12px rgb(15 70 95 / 0.18);
-  --shadow-pop: 0 12px 40px -12px rgb(15 70 95 / 0.28), 0 2px 8px rgb(32 35 34 / 0.06);
+  --shadow-card: 0 1px 2px rgb(10 77 105 / 0.06);
+  --shadow-pop: 0 16px 40px -16px rgb(10 77 105 / 0.35), 0 2px 6px rgb(31 37 38 / 0.08);
 }
 
 /* Tokens sémantiques : surface, texte, bordures. */
 :root {
   color-scheme: light;
 
-  --background: #f4f8fb;
-  --background-tint-a: rgb(7 157 211 / 0.1);
-  --background-tint-b: rgb(173 112 31 / 0.06);
+  /* Feuille : la page de travail. */
+  --background: #f2f6f8;
   --surface: #ffffff;
-  --surface-muted: #f8fafc;
-  --surface-glass: rgb(255 255 255 / 0.86);
-  --surface-glass-fallback: rgb(255 255 255 / 0.97);
-  --surface-glass-border: rgb(255 255 255 / 0.6);
-  --sidebar: #0d2c3a;
-  --sidebar-foreground: #e8f4fa;
-  --sidebar-muted: #9db8c4;
-  --sidebar-active: rgb(7 157 211 / 0.22);
+  --surface-muted: #f7fafb;
+  --surface-glass: rgb(242 246 248 / 0.92);
+  --surface-glass-fallback: #f2f6f8;
+  --surface-glass-border: var(--border);
+  /* Couverture du classeur : encre ESSIG. */
+  --sidebar: #0a4d69;
+  --sidebar-foreground: #ffffff;
+  --sidebar-muted: #b4d9e8;
+  --sidebar-hover: rgb(255 255 255 / 0.08);
+  --sidebar-rule: rgb(255 255 255 / 0.14);
+  /* Onglet actif : même matière que la feuille, repère ocre. */
+  --sidebar-active: var(--background);
+  --sidebar-active-foreground: #0a4d69;
+  --tab-mark: #ad701f;
 
-  --foreground: #202322;
-  --muted-foreground: #5a6a6d;
-  --border: #dde6ea;
-  --border-strong: #c3d1d7;
+  --foreground: #1f2526;
+  --muted-foreground: #556669;
+  --border: #d9e3e7;
+  --border-strong: #bfcdd3;
   --focus-ring: #047fae;
   --ring-offset: #ffffff;
 
@@ -127,16 +141,23 @@ body {
   min-height: 100dvh;
   margin: 0;
   background-color: var(--background);
-  background-image:
-    radial-gradient(ellipse 80% 55% at 12% -10%, var(--background-tint-a), transparent 70%),
-    radial-gradient(ellipse 60% 45% at 100% 0%, var(--background-tint-b), transparent 65%);
-  background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-sans);
   font-size: 1rem;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* Titres en couche base : les utilitaires Tailwind gardent la main. */
+@layer base {
+  h1,
+  h2,
+  .font-display {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: 0;
+  }
 }
 
 ::selection {
@@ -391,13 +412,94 @@ body {
   .table-head {
     padding: 0.625rem 1rem;
     text-align: left;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    font-size: 0.8125rem;
+    font-weight: 600;
     color: var(--muted-foreground);
     background: var(--surface-muted);
     border-bottom: 1px solid var(--border);
     white-space: nowrap;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Navigation « classeur » : l'entrée active est un onglet intercalaire
+ * de la couleur de la feuille, raccordé à la page par deux congés
+ * concaves (pseudo-éléments). Le liseré ocre rappelle les mains du logo.
+ * ------------------------------------------------------------------ */
+@layer components {
+  .nav-tab {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 2.5rem;
+    padding-inline: 0.75rem;
+    border-radius: 0.625rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--sidebar-muted);
+    transition:
+      background-color 120ms ease-out,
+      color 120ms ease-out;
+  }
+
+  .nav-tab:hover {
+    background: var(--sidebar-hover);
+    color: var(--sidebar-foreground);
+  }
+
+  .nav-tab:focus-visible {
+    outline: 2px solid var(--sidebar-foreground);
+    outline-offset: -2px;
+    border-radius: 0.625rem;
+  }
+
+  .nav-tab[aria-current='page'] {
+    background: var(--sidebar-active);
+    color: var(--sidebar-active-foreground);
+    font-weight: 600;
+    box-shadow: inset 3px 0 0 var(--tab-mark);
+  }
+
+  /* Onglet raccordé : collé au bord droit de la couverture (bureau). */
+  .nav-tab--joint[aria-current='page'] {
+    border-radius: 0.625rem 0 0 0.625rem;
+  }
+
+  .nav-tab--joint[aria-current='page']::before,
+  .nav-tab--joint[aria-current='page']::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 0.75rem;
+    height: 0.75rem;
+    pointer-events: none;
+  }
+
+  .nav-tab--joint[aria-current='page']::before {
+    top: -0.75rem;
+    background: radial-gradient(
+      circle at 0 0,
+      transparent calc(0.75rem - 0.5px),
+      var(--sidebar-active) 0.75rem
+    );
+  }
+
+  .nav-tab--joint[aria-current='page']::after {
+    bottom: -0.75rem;
+    background: radial-gradient(
+      circle at 0 100%,
+      transparent calc(0.75rem - 0.5px),
+      var(--sidebar-active) 0.75rem
+    );
+  }
+
+  .nav-section {
+    margin-bottom: 0.25rem;
+    padding-inline: 0.75rem;
+    font-family: var(--font-display);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--sidebar-muted);
   }
 }
