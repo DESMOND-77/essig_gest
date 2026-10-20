@@ -1,0 +1,403 @@
+@import 'tailwindcss';
+
+/* ------------------------------------------------------------------ *
+ * Design tokens ESSIG Gest
+ * Palette extraite des logos officiels : cyan institutionnel, brun/ocre,
+ * charbon, blanc bleuté. Aucun composant ne code une couleur en dur :
+ * tout passe par ces tokens (et par le mapping Tailwind ci-dessous).
+ * ------------------------------------------------------------------ */
+@theme {
+  --color-brand-50: #eaf7fd;
+  --color-brand-100: #d0eefa;
+  --color-brand-200: #a5ddf5;
+  --color-brand-300: #6cc8ec;
+  --color-brand-400: #2aaedc;
+  --color-brand-500: #079dd3;
+  --color-brand-600: #047fae;
+  --color-brand-700: #07658b;
+  --color-brand-800: #0c5472;
+  --color-brand-900: #0f465f;
+
+  --color-accent-50: #fbf5ea;
+  --color-accent-100: #f4e5c8;
+  --color-accent-200: #e9cb92;
+  --color-accent-300: #dcab5b;
+  --color-accent-400: #c98f35;
+  --color-accent-500: #ad701f;
+  --color-accent-600: #91591a;
+  --color-accent-700: #754619;
+
+  --color-ink-50: #f6f8f8;
+  --color-ink-100: #eceff0;
+  --color-ink-200: #d8dedf;
+  --color-ink-300: #b3bfc1;
+  --color-ink-400: #869598;
+  --color-ink-500: #5f7073;
+  --color-ink-600: #4a5a5c;
+  --color-ink-700: #3a4749;
+  --color-ink-800: #2a3435;
+  --color-ink-900: #202322;
+
+  --color-success-50: #ecfdf3;
+  --color-success-100: #d1fae0;
+  --color-success-500: #128c4a;
+  --color-success-600: #0d7039;
+  --color-warning-50: #fffaeb;
+  --color-warning-100: #fef0c7;
+  --color-warning-500: #b54708;
+  --color-warning-600: #93370d;
+  --color-danger-50: #fef3f2;
+  --color-danger-100: #fee4e2;
+  --color-danger-500: #b42318;
+  --color-danger-600: #912018;
+
+  --radius-control: 0.625rem;
+  --radius-card: 1rem;
+  --radius-sheet: 1.25rem;
+
+  --font-sans:
+    'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, sans-serif;
+
+  --shadow-card: 0 1px 2px rgb(32 35 34 / 0.06), 0 8px 24px -12px rgb(15 70 95 / 0.18);
+  --shadow-pop: 0 12px 40px -12px rgb(15 70 95 / 0.28), 0 2px 8px rgb(32 35 34 / 0.06);
+}
+
+/* Tokens sémantiques : surface, texte, bordures. */
+:root {
+  color-scheme: light;
+
+  --background: #f4f8fb;
+  --background-tint-a: rgb(7 157 211 / 0.1);
+  --background-tint-b: rgb(173 112 31 / 0.06);
+  --surface: #ffffff;
+  --surface-muted: #f8fafc;
+  --surface-glass: rgb(255 255 255 / 0.86);
+  --surface-glass-fallback: rgb(255 255 255 / 0.97);
+  --surface-glass-border: rgb(255 255 255 / 0.6);
+  --sidebar: #0d2c3a;
+  --sidebar-foreground: #e8f4fa;
+  --sidebar-muted: #9db8c4;
+  --sidebar-active: rgb(7 157 211 / 0.22);
+
+  --foreground: #202322;
+  --muted-foreground: #5a6a6d;
+  --border: #dde6ea;
+  --border-strong: #c3d1d7;
+  --focus-ring: #047fae;
+  --ring-offset: #ffffff;
+
+  --brand-primary: #079dd3;
+  --brand-primary-hover: #047fae;
+  --brand-primary-active: #07658b;
+  --brand-primary-text: #04628a;
+  --brand-primary-subtle: #e6f6fc;
+  --brand-on-primary: #ffffff;
+  --brand-accent: #ad701f;
+  --brand-accent-subtle: #fbf3e6;
+
+  --success: #128c4a;
+  --success-subtle: #e7f8ee;
+  --warning: #b54708;
+  --warning-subtle: #fff5e5;
+  --destructive: #b42318;
+  --destructive-subtle: #fdeeec;
+  --info: #07658b;
+  --info-subtle: #e7f4fa;
+
+  --shadow-sm: 0 1px 2px rgb(32 35 34 / 0.05);
+  --shadow-md: 0 6px 20px -10px rgb(15 70 95 / 0.25);
+  --blur-md: 16px;
+
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media (max-width: 767px) {
+  :root {
+    /* Moins de flou sur appareils modestes (cf. règles de performance). */
+    --blur-md: 10px;
+  }
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  margin: 0;
+  background-color: var(--background);
+  background-image:
+    radial-gradient(ellipse 80% 55% at 12% -10%, var(--background-tint-a), transparent 70%),
+    radial-gradient(ellipse 60% 45% at 100% 0%, var(--background-tint-b), transparent 65%);
+  background-attachment: fixed;
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--brand-primary);
+  color: var(--brand-on-primary);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Surfaces en verre : opaques par défaut, translucides si supporté. */
+.glass {
+  background: var(--surface-glass-fallback);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .glass {
+    background: var(--surface-glass);
+    border-color: var(--surface-glass-border);
+    -webkit-backdrop-filter: blur(var(--blur-md)) saturate(1.1);
+    backdrop-filter: blur(var(--blur-md)) saturate(1.1);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    background: var(--surface-glass-fallback);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* Tabulaire pour les montants : les chiffres s'alignent dans les tableaux. */
+.numeric {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+/* Barre de défilement discrète (tableaux, panneaux). */
+.scroll-slim {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+.scroll-slim::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.scroll-slim::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 999px;
+}
+
+/* Ombre de défilement horizontale pour les tableaux denses sur mobile. */
+.table-scroll {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  background:
+    linear-gradient(to right, var(--surface) 30%, transparent) left center / 24px 100% no-repeat
+      local,
+    linear-gradient(to left, var(--surface) 30%, transparent) right center / 24px 100% no-repeat
+      local,
+    radial-gradient(farthest-side at 0 50%, rgb(32 35 34 / 0.14), transparent) left center / 12px
+      100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, rgb(32 35 34 / 0.14), transparent) right center /
+      12px 100% no-repeat scroll;
+}
+
+/* Animation d'entrée des dialogues/bottom sheets. */
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: -200% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}
+
+.animate-sheet-in {
+  animation: sheet-in 180ms ease-out;
+}
+
+.animate-fade-in {
+  animation: fade-in 150ms ease-out;
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface-muted) 25%,
+    var(--border) 37%,
+    var(--surface-muted) 63%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Contrôles : 40px sur PC, 44px minimum au doigt (WCAG 2.2 / iOS). */
+@media (pointer: coarse) {
+  .control-h {
+    min-height: 44px;
+  }
+}
+
+/* Impression : les fiches et bulletins passent en noir sur blanc. */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Classes de base réutilisées par les composants (surfaces, champs).
+ * Les couleurs viennent exclusivement des tokens ci-dessus.
+ * ------------------------------------------------------------------ */
+@layer components {
+  .surface-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .surface-muted {
+    background: var(--surface-muted);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+  }
+
+  .field-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--foreground);
+    margin-bottom: 0.375rem;
+  }
+
+  .field-hint {
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+    margin-top: 0.375rem;
+  }
+
+  .field-error {
+    font-size: 0.8125rem;
+    color: var(--destructive);
+    margin-top: 0.375rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .control {
+    width: 100%;
+    min-height: 2.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-control);
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    color: var(--foreground);
+    font-size: 1rem; /* évite le zoom automatique iOS */
+    line-height: 1.5;
+    transition:
+      border-color 140ms ease-out,
+      box-shadow 140ms ease-out;
+  }
+
+  .control::placeholder {
+    color: var(--muted-foreground);
+    opacity: 0.75;
+  }
+
+  .control:hover:not(:disabled) {
+    border-color: var(--brand-primary-text);
+  }
+
+  .control:focus {
+    outline: none;
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px rgb(7 157 211 / 0.18);
+  }
+
+  .control:disabled {
+    background: var(--surface-muted);
+    color: var(--muted-foreground);
+    cursor: not-allowed;
+  }
+
+  .control[aria-invalid='true'] {
+    border-color: var(--destructive);
+  }
+
+  .control[aria-invalid='true']:focus {
+    box-shadow: 0 0 0 3px rgb(180 35 24 / 0.16);
+  }
+
+  /* Cible tactile minimale de 44px au doigt. */
+  @media (pointer: coarse) {
+    .control {
+      min-height: 2.75rem;
+    }
+  }
+
+  .table-cell {
+    padding: 0.75rem 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .table-head {
+    padding: 0.625rem 1rem;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+    background: var(--surface-muted);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+}
