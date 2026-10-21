@@ -64,7 +64,8 @@ class Command(BaseCommand):
         self._ecrire_rapport(opts["rapport_erreurs"], erreurs)
 
     def _importer_ligne(self, nom_brut, prenom_brut, tel_brut, email_brut):
-        nom = str(nom_brut or "").strip()
+        # Artefact d'export : `\'` littéral aussi bien dans NOM que dans PRENOM (cf. mapping §4.7).
+        nom = str(nom_brut or "").strip().replace("\\'", "'")
         prenom = str(prenom_brut or "").strip().replace("\\'", "'")
         if not nom or not prenom:
             raise LigneInvalide("NOM ou PRENOM vide")

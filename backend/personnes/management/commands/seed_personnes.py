@@ -9,6 +9,10 @@ TYPES_PIECE = [
     ("PHOTOS", "Photos d'identité"),
     ("LETTRE_MOTIVATION", "Lettre de motivation"),
     ("CERTIF_SCOLARITE", "Certificat de scolarité"),
+    ("DIPLOMES", "Photocopie des diplômes (travailleurs)"),
+    ("ATTESTATION_TRAVAIL", "Attestation de travail (travailleurs)"),
+    ("BULLETINS", "Bulletins de notes de la classe précédente"),
+    ("FICHE_IDENTIFICATION", "Fiche d'identification (à retirer au secrétariat)"),
 ]
 
 
