@@ -37,6 +37,24 @@ def test_import_enseignants_cree_les_lignes_valides(tmp_path):
     assert manfoumbi.email is None
 
 
+def test_import_enseignants_nettoie_l_apostrophe_echappee_du_nom_comme_du_prenom(tmp_path):
+    # Artefact d'export du classeur : un `\'` littéral figure dans NOM comme dans PRENOM.
+    chemin = _creer_classeur(
+        tmp_path,
+        [
+            ("D\\'ARTAGNAN", "Charles", None, None),
+            ("DUPONT", "Marie D\\'Arc", None, None),
+        ],
+    )
+
+    call_command("import_enseignants", str(chemin))
+
+    assert set(Enseignant.objects.values_list("nom", "prenom")) == {
+        ("D'ARTAGNAN", "Charles"),
+        ("DUPONT", "Marie D'Arc"),
+    }
+
+
 def test_import_enseignants_est_idempotent(tmp_path):
     chemin = _creer_classeur(
         tmp_path, [("ABAKER", "Madi Guirema", "062-12-77-12", "abaker@gmail.com")]

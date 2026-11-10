@@ -9,11 +9,15 @@ pytestmark = pytest.mark.django_db
 def test_seed_personnes_idempotent():
     call_command("seed_personnes")
     call_command("seed_personnes")
-    assert TypePiece.objects.count() == 5
+    assert TypePiece.objects.count() == 9
     assert set(TypePiece.objects.values_list("code", flat=True)) == {
         "ACTE_NAISSANCE",
         "RELEVE_BAC",
         "PHOTOS",
         "LETTRE_MOTIVATION",
         "CERTIF_SCOLARITE",
+        "DIPLOMES",
+        "ATTESTATION_TRAVAIL",
+        "BULLETINS",
+        "FICHE_IDENTIFICATION",
     }

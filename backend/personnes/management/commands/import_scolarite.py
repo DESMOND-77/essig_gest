@@ -16,9 +16,19 @@ from referentiel.models import (
 
 # Feuilles ESSIG/ESSS/CFPA (§1 du mapping) ; mapping feuille -> Ecole.sigle,
 # absent du fichier source, fourni en configuration (cf. db/IMPORT_MAPPING_scolarite.md §5).
-SIGLE_ECOLE_PAR_FEUILLE = {"ESSIG": "ESSIG", "ESSS": "UPSS", "CFPA": "CFPA"}
+SIGLE_ECOLE_PAR_FEUILLE = {"ESSIG": "ESSIG", "ESSS": "ESSS", "CFPA": "CFPA"}
 LIGNE_PREMIERE_DONNEE = 4
 MODALITE_DEFAUT = "FI"
+
+
+def _normaliser(texte):
+    """Clé de comparaison insensible aux espaces et à la casse (`L 1` = `L1`)."""
+    return "".join(str(texte or "").split()).casefold()
+
+
+def _matricule_brut(valeurs):
+    # Colonne AF (feuille ESSIG) ou AE (ESSS, CFPA : pas de colonne « type de formation »).
+    return valeurs.get("AF") or valeurs.get("AE")
 
 
 class Command(BaseCommand):
@@ -80,10 +90,11 @@ class Command(BaseCommand):
         traitees = importees = 0
         for ligne in feuille.iter_rows(min_row=LIGNE_PREMIERE_DONNEE):
             valeurs = {c.column_letter: c.value for c in ligne}
-            numero_ordre = valeurs.get("A")
             nom_prenoms = valeurs.get("B")
-            if numero_ordre is None and not nom_prenoms:
-                continue  # ligne de gabarit vide, pas une erreur (cf. mapping, constat).
+            if not nom_prenoms and not _matricule_brut(valeurs):
+                # Ligne de gabarit (seul `N° ordre` est pré-rempli), pas une erreur
+                # (cf. mapping, constat).
+                continue
             traitees += 1
             num_ligne = ligne[0].row
             try:
@@ -101,7 +112,7 @@ class Command(BaseCommand):
         return traitees, importees
 
     def _importer_ligne(self, valeurs, num_ligne, ecole, annee_scolaire):
-        matricule = (valeurs.get("AF") or valeurs.get("AE") or "")
+        matricule = _matricule_brut(valeurs) or ""
         matricule = str(matricule).strip() if matricule else ""
         if not matricule:
             raise LigneInvalide(
@@ -112,9 +123,7 @@ class Command(BaseCommand):
         nom, prenoms = self._separer_nom_prenoms(nom_prenoms, num_ligne)
 
         niveau_brut = str(valeurs.get("C") or "").strip()
-        niveau = Niveau.objects.filter(ecole=ecole, libelle__iexact=niveau_brut).first()
-        if niveau is None:
-            niveau = Niveau.objects.filter(ecole=ecole, code__iexact=niveau_brut).first()
+        niveau = self._resoudre_niveau(niveau_brut, ecole)
         if niveau is None:
             raise LigneInvalide(f'niveau "{niveau_brut}" inconnu pour l\'école {ecole}')
 
@@ -183,15 +192,33 @@ class Command(BaseCommand):
             return nom_prenoms, ""
         return mots[0], " ".join(mots[1:])
 
+    def _resoudre_niveau(self, brut, ecole):
+        niveaux = list(Niveau.objects.filter(ecole=ecole))
+        cible = _normaliser(brut)
+        for champ in ("libelle", "code"):
+            for niveau in niveaux:
+                if _normaliser(getattr(niveau, champ)) == cible:
+                    return niveau
+        return None
+
     def _resoudre_option_filiere(self, brut, ecole):
-        if "/" not in brut:
+        if not _normaliser(brut):
             return None
-        sigle_filiere, _, sigle_option = (p.strip() for p in brut.partition("/"))
-        return OptionFiliere.objects.filter(
-            filiere__ecole=ecole,
-            filiere__sigle__iexact=sigle_filiere,
-            sigle__iexact=sigle_option,
-        ).first()
+        gauche, separateur, droite = (_normaliser(p) for p in brut.partition("/"))
+        options = list(OptionFiliere.objects.filter(filiere__ecole=ecole).select_related("filiere"))
+        if not separateur:
+            # Feuille CFPA : seule l'option est citée ; retenue si elle est unique dans l'école
+            # (jamais de choix arbitraire entre deux filières).
+            candidates = [o for o in options if _normaliser(o.sigle) == gauche]
+            return candidates[0] if len(candidates) == 1 else None
+        return next(
+            (
+                o
+                for o in options
+                if _normaliser(o.filiere.sigle) == gauche and _normaliser(o.sigle) == droite
+            ),
+            None,
+        )
 
     def _resoudre_modalite(self, ecole):
         return ModaliteFormation.objects.filter(code=MODALITE_DEFAUT).first()
