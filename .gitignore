@@ -21,6 +21,7 @@ frontend/node_modules/
 frontend/dist/
 frontend/.env
 graphify-out/
+docs/prospect/
 
 #Ignore vscode AI rules
 .github/instructions/codacy.instructions.md
